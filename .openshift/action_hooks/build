@@ -1,0 +1,10 @@
+#!/bin/bash
+# This is a simple build script, place your post-deploy but pre-start commands
+# in this script.  This script gets executed directly, so it could be python,
+# php, ruby, etc.
+
+if [ ! $OPENSHIFT_DATA_DIR/sqlite3.db ]
+then
+    cp $OPENSHIFT_REPO_DIR/wsgi/openshift/sqlite3.db $OPENSHIFT_DATA_DIR/
+fi
+
