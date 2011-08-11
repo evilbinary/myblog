@@ -13,7 +13,7 @@ ADMINS = (
 ON_OPENSHIFT = False
 environ_keys = os.environ.keys()
 for key in environ_keys:
-    if search("OPENSHIFT_REPO_PATH", key):
+    if search("OPENSHIFT_REPO_DIR", key):
         ON_OPENSHIFT = True
 
 MANAGERS = ADMINS
