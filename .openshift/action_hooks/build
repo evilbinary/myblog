@@ -5,10 +5,9 @@
 
 if [ ! -f $OPENSHIFT_DATA_DIR/sqlite3.db ]
 then
-    echo 1>&2
     echo "Copying $OPENSHIFT_REPO_DIR/wsgi/openshift/sqlite3.db to $OPENSHIFT_DATA_DIR"
-    echo 1>&2
-
     cp $OPENSHIFT_REPO_DIR/wsgi/openshift/sqlite3.db $OPENSHIFT_DATA_DIR/
+else
+    echo "Executing 'python $OPENSHIFT_REPO_DIR/wsgi/openshift/manage.py syncdb --noinput'
+    python $OPENSHIFT_REPO_DIR/wsgi/openshift/manage.py syncdb --noinput 
 fi
-

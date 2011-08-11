@@ -10,6 +10,14 @@ When you push this application up for the first time, the sqlite database is
 copied from wsgi/openshift/sqlite3.db.  This is the stock database that is created
 when 'python manage.py syncdb' is run with only the admin app installed.
 
+You can delete the database from your git repo after the first push (you probably
+should for security).  On subsequent pushes, a 'python manage.py syncdb' is
+executed to make sure that any models you added are created in the DB.  If you
+do anything that requires an alter table, you could add the alter statements
+in GIT_ROOT/.openshift/action_hooks/alter and then use
+GIT_ROOT/.openshift/action_hooks/build to execute that script (make susre to
+back up your database w/ rhc-snapshot first :) )
+
 
 Running on OpenShift
 ----------------------------
