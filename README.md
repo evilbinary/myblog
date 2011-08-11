@@ -38,7 +38,7 @@ Then push the repo upstream
 
     git push
 
-That's it, you can now checkout your application at:
+That's it, you can now checkout your application at (default admin account is admin/admin):
 
     http://django-$yourlogin.rhcloud.com
 
