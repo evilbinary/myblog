@@ -3,8 +3,12 @@
 # in this script.  This script gets executed directly, so it could be python,
 # php, ruby, etc.
 
-if [ ! $OPENSHIFT_DATA_DIR/sqlite3.db ]
+if [ ! -f $OPENSHIFT_DATA_DIR/sqlite3.db ]
 then
+    echo 1>&2
+    echo "Copying $OPENSHIFT_REPO_DIR/wsgi/openshift/sqlite3.db to $OPENSHIFT_DATA_DIR"
+    echo 1>&2
+
     cp $OPENSHIFT_REPO_DIR/wsgi/openshift/sqlite3.db $OPENSHIFT_DATA_DIR/
 fi
 
