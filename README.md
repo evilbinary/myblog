@@ -1,4 +1,4 @@
-Djangom on OpenShift Express
+Django on OpenShift Express
 ============================
 
 This git repository helps you get up and running quickly w/ a Django installation
