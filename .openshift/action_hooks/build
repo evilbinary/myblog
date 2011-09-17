@@ -3,6 +3,9 @@
 # in this script.  This script gets executed directly, so it could be python,
 # php, ruby, etc.
 
+# Activate VirtualEnv in order to use the correct libraries
+source $OPENSHIFT_APP_DIR/virtenv/bin/activate
+
 if [ ! -f $OPENSHIFT_DATA_DIR/sqlite3.db ]
 then
     echo "Copying $OPENSHIFT_REPO_DIR/wsgi/openshift/sqlite3.db to $OPENSHIFT_DATA_DIR"
