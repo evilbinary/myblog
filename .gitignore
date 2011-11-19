@@ -3,3 +3,5 @@
 *.bak
 *.orig
 *~
+.project
+.pydevproject

@@ -40,5 +40,5 @@ Then push the repo upstream
 
 That's it, you can now checkout your application at (default admin account is admin/admin):
 
-    http://django-$yourlogin.rhcloud.com
+    http://django-$yournamespace.rhcloud.com
 
