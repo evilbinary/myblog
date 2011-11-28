@@ -14,8 +14,8 @@ You can delete the database from your git repo after the first push (you probabl
 should for security).  On subsequent pushes, a 'python manage.py syncdb' is
 executed to make sure that any models you added are created in the DB.  If you
 do anything that requires an alter table, you could add the alter statements
-in GIT_ROOT/.openshift/action_hooks/alter and then use
-GIT_ROOT/.openshift/action_hooks/build to execute that script (make sure to
+in GIT_ROOT/.openshift/action_hooks/alter.sql and then use
+GIT_ROOT/.openshift/action_hooks/post_deploy to execute that script (make sure to
 back up your database w/ rhc-snapshot first :) )
 
 
