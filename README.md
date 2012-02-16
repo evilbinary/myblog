@@ -26,7 +26,7 @@ Create an account at http://openshift.redhat.com/
 
 Create a wsgi-3.2 application
 
-    rhc-create-app -a django -t wsgi-3.2
+    rhc-create-app -a django -t python-2.6
 
 Add this upstream seambooking repo
 
