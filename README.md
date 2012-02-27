@@ -24,7 +24,7 @@ Running on OpenShift
 
 Create an account at http://openshift.redhat.com/
 
-Create a wsgi-3.2 application
+Create a python-2.6 application
 
     rhc-create-app -a django -t python-2.6
 
