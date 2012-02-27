@@ -16,7 +16,7 @@ executed to make sure that any models you added are created in the DB.  If you
 do anything that requires an alter table, you could add the alter statements
 in GIT_ROOT/.openshift/action_hooks/alter.sql and then use
 GIT_ROOT/.openshift/action_hooks/deploy to execute that script (make sure to
-back up your database w/ rhc-snapshot first :) )
+back up your database w/ 'rhc app snapshot save' first :) )
 
 
 Running on OpenShift
@@ -26,7 +26,7 @@ Create an account at http://openshift.redhat.com/
 
 Create a python-2.6 application
 
-    rhc-create-app -a django -t python-2.6
+    rhc app create -a django -t python-2.6
 
 Add this upstream seambooking repo
 
