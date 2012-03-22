@@ -5,7 +5,7 @@
 # could be python, php, ruby, etc.
 
 # Activate VirtualEnv in order to use the correct libraries
-source $OPENSHIFT_APP_DIR/virtenv/bin/activate
+source $OPENSHIFT_GEAR_DIR/virtenv/bin/activate
 
 if [ ! -f $OPENSHIFT_DATA_DIR/sqlite3.db ]
 then
