@@ -1,8 +1,8 @@
-Django on OpenShift Express
-============================
+Django on OpenShift
+===================
 
 This git repository helps you get up and running quickly w/ a Django installation
-on OpenShift Express.  The Django project name used in this repo is 'openshift'
+on OpenShift.  The Django project name used in this repo is 'openshift'
 but you can feel free to change it.  Right now the backend is sqlite3 and the
 database runtime is @ $OPENSHIFT_DATA_DIR/sqlite3.db.
 
