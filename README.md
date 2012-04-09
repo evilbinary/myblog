@@ -28,7 +28,7 @@ Create a python-2.6 application
 
     rhc app create -a django -t python-2.6
 
-Add this upstream seambooking repo
+Add this upstream repo
 
     cd django
     git remote add upstream -m master git://github.com/openshift/django-example.git
