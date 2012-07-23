@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Django settings for openshift project.
-import os
+import imp, os
 
 # a setting to determine whether we are running on OpenShift
 ON_OPENSHIFT = False
@@ -104,8 +104,18 @@ STATICFILES_FINDERS = (
     #'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
+# Make a dictionary of default keys
+default_keys = { 'SECRET_KEY': 'vm4rl5*ymb@2&d_(gc$gb-^twq9w(u69hi--%$5xrh!xk(t%hw' }
+
+# Replace default keys with dynamic values if we are in OpenShift
+use_keys = default_keys
+if ON_OPENSHIFT:
+    imp.find_module('openshiftlibs')
+    import openshiftlibs
+    use_keys = openshiftlibs.openshift_secure(default_keys)
+
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'vm4rl5*ymb@2&d_(gc$gb-^twq9w(u69hi--%$5xrh!xk(t%hw'
+SECRET_KEY = use_keys['SECRET_KEY']
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
