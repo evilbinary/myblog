@@ -43,7 +43,7 @@ Add this upstream repo
     git remote add upstream -m master git://github.com/openshift/django-example.git
     git pull -s recursive -X theirs upstream master
 
-Set your Django admin password
+Set your Django admin password. (Django must be installed on your dev system for this to work; 'sudo yum install Django' will do this for Fedora and RHEL)
 
     cd wsgi/openshift
     ./manage.py changepassword admin

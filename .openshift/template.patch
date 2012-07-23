@@ -1,0 +1,133 @@
+From 2b49faba38b8ceb8abe639b5f7ec022a59f47ce0 Mon Sep 17 00:00:00 2001
+From: "N. Harrison Ripps" <hripps@redhat.com>
+Date: Mon, 23 Jul 2012 11:05:13 -0400
+Subject: [PATCH] Added changes to templatize the quick start.
+
+---
+ wsgi/openshift/openshiftlibs.py |   81 +++++++++++++++++++++++++++++++++++++++
+ wsgi/openshift/settings.py      |   14 ++++++-
+ 2 files changed, 93 insertions(+), 2 deletions(-)
+ create mode 100644 wsgi/openshift/openshiftlibs.py
+
+diff --git a/wsgi/openshift/openshiftlibs.py b/wsgi/openshift/openshiftlibs.py
+new file mode 100644
+index 0000000..a11e0e5
+--- /dev/null
++++ b/wsgi/openshift/openshiftlibs.py
+@@ -0,0 +1,81 @@
++#!/usr/bin/env python
++import hashlib, inspect, os, random, sys
++
++# Gets the secret token provided by OpenShift 
++# or generates one (this is slightly less secure, but good enough for now)
++def get_openshift_secret_token():
++    token = os.getenv('OPENSHIFT_SECRET_TOKEN')
++    name  = os.getenv('OPENSHIFT_APP_NAME')
++    uuid  = os.getenv('OPENSHIFT_APP_UUID')
++    if token is not None:
++        return token
++    elif (name is not None and uuid is not None):
++        return hashlib.sha256(name + '-' + uuid).hexdigest()
++    return None
++
++# Loop through all provided variables and generate secure versions
++# If not running on OpenShift, returns defaults and logs an error message
++#
++# This function calls secure_function and passes an array of:
++#  {
++#    'hash':     generated sha hash,
++#    'variable': name of variable,
++#    'original': original value
++#  }
++def openshift_secure(default_keys, secure_function = 'make_secure_key'):
++    # Attempts to get secret token
++    my_token = get_openshift_secret_token()
++
++    # Only generate random values if on OpenShift
++    my_list  = default_keys
++    
++    if my_token is not None:
++        # Loop over each default_key and set the new value
++        for key, value in default_keys.iteritems():
++            # Create hash out of token and this key's name
++            sha = hashlib.sha256(my_token + '-' + key).hexdigest()
++            # Pass a dictionary so we can add stuff without breaking existing calls
++            vals = { 'hash': sha, 'variable': key, 'original': value }
++            # Call user specified function or just return hash
++            my_list[key] = sha
++            if secure_function is not None:
++                # Pick through the global and local scopes to find the function.
++                possibles = globals().copy()
++                possibles.update(locals())
++                supplied_function = possibles.get(secure_function)
++                if not supplied_function:
++                    raise Exception("Cannot find supplied security function")
++                else:
++                    my_list[key] = supplied_function(vals)
++    else:
++        calling_file = inspect.stack()[1][1]
++        if os.getenv('OPENSHIFT_REPO_DIR'):
++            base = os.getenv('OPENSHIFT_REPO_DIR')
++            calling_file.replace(base,'')
++        sys.stderr.write("OPENSHIFT WARNING: Using default values for secure variables, please manually modify in " + calling_file + "\n")
++
++    return my_list
++
++
++# This function transforms default keys into per-deployment random keys;
++def make_secure_key(key_info):
++	hashcode = key_info['hash']
++	key      = key_info['variable']
++	original = key_info['original']
++	
++	chars = '0123456789abcdef'
++
++	# Use the hash to seed the RNG
++	random.seed(int("0x" + hashcode[:8], 0))
++
++    # Create a random string the same length as the default
++	rand_key = ''
++	for _ in range(len(original)):
++		rand_pos = random.randint(0,len(chars))
++		rand_key += chars[rand_pos:(rand_pos+1)]
++
++	# Reset the RNG
++	random.seed()
++
++	# Set the value
++	return rand_key
+diff --git a/wsgi/openshift/settings.py b/wsgi/openshift/settings.py
+index 842669e..2f44079 100644
+--- a/wsgi/openshift/settings.py
++++ b/wsgi/openshift/settings.py
+@@ -1,6 +1,6 @@
+ # -*- coding: utf-8 -*-
+ # Django settings for openshift project.
+-import os
++import imp, os
+ 
+ # a setting to determine whether we are running on OpenShift
+ ON_OPENSHIFT = False
+@@ -104,8 +104,18 @@ STATICFILES_FINDERS = (
+     #'django.contrib.staticfiles.finders.DefaultStorageFinder',
+ )
+ 
++# Make a dictionary of default keys
++default_keys = { 'SECRET_KEY': 'vm4rl5*ymb@2&d_(gc$gb-^twq9w(u69hi--%$5xrh!xk(t%hw' }
++
++# Replace default keys with dynamic values if we are in OpenShift
++use_keys = default_keys
++if ON_OPENSHIFT:
++    imp.find_module('openshiftlibs')
++    import openshiftlibs
++    use_keys = openshiftlibs.openshift_secure(default_keys)
++
+ # Make this unique, and don't share it with anybody.
+-SECRET_KEY = 'vm4rl5*ymb@2&d_(gc$gb-^twq9w(u69hi--%$5xrh!xk(t%hw'
++SECRET_KEY = use_keys['SECRET_KEY']
+ 
+ # List of callables that know how to import templates from various sources.
+ TEMPLATE_LOADERS = (
+-- 
+1.7.5.4
+
