@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import hashlib, inspect, os, random, sys
 
-# Gets the secret token provided by OpenShift 
+# Gets the secret token provided by OpenShift
 # or generates one (this is slightly less secure, but good enough for now)
 def get_openshift_secret_token():
     token = os.getenv('OPENSHIFT_SECRET_TOKEN')
@@ -28,7 +28,7 @@ def openshift_secure(default_keys, secure_function = 'make_secure_key'):
 
     # Only generate random values if on OpenShift
     my_list  = default_keys
-    
+
     if my_token is not None:
         # Loop over each default_key and set the new value
         for key, value in default_keys.iteritems():
@@ -62,8 +62,11 @@ def make_secure_key(key_info):
 	hashcode = key_info['hash']
 	key      = key_info['variable']
 	original = key_info['original']
-	
-	chars = '0123456789abcdef'
+
+	chars  = '0123456789'
+	chars += 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+	chars += '!@#%^&*()'
+	chars += '-_ []{}<>~`+=,.;:/?|'
 
 	# Use the hash to seed the RNG
 	random.seed(int("0x" + hashcode[:8], 0))
