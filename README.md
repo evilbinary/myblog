@@ -43,15 +43,15 @@ Add this upstream repo
     git remote add upstream -m master git://github.com/openshift/django-example.git
     git pull -s recursive -X theirs upstream master
 
-Set your Django admin password. (Django must be installed on your dev system for this to work; 'sudo yum install Django' will do this for Fedora and RHEL)
-
-    cd wsgi/openshift
-    ./manage.py changepassword admin
-    
 Then push the repo upstream
 
-    cd ../../
     git push
+	
+**Note**: As the git push output scrolls by, keep an eye out for a
+  line of output that starts with 'CLIENT_MESSAGE: '. This line
+  contains the generated admin password that you will need to begin
+  administering your Django app. This is the only time the password
+  will be displayed, so be sure to save it somewhere!
 
 That's it, you can now checkout your application at (default admin account is admin/admin):
 
