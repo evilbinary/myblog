@@ -63,10 +63,12 @@ def make_secure_key(key_info):
 	key      = key_info['variable']
 	original = key_info['original']
 
-	chars  = '0123456789'
-	chars += 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
-	chars += '!@#%^&*()'
-	chars += '-_ []{}<>~`+=,.;:/?|'
+    # These are the legal password characters
+    # as per the Django source code
+    # (django/contrib/auth/models.py)
+    chars  = 'abcdefghjkmnpqrstuvwxyz'
+    chars += 'ABCDEFGHJKLMNPQRSTUVWXYZ'
+    chars += '23456789'
 
 	# Use the hash to seed the RNG
 	random.seed(int("0x" + hashcode[:8], 0))
