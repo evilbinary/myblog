@@ -1,4 +1,3 @@
-
 Django on OpenShift
 ===================
 
@@ -51,8 +50,10 @@ Then push the repo upstream
   line of output that starts with 'CLIENT_MESSAGE: '. This line
   contains the generated admin password that you will need to begin
   administering your Django app. This is the only time the password
-  will be displayed, so be sure to save it somewhere!
+  will be displayed, so be sure to save it somewhere! You might want 
+  to pipe the output of the git push to a text file so you can grep for
+  the password later.
 
-That's it, you can now checkout your application at (default admin account is admin/admin):
+That's it, you can now checkout your application at:
 
     http://django-$yournamespace.rhcloud.com
