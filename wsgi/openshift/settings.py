@@ -19,7 +19,7 @@ MANAGERS = ADMINS
 
 if ON_OPENSHIFT:
     # os.environ['OPENSHIFT_MYSQL_DB_*'] variables can be used with databases created
-    # with rhc app cartridge add (see /README in this git repo)
+    # with rhc cartridge add (see /README in this git repo)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
