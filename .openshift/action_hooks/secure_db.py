@@ -39,4 +39,4 @@ c.close()
 conn.close()
 
 # Print the new password info
-print "CLIENT_MESSAGE: The password for user 'admin' in your Django app is " + new_pass + " ...be sure to write this down as you will not see this message again.\n"
+print "Django application credentials:\n\tuser: admin\n\t" + new_pass
