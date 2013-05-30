@@ -4,7 +4,7 @@
 # up again.  This script gets executed directly, so it could be python, php,
 # ruby, etc.
 
-if [ -f $OPENSHIFT_HOMEDIR/python-2.6 ]; then
+if [ -e $OPENSHIFT_HOMEDIR/python-2.6 ]; then
     source $OPENSHIFT_HOMEDIR/python-2.6/virtenv/bin/activate
 else
     source $OPENSHIFT_HOMEDIR/python/virtenv/bin/activate
