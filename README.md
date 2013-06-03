@@ -57,7 +57,7 @@ That's it. You can now checkout your application at:
 Admin user name and password
 ----------------------------
 As the `git push` output scrolls by, keep an eye out for a
-line of output that starts with `CLIENT_MESSAGE: `. This line
+line of output that starts with `Django application credentials: `. This line
 contains the generated admin password that you will need to begin
 administering your Django app. This is the only time the password
 will be displayed, so be sure to save it somewhere. You might want 
