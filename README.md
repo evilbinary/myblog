@@ -23,6 +23,17 @@ statements in `GIT_ROOT/.openshift/action_hooks/alter.sql` and then use
 `GIT_ROOT/.openshift/action_hooks/deploy` to execute that script (make
 sure to back up your database w/ `rhc app snapshot save` first :) )
 
+You can also turn on the DEBUG mode for Django application using the
+`rhc env set DEBUG=True --app APP_NAME`. If you do this, you'll get
+nicely formatted error pages in browser for HTTP 500 errors.
+
+Do not forget to turn this environment variable off and fully restart
+the application when you finish:
+
+```
+$ rhc env unset DEBUG
+$ rhc app stop && rhc app start
+```
 
 Running on OpenShift
 --------------------
