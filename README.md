@@ -44,9 +44,9 @@ Install the RHC client tools if you have not already done so:
     
     sudo gem install rhc
 
-Create a python-2.6 application
+Create a python application
 
-    rhc app create -a django -t python-2.6
+    rhc app create django python-2.6
 
 Add this upstream repo
 
