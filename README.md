@@ -38,7 +38,7 @@ $ rhc app stop && rhc app start
 Running on OpenShift
 --------------------
 
-Create an account at http://openshift.redhat.com/
+Create an account at https://www.openshift.com
 
 Install the RHC client tools if you have not already done so:
     
