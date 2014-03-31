@@ -51,5 +51,5 @@ persist between pushes of your repo.
 Notes about setup.py
 ====================
 
-Adding deps to the install_requires will have the openshift server actually
+Adding deps to the install_requires will have the OpenShift server actually
 install those deps at git push time.

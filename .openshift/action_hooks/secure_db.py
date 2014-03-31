@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import hashlib, imp, os, sqlite3
 
-# Load the openshift helper library
+# Load the OpenShift helper library
 lib_path      = os.environ['OPENSHIFT_REPO_DIR'] + 'wsgi/openshift/'
 modinfo       = imp.find_module('openshiftlibs', [lib_path])
 openshiftlibs = imp.load_module('openshiftlibs', modinfo[0], modinfo[1], modinfo[2])

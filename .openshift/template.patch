@@ -102,7 +102,7 @@ index 842669e..2f44079 100644
 +++ b/wsgi/openshift/settings.py
 @@ -1,6 +1,6 @@
  # -*- coding: utf-8 -*-
- # Django settings for openshift project.
+ # Django settings for OpenShift project.
 -import os
 +import imp, os
  

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Django settings for openshift project.
+# Django settings for OpenShift project.
 import imp, os
 
 # a setting to determine whether we are running on OpenShift
