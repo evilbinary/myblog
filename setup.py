@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name='Blog',
-    version='1.0',
+    version='1.1',
     description='OpenShift App',
     author='evilbinary',
     author_email='rootntsd@gmail.com',
