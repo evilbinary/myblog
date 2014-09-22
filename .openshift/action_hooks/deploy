@@ -3,14 +3,17 @@
 # build hook has been run but before the application has been started back
 # up again.  This script gets executed directly, so it could be python, php,
 # ruby, etc.
-
+ 
 source $OPENSHIFT_HOMEDIR/python/virtenv/bin/activate
 
-if [ ! -f $OPENSHIFT_DATA_DIR/sqlite3.db ]
+if [ ! -f $OPENSHIFT_DATA_DIR/wsgi/mysite/db.sqlite3 ]
 then
-    echo "Copying $OPENSHIFT_REPO_DIR/wsgi/openshift/sqlite3.db to $OPENSHIFT_DATA_DIR"
-    cp "$OPENSHIFT_REPO_DIR"wsgi/openshift/sqlite3.db $OPENSHIFT_DATA_DIR
+    echo "Copying $OPENSHIFT_REPO_DIR/wsgi/mysite/db.sqlite3 to $OPENSHIFT_DATA_DIR"
+    cp "$OPENSHIFT_REPO_DIR"wsgi/mysite/db.sqlite3 $OPENSHIFT_DATA_DIR
     python "$OPENSHIFT_REPO_DIR".openshift/action_hooks/secure_db.py | tee ${OPENSHIFT_DATA_DIR}/CREDENTIALS
+    python "$OPENSHIFT_REPO_DIR"wsgi/mysite/manage.py makemigrations
+    python "$OPENSHIFT_REPO_DIR"wsgi/mysite/manage.py migrations
+
 else
     echo "Executing 'python $OPENSHIFT_REPO_DIR/wsgi/mysite/manage.py syncdb --noinput'"
     python "$OPENSHIFT_REPO_DIR"wsgi/mysite/manage.py syncdb --noinput
