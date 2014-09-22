@@ -12,6 +12,7 @@
 
 from django.db import models
 
+db_prefix=''
 
 class DjangoMigrations(models.Model):
     id = models.IntegerField(primary_key=True)  # AutoField?
@@ -32,7 +33,7 @@ class Commentmeta(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'e_commentmeta'
+        db_table = db_prefix+'commentmeta'
 
 
 class Comments(models.Model):
@@ -54,7 +55,7 @@ class Comments(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'e_comments'
+        db_table = db_prefix+'comments'
 
 
 class Links(models.Model):
@@ -74,7 +75,7 @@ class Links(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'e_links'
+        db_table = db_prefix+'links'
 
 
 class Options(models.Model):
@@ -85,7 +86,7 @@ class Options(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'e_options'
+        db_table = db_prefix+'ptions'
 
 
 class Postmeta(models.Model):
@@ -96,7 +97,7 @@ class Postmeta(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'e_postmeta'
+        db_table = db_prefix+'postmeta'
 
 
 class Posts(models.Model):
@@ -126,7 +127,7 @@ class Posts(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'e_posts'
+        db_table = db_prefix+'posts'
 
 
 class TermRelationships(models.Model):
@@ -136,7 +137,7 @@ class TermRelationships(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'e_term_relationships'
+        db_table = db_prefix+'term_relationships'
 
 
 class TermTaxonomy(models.Model):
@@ -149,7 +150,7 @@ class TermTaxonomy(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'e_term_taxonomy'
+        db_table = db_prefix+'term_taxonomy'
 
 
 class Terms(models.Model):
@@ -160,7 +161,7 @@ class Terms(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'e_terms'
+        db_table = db_prefix+'terms'
 
 
 class Usermeta(models.Model):
@@ -171,7 +172,7 @@ class Usermeta(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'e_usermeta'
+        db_table = db_prefix+'usermeta'
 
 
 class Users(models.Model):
@@ -188,171 +189,4 @@ class Users(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'e_users'
-
-
-class WpCommentmeta(models.Model):
-    meta_id = models.BigIntegerField(primary_key=True)
-    comment_id = models.BigIntegerField()
-    meta_key = models.CharField(max_length=255, blank=True)
-    meta_value = models.TextField(blank=True)
-
-    class Meta:
-        managed = False
-        db_table = 'wp_commentmeta'
-
-
-class WpComments(models.Model):
-    comment_id = models.BigIntegerField(db_column='comment_ID', primary_key=True)  # Field name made lowercase.
-    comment_post_id = models.BigIntegerField(db_column='comment_post_ID')  # Field name made lowercase.
-    comment_author = models.TextField()
-    comment_author_email = models.CharField(max_length=100)
-    comment_author_url = models.CharField(max_length=200)
-    comment_author_ip = models.CharField(db_column='comment_author_IP', max_length=100)  # Field name made lowercase.
-    comment_date = models.DateTimeField()
-    comment_date_gmt = models.DateTimeField()
-    comment_content = models.TextField()
-    comment_karma = models.IntegerField()
-    comment_approved = models.CharField(max_length=20)
-    comment_agent = models.CharField(max_length=255)
-    comment_type = models.CharField(max_length=20)
-    comment_parent = models.BigIntegerField()
-    user_id = models.BigIntegerField()
-
-    class Meta:
-        managed = False
-        db_table = 'wp_comments'
-
-
-class WpLinks(models.Model):
-    link_id = models.BigIntegerField(primary_key=True)
-    link_url = models.CharField(max_length=255)
-    link_name = models.CharField(max_length=255)
-    link_image = models.CharField(max_length=255)
-    link_target = models.CharField(max_length=25)
-    link_description = models.CharField(max_length=255)
-    link_visible = models.CharField(max_length=20)
-    link_owner = models.BigIntegerField()
-    link_rating = models.IntegerField()
-    link_updated = models.DateTimeField()
-    link_rel = models.CharField(max_length=255)
-    link_notes = models.TextField()
-    link_rss = models.CharField(max_length=255)
-
-    class Meta:
-        managed = False
-        db_table = 'wp_links'
-
-
-class WpOptions(models.Model):
-    option_id = models.BigIntegerField(primary_key=True)
-    option_name = models.CharField(unique=True, max_length=64)
-    option_value = models.TextField()
-    autoload = models.CharField(max_length=20)
-
-    class Meta:
-        managed = False
-        db_table = 'wp_options'
-
-
-class WpPostmeta(models.Model):
-    meta_id = models.BigIntegerField(primary_key=True)
-    post_id = models.BigIntegerField()
-    meta_key = models.CharField(max_length=255, blank=True)
-    meta_value = models.TextField(blank=True)
-
-    class Meta:
-        managed = False
-        db_table = 'wp_postmeta'
-
-
-class WpPosts(models.Model):
-    id = models.BigIntegerField(db_column='ID', primary_key=True)  # Field name made lowercase.
-    post_author = models.BigIntegerField()
-    post_date = models.DateTimeField()
-    post_date_gmt = models.DateTimeField()
-    post_content = models.TextField()
-    post_title = models.TextField()
-    post_excerpt = models.TextField()
-    post_status = models.CharField(max_length=20)
-    comment_status = models.CharField(max_length=20)
-    ping_status = models.CharField(max_length=20)
-    post_password = models.CharField(max_length=20)
-    post_name = models.CharField(max_length=200)
-    to_ping = models.TextField()
-    pinged = models.TextField()
-    post_modified = models.DateTimeField()
-    post_modified_gmt = models.DateTimeField()
-    post_content_filtered = models.TextField()
-    post_parent = models.BigIntegerField()
-    guid = models.CharField(max_length=255)
-    menu_order = models.IntegerField()
-    post_type = models.CharField(max_length=20)
-    post_mime_type = models.CharField(max_length=100)
-    comment_count = models.BigIntegerField()
-
-    class Meta:
-        managed = False
-        db_table = 'wp_posts'
-
-
-class WpTermRelationships(models.Model):
-    object_id = models.BigIntegerField()
-    term_taxonomy_id = models.BigIntegerField()
-    term_order = models.IntegerField()
-
-    class Meta:
-        managed = False
-        db_table = 'wp_term_relationships'
-
-
-class WpTermTaxonomy(models.Model):
-    term_taxonomy_id = models.BigIntegerField(primary_key=True)
-    term_id = models.BigIntegerField()
-    taxonomy = models.CharField(max_length=32)
-    description = models.TextField()
-    parent = models.BigIntegerField()
-    count = models.BigIntegerField()
-
-    class Meta:
-        managed = False
-        db_table = 'wp_term_taxonomy'
-
-
-class WpTerms(models.Model):
-    term_id = models.BigIntegerField(primary_key=True)
-    name = models.CharField(max_length=200)
-    slug = models.CharField(unique=True, max_length=200)
-    term_group = models.BigIntegerField()
-
-    class Meta:
-        managed = False
-        db_table = 'wp_terms'
-
-
-class WpUsermeta(models.Model):
-    umeta_id = models.BigIntegerField(primary_key=True)
-    user_id = models.BigIntegerField()
-    meta_key = models.CharField(max_length=255, blank=True)
-    meta_value = models.TextField(blank=True)
-
-    class Meta:
-        managed = False
-        db_table = 'wp_usermeta'
-
-
-class WpUsers(models.Model):
-    id = models.BigIntegerField(db_column='ID', primary_key=True)  # Field name made lowercase.
-    user_login = models.CharField(max_length=60)
-    user_pass = models.CharField(max_length=64)
-    user_nicename = models.CharField(max_length=50)
-    user_email = models.CharField(max_length=100)
-    user_url = models.CharField(max_length=100)
-    user_registered = models.DateTimeField()
-    user_activation_key = models.CharField(max_length=60)
-    user_status = models.IntegerField()
-    display_name = models.CharField(max_length=250)
-
-    class Meta:
-        managed = False
-        db_table = 'wp_users'
+        db_table = db_prefix+'users'
