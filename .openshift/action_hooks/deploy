@@ -11,8 +11,7 @@ then
     echo "Copying $OPENSHIFT_REPO_DIR/wsgi/mysite/db.sqlite3 to $OPENSHIFT_DATA_DIR"
     cp "$OPENSHIFT_REPO_DIR"wsgi/mysite/db.sqlite3 $OPENSHIFT_DATA_DIR
     python "$OPENSHIFT_REPO_DIR".openshift/action_hooks/secure_db.py | tee ${OPENSHIFT_DATA_DIR}/CREDENTIALS
-    python "$OPENSHIFT_REPO_DIR"wsgi/mysite/manage.py makemigrations
-    python "$OPENSHIFT_REPO_DIR"wsgi/mysite/manage.py migrate
+    python "$OPENSHIFT_REPO_DIR"wsgi/mysite/manage.py syncdb
 
 else
     echo "Executing 'python $OPENSHIFT_REPO_DIR/wsgi/mysite/manage.py syncdb --noinput'"

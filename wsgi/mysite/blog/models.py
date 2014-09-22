@@ -3,7 +3,7 @@
 # You'll have to do the following manually to clean this up:
 #   * Rearrange models' order
 #   * Make sure each model has one field with primary_key=True
-#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
+#   * Remove `managed = db_managed` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 #
 # Also note: You'll have to insert the output of 'django-admin.py sqlcustom [app_label]'
@@ -13,6 +13,7 @@
 from django.db import models
 
 db_prefix=''
+db_managed=True
 
 class DjangoMigrations(models.Model):
     id = models.IntegerField(primary_key=True)  # AutoField?
@@ -21,7 +22,7 @@ class DjangoMigrations(models.Model):
     applied = models.DateTimeField()
 
     class Meta:
-        managed = False
+        managed = db_managed
         db_table = 'django_migrations'
 
 
@@ -32,7 +33,7 @@ class Commentmeta(models.Model):
     meta_value = models.TextField(blank=True)
 
     class Meta:
-        managed = False
+        managed = db_managed
         db_table = db_prefix+'commentmeta'
 
 
@@ -54,7 +55,7 @@ class Comments(models.Model):
     user_id = models.BigIntegerField()
 
     class Meta:
-        managed = False
+        managed = db_managed
         db_table = db_prefix+'comments'
 
 
@@ -74,7 +75,7 @@ class Links(models.Model):
     link_rss = models.CharField(max_length=255)
 
     class Meta:
-        managed = False
+        managed = db_managed
         db_table = db_prefix+'links'
 
 
@@ -85,7 +86,7 @@ class Options(models.Model):
     autoload = models.CharField(max_length=20)
 
     class Meta:
-        managed = False
+        managed = db_managed
         db_table = db_prefix+'ptions'
 
 
@@ -96,7 +97,7 @@ class Postmeta(models.Model):
     meta_value = models.TextField(blank=True)
 
     class Meta:
-        managed = False
+        managed = db_managed
         db_table = db_prefix+'postmeta'
 
 
@@ -126,7 +127,7 @@ class Posts(models.Model):
     comment_count = models.BigIntegerField()
 
     class Meta:
-        managed = False
+        managed = db_managed
         db_table = db_prefix+'posts'
 
 
@@ -136,7 +137,7 @@ class TermRelationships(models.Model):
     term_order = models.IntegerField()
 
     class Meta:
-        managed = False
+        managed = db_managed
         db_table = db_prefix+'term_relationships'
 
 
@@ -149,7 +150,7 @@ class TermTaxonomy(models.Model):
     count = models.BigIntegerField()
 
     class Meta:
-        managed = False
+        managed = db_managed
         db_table = db_prefix+'term_taxonomy'
 
 
@@ -160,7 +161,7 @@ class Terms(models.Model):
     term_group = models.BigIntegerField()
 
     class Meta:
-        managed = False
+        managed = db_managed
         db_table = db_prefix+'terms'
 
 
@@ -171,7 +172,7 @@ class Usermeta(models.Model):
     meta_value = models.TextField(blank=True)
 
     class Meta:
-        managed = False
+        managed = db_managed
         db_table = db_prefix+'usermeta'
 
 
@@ -188,5 +189,5 @@ class Users(models.Model):
     display_name = models.CharField(max_length=250)
 
     class Meta:
-        managed = False
+        managed = db_managed
         db_table = db_prefix+'users'
