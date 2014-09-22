@@ -90,7 +90,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
-STATIC_URL = 'blog/static/'
+STATIC_URL = '/static/'
 
 TEMPLATE_DIR=(
         os.path.join(os.path.dirname(__file__), '../blog/templates').replace('\\','/'),
