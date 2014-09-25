@@ -6,6 +6,7 @@ from django.template.loader import render_to_string
 from django.core.paginator import Paginator,Page,EmptyPage, PageNotAnInteger
 from django.db.models import Avg,Max,Min,Variance,Count
 import datetime
+from django.db import connection
 
 #This is for response request
 
@@ -54,8 +55,16 @@ def render_sidebar(request):
     categories=Terms.objects.select_related('term').filter(termtaxonomy__taxonomy='category',termtaxonomy__count__gt=0).order_by('name')
     
     #this sql equal to SELECT YEAR(post_date) AS `year`, MONTH(post_date) AS `month`, count(ID) as posts FROM e_posts  WHERE post_type = 'post' AND post_status = 'publish' GROUP BY YEAR(post_date), MONTH(post_date) ORDER BY post_date DESC
-    archives=Posts.objects.filter(post_status='publish',post_type='post').extra(select={'year':'year(post_date)','month':'month(post_date)'}).values('year','month').annotate(Count('id')).order_by('-post_date')
-    
+    #archives=Posts.objects.filter(post_status='publish',post_type='post').extra(select={'year':'year(post_date)','month':'month(post_date)'}).values('year','month').annotate(Count('id')).order_by('-post_date')
+    #hack to port to mysql and sqlite
+    engine=connection.settings_dict['ENGINE']
+    archives=[]
+    if engine=='django.db.backends.sqlite3':
+        archives=Posts.objects.filter(post_status='publish',post_type='post').extra(select={'year':"strftime('%Y',post_date)",'month':"strftime('%m',post_date)"}).values('year','month').annotate(Count('id')).order_by('-post_date')
+    elif engine=='django.db.backends.mysql':
+        archives=Posts.objects.filter(post_status='publish',post_type='post').extra(select={'year':'year(post_date)','month':'month(post_date)'}).values('year','month').annotate(Count('id')).order_by('-post_date')
+    else:
+        pass;
 
     context={
         'recent_posts':recent_posts,
