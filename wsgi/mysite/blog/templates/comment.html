@@ -1,0 +1,32 @@
+<div id="comments" class="comments-area">
+	<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">回复
+			<small>
+			<a rel="nofollow" id="cancel-comment-reply-link" href="/php/wordpress/?p=29#respond" style="display:none;">Cancel reply</a>
+			</small>
+		</h3>
+		<form action="/blog/comment" method="post" id="commentform" class="comment-form">
+			<!--<p class="logged-in-as">Logged in as 
+				<a href="http://localhost/php/wordpress/wp-admin/profile.php">root</a>. 
+				<a href="http://localhost/php/wordpress/wp-login.php?action=logout&amp;redirect_to=http%3A%2F%2Flocalhost%2Fphp%2Fwordpress%2F%3Fp%3D29&amp;_wpnonce=4c698ae045" title="Log out of this account">Log out?</a>
+			</p>-->	
+																					
+			<p class="comment-form-comment">
+				<label for="comment">Comment</label> 
+				<textarea id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea>
+			</p>						
+			<p class="form-allowed-tags">你可以使用这些 
+				<abbr title="HyperText Markup Language">HTML</abbr> 标签和属性:  <code>&lt;a href="" title=""&gt; &lt;abbr title=""&gt; &lt;acronym title=""&gt; &lt;b&gt; &lt;blockquote cite=""&gt; &lt;cite&gt; &lt;code&gt; &lt;del datetime=""&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=""&gt; &lt;strike&gt; &lt;strong&gt; </code>
+			</p>
+			<p class="form-submit">
+				<input name="submit" type="submit" id="submit" value="发表回复">
+				<input type="hidden" name="comment_post_ID" value="{{comment_post_id}}" id="comment_post_ID">
+				<input type="hidden" name="comment_parent" id="comment_parent" value="0">
+			</p>
+				<input type="hidden" id="_wp_unfiltered_html_comment_disabled" name="_wp_unfiltered_html_comment" value="ec2af034c7">
+				<script>(function(){if(window===window.parent){document.getElementById('_wp_unfiltered_html_comment_disabled').name='_wp_unfiltered_html_comment';}})();
+				</script>
+			</form>
+	</div><!-- #respond -->
+			
+</div>

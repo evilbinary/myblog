@@ -1,0 +1,15 @@
+<div class="pagination">
+    <span class="step-links">
+        {% if prev_post %}
+            上一篇 <a href="/blog/page{{ page.previous_page_number }}/?p={{prev_post.id}}"> {{prev_post.post_title}}</a>
+        {% endif %}
+
+        <span class="current">
+           
+        </span>
+        
+        {% if next_post %}
+            下一篇 <a href="/blog/page{{ page.next_page_number }}/?p={{next_post.id}}"> {{next_post.post_title}}</a>
+        {% endif %}
+    </span>
+</div>

@@ -1,19 +1,24 @@
-
-{%for post in posts %}
+{%for post in posts%} 
+{{post.object_list}}
 <article id="post-{{post.id}}" class="post-{{post.id}} post type-post status-publish format-standard hentry category-uncategorized">       
     <header class="entry-header">
-        <h1 class="entry-title"><a href="?p={{post.id}}" rel="bookmark">{{post.post_title}}</a></h1>
+        <h1 class="entry-title"><a href="/blog/article/{{post.id}}" rel="bookmark">{{post.post_title}}</a></h1>
         <div class="comments-link">
-            <a href="?p=7#respond" title="评论 {{post.post_titile}}"><span class="leave-reply">发表回复</span></a>
+            <a href="?p={{post.id}}#respond" title="评论 {{post.post_titile}}"><span class="leave-reply">发表回复</span></a>
         </div>
     </header>
 
     <div class="entry-content">
         <p> {{post.post_content}} </p>
     </div>
-    
+
     <footer class="entry-meta">
-    发布在 <a href="?cat=1" rel="category">未分类</a> 
+    发布在 
+    {%if post.cat %}
+    <a href="/blog/cat/{{post.cat.term_id}}" rel="category">{{post.cat.name}}</a> 
+    {%else%}
+        未分类
+    {%endif%}
      <a href="?p={{post.id}}" title="{{post.post_date}}" rel="bookmark">
             <time class="entry-date" datetime="{{post.post_date}}">{{post.post_date}}</time></a>
             <span class="by-author"> by 
@@ -21,12 +26,12 @@
                     <a class="url fn n" href="?author=1" title="View all posts by root" rel="author">{{post.post_author}}</a>
                 </span>
             </span>        
-            <span class="edit-link">
+            <!--<span class="edit-link">
                 <a class="post-edit-link" href="wp-admin/post.php?post=5&amp;action=edit">编辑</a>
-            </span>                    
+            </span>-->                    
     </footer>
 
 </article><!-- #post -->
 {%endfor%}
 
- 
+{{info}}
