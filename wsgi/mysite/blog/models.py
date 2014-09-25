@@ -12,7 +12,7 @@
 
 from django.db import models
 
-db_prefix=''
+db_prefix='wp_'
 db_managed=True
 
 class DjangoMigrations(models.Model):
@@ -26,37 +26,7 @@ class DjangoMigrations(models.Model):
         db_table = 'django_migrations'
 
 
-class Commentmeta(models.Model):
-    meta_id = models.BigIntegerField(primary_key=True)
-    comment_id = models.BigIntegerField()
-    meta_key = models.CharField(max_length=255, blank=True)
-    meta_value = models.TextField(blank=True)
 
-    class Meta:
-        managed = db_managed
-        db_table = db_prefix+'commentmeta'
-
-
-class Comments(models.Model):
-    comment_id = models.BigIntegerField(db_column='comment_ID', primary_key=True)  # Field name made lowercase.
-    comment_post_id = models.BigIntegerField(db_column='comment_post_ID')  # Field name made lowercase.
-    comment_author = models.TextField()
-    comment_author_email = models.CharField(max_length=100)
-    comment_author_url = models.CharField(max_length=200)
-    comment_author_ip = models.CharField(db_column='comment_author_IP', max_length=100)  # Field name made lowercase.
-    comment_date = models.DateTimeField()
-    comment_date_gmt = models.DateTimeField()
-    comment_content = models.TextField()
-    comment_karma = models.IntegerField()
-    comment_approved = models.CharField(max_length=20)
-    comment_agent = models.CharField(max_length=255)
-    comment_type = models.CharField(max_length=20)
-    comment_parent = models.BigIntegerField()
-    user_id = models.BigIntegerField()
-
-    class Meta:
-        managed = db_managed
-        db_table = db_prefix+'comments'
 
 
 class Links(models.Model):
@@ -87,7 +57,7 @@ class Options(models.Model):
 
     class Meta:
         managed = db_managed
-        db_table = db_prefix+'ptions'
+        db_table = db_prefix+'options'
 
 
 class Postmeta(models.Model):
@@ -131,27 +101,39 @@ class Posts(models.Model):
         db_table = db_prefix+'posts'
 
 
-class TermRelationships(models.Model):
-    object_id = models.BigIntegerField()
-    term_taxonomy_id = models.BigIntegerField()
-    term_order = models.IntegerField()
+class Commentmeta(models.Model):
+    meta_id = models.BigIntegerField(primary_key=True)
+    comment_id = models.BigIntegerField()
+    meta_key = models.CharField(max_length=255, blank=True)
+    meta_value = models.TextField(blank=True)
 
     class Meta:
         managed = db_managed
-        db_table = db_prefix+'term_relationships'
+        db_table = db_prefix+'commentmeta'
 
 
-class TermTaxonomy(models.Model):
-    term_taxonomy_id = models.BigIntegerField(primary_key=True)
-    term_id = models.BigIntegerField()
-    taxonomy = models.CharField(max_length=32)
-    description = models.TextField()
-    parent = models.BigIntegerField()
-    count = models.BigIntegerField()
+class Comments(models.Model):
+    comment_id = models.BigIntegerField(db_column='comment_ID', primary_key=True)  # Field name made lowercase.
+    #comment_post_id = models.BigIntegerField(db_column='comment_post_ID')  # Field name made lowercase.
+    comment_post=models.ForeignKey(Posts)
+    comment_author = models.TextField()
+    comment_author_email = models.CharField(max_length=100)
+    comment_author_url = models.CharField(max_length=200)
+    comment_author_ip = models.CharField(db_column='comment_author_IP', max_length=100)  # Field name made lowercase.
+    comment_date = models.DateTimeField()
+    comment_date_gmt = models.DateTimeField()
+    comment_content = models.TextField()
+    comment_karma = models.IntegerField()
+    comment_approved = models.CharField(max_length=20)
+    comment_agent = models.CharField(max_length=255)
+    comment_type = models.CharField(max_length=20)
+    comment_parent = models.BigIntegerField()
+    user_id = models.BigIntegerField()
 
     class Meta:
         managed = db_managed
-        db_table = db_prefix+'term_taxonomy'
+        db_table = db_prefix+'comments'
+
 
 
 class Terms(models.Model):
@@ -163,6 +145,38 @@ class Terms(models.Model):
     class Meta:
         managed = db_managed
         db_table = db_prefix+'terms'
+
+
+class TermTaxonomy(models.Model):
+    term_taxonomy_id = models.BigIntegerField(primary_key=True)
+    #term_id = models.BigIntegerField()
+    term=models.ForeignKey(Terms)
+    taxonomy = models.CharField(max_length=32)
+    description = models.TextField()
+    parent = models.BigIntegerField()
+    count = models.BigIntegerField()
+
+    class Meta:
+        managed = db_managed
+        db_table = db_prefix+'term_taxonomy'
+
+class TermRelationships(models.Model):
+    #object_id = models.BigIntegerField()
+    term_relationship_id=models.BigIntegerField(primary_key=True)
+    object=models.ForeignKey(Posts)
+    #term_taxonomy_id = models.BigIntegerField()
+    term_taxonomy = models.ForeignKey(TermTaxonomy)
+    term_order = models.IntegerField()
+
+    class Meta:
+        managed = db_managed
+        db_table = db_prefix+'term_relationships'
+        #unique_together=('object','term_taxonomy_id')
+
+
+
+
+
 
 
 class Usermeta(models.Model):
