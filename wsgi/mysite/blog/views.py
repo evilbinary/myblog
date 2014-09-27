@@ -7,6 +7,10 @@ from django.core.paginator import Paginator,Page,EmptyPage, PageNotAnInteger
 from django.db.models import Avg,Max,Min,Variance,Count
 import datetime
 from django.db import connection
+from django.db.models import Q
+from django.core.context_processors import csrf
+
+
 
 #This is for response request
 
@@ -15,15 +19,29 @@ def index(request):
     context={
     'header':render_header(request),
     'footer':render_footer(request),
-    'contents':render_page(request),
+    'contents':render_pages(request),
      'sidebar':render_sidebar(request),
     }
     return render_to_response('index.html',context)
-def page(request,num='1'):
+def page(request,page_id):
+    posts_list=Posts.objects.filter(post_status='publish',post_type='page',id=page_id)
+
+    comments=Comments.objects.filter(comment_post_id=page_id).order_by('comment_date')
+    contents=render_page1(posts_list,1,'',render_comment(request,page_id,comments),1)
     context={
     'header':render_header(request),
     'footer':render_footer(request),
-    'contents':render_page(request,num),
+    'contents':contents,
+     'sidebar':render_sidebar(request),
+    }
+    return render_to_response('index.html',context)
+    pass
+
+def pages(request,num='1'):
+    context={
+    'header':render_header(request),
+    'footer':render_footer(request),
+    'contents':render_pages(request,num),
      'sidebar':render_sidebar(request),
     }
     return render_to_response('index.html',context)
@@ -76,13 +94,44 @@ def render_sidebar(request):
 
 #for post
 def comment(request):
-    context={'test':'ttestfasdf'}
-    context=RequestContext(context)
-    return render_to_response('test.html',context)
+    comment_content=request.POST.get('comment')
+    comment_post_id=request.POST.get('comment_post_ID')
+    comment_author=request.POST.get('author')
+    comment_email=request.POST.get('email')
+    comment_url=request.POST.get('url')
+    comment_parent=request.POST.get('comment_parent')
+    
+    if comment_post_id==None or comment_parent==None:
+        return index(request)
+    p=Posts.objects.get(pk=comment_post_id)
+    comment=Comments(comment_post=p,comment_author=comment_author,comment_parent=comment_parent,comment_content=comment_content,comment_author_email=comment_email,comment_author_url=comment_url)
+    # comment.comment_date=datetime()
+    p.comment_count=p.comment_count+1
+    p.save()
+    comment.save()
+
+    #context={'test':comment_post_id}
+    if(p.post_type=='post'):
+        return article(request,comment_post_id)
+    elif(p.post_type=='page'):
+        return page(request,comment_post_id)
     pass;
 
 def search(request):
-    return page(request)
+    s=request.GET.get('s')
+    posts_list=[]
+    if s!=None:
+        posts_list=Posts.objects.all().filter(post_status='publish',post_type='post').filter(Q(post_title__contains=s)|Q(post_content__contains=s))
+    
+    context={
+        'header':render_header(request),
+        'footer':render_footer(request),
+        'contents':render_page1(posts_list),
+         'sidebar':render_sidebar(request),
+        }
+    return render_to_response('index.html',context,context_instance=RequestContext(request))
+    #return page(request)
+
 
 def cat(request,num='1'):
     #test=TermRelationships.objects.select_related('object').filter(term_taxonomy_id=num,object__post_type='post')
@@ -121,7 +170,7 @@ def article(request,post_id):
     context={
     'header':render_header(request),
     'footer':render_footer(request),
-    'contents':render_article(post_id),
+    'contents':render_article(request,post_id),
      'sidebar':render_sidebar(request),
     }
     return render_to_response('index.html',context)
@@ -132,7 +181,9 @@ def feed(request,str=''):
 
 
 def render_header(request):
-    context=RequestContext(request) 
+    pages=Posts.objects.all().filter(post_status='publish',post_type='page').only('id','post_title').order_by('-post_date')
+
+    context=RequestContext(request,{'pages':pages}) 
     return render_to_string('header.html',context)
 def render_footer(request):
     return render_to_string('footer.html')
@@ -159,12 +210,16 @@ def render_nator2(prev,next):
     context={'prev_post':prev,
             'next_post':next}
     return render_to_string('page_nav.html',context)
-def render_comment(comment_post_id):
-    context={'comment_post_id':comment_post_id}
+def render_comment(request,comment_post_id,comments=''):
+    context={'comment_post_id':comment_post_id,
+            'comments':comments}
+    if request!=None:
+        context.update(csrf(request))
+    context=RequestContext(request,context) 
     return render_to_string('comment.html',context)
 
-def render_page1(posts,num='1',nator=None,comment=None):
-    paginator = MyPaginator(posts, 5)
+def render_page1(posts,num='1',nator=None,comment=None,num_page=5):
+    paginator = MyPaginator(posts, num_page)
     try:
         page=paginator.page(num)
     except PageNotAnInteger:
@@ -173,7 +228,7 @@ def render_page1(posts,num='1',nator=None,comment=None):
         page= paginator.page(paginator.num_pages)
     contents=render_contents(page)
     if nator==None:
-        nator=render_nator(page)
+        nator=render_nator(page) 
     context={ 
         'page_contents':contents,
         'page_nator':nator,
@@ -183,17 +238,21 @@ def render_page1(posts,num='1',nator=None,comment=None):
     return render_to_string('page.html',context)
 
 
-def render_article(post_id):
+
+
+
+def render_article(request,post_id):
     objs=Posts.objects.all().filter(post_status='publish',post_type='post')
     prev_post=objs.filter(id__lt=post_id).only('id','post_title').last()
     cur_post=Posts.objects.all().filter(id=post_id,post_status='publish',post_type='post')
     next_post=objs.filter(id__gt=post_id).only('id','post_title').first()
     contents=render_contents(cur_post)
     nator=render_nator2(prev_post,next_post)
-    return render_page1(cur_post,1,nator,render_comment(post_id))
+    comments=Comments.objects.filter(comment_post_id=post_id).order_by('comment_date')
+    return render_page1(cur_post,1,nator,render_comment(request,post_id,comments))
 
 
-def render_page(request,num='1'):
+def render_pages(request,num='1'):
     context={}
     if(long(num)<=0):
         num=1
@@ -201,18 +260,19 @@ def render_page(request,num='1'):
     
     post_id=request.GET.get('p')
     if post_id:
-        objs=Posts.objects.all().filter(post_status='publish',post_type='post')
-        prev_post=objs.filter(id__lt=post_id).only('id','post_title').last()
-        cur_post=Posts.objects.all().filter(id=post_id,post_status='publish',post_type='post')
-        next_post=objs.filter(id__gt=post_id).only('id','post_title').first()
-        contents=render_contents(cur_post)
-        nator=render_nator2(prev_post,next_post)
+        # objs=Posts.objects.all().filter(post_status='publish',post_type='post')
+        # prev_post=objs.filter(id__lt=post_id).only('id','post_title').last()
+        # cur_post=Posts.objects.all().filter(id=post_id,post_status='publish',post_type='post')
+        # next_post=objs.filter(id__gt=post_id).only('id','post_title').first()
+        # contents=render_contents(cur_post)
+        # nator=render_nator2(prev_post,next_post)
         # context={
         #     'page_contents':contents,
         #     'page_comment':render_comment(post_id),
         #     'page_nator':nator,
         #     }
-        return render_page1(cur_post,1,nator,render_comment(post_id))
+        # return render_page1(cur_post,1,nator,render_comment(request,post_id))
+        return render_article(request,post_id)
     else:
         #get post data
         posts_list=Posts.objects.all().filter(post_status='publish',post_type='post').order_by('-post_date')

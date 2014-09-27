@@ -1,6 +1,6 @@
 <head>
-<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/style.css" />
-
+    <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/style.css" />
+    <script type="text/javascript" src="{{STATIC_URL}}/js/comment-reply.min.js?ver=4.0"></script>
 </head>
 
 <body class="home blog logged-in admin-bar custom-font-enabled single-author customize-support">
@@ -19,9 +19,11 @@
                     <li class="current_page_item">
                         <a href="/blog/">主页</a>
                     </li>
-                    <li class="page_item page-item-2">
-                        <a href="?page_id=2">测试</a>
+                    {%for page in pages%}
+                    <li class="page_item page-item-{{page.id}}">
+                        <a href="/blog/page/{{page.id}}">{{page.post_title}}</a>
                     </li>
+                    {%endfor%}
                 </ul>
             </div>
         </nav><!-- #site-navigation -->

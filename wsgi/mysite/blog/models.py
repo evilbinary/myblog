@@ -72,7 +72,8 @@ class Postmeta(models.Model):
 
 
 class Posts(models.Model):
-    id = models.BigIntegerField(db_column='ID', primary_key=True)  # Field name made lowercase.
+    #id = models.BigIntegerField(db_column='ID', primary_key=True)  # Field name made lowercase.
+    id=models.AutoField(primary_key=True) 
     post_author = models.BigIntegerField()
     post_date = models.DateTimeField()
     post_date_gmt = models.DateTimeField()
@@ -113,22 +114,23 @@ class Commentmeta(models.Model):
 
 
 class Comments(models.Model):
-    comment_id = models.BigIntegerField(db_column='comment_ID', primary_key=True)  # Field name made lowercase.
+    #comment_id = models.BigIntegerField(db_column='comment_ID', primary_key=True)  # Field name made lowercase.
+    comment_id=models.AutoField(primary_key=True)
     #comment_post_id = models.BigIntegerField(db_column='comment_post_ID')  # Field name made lowercase.
     comment_post=models.ForeignKey(Posts)
     comment_author = models.TextField()
     comment_author_email = models.CharField(max_length=100)
     comment_author_url = models.CharField(max_length=200)
-    comment_author_ip = models.CharField(db_column='comment_author_IP', max_length=100)  # Field name made lowercase.
-    comment_date = models.DateTimeField()
-    comment_date_gmt = models.DateTimeField()
+    comment_author_ip = models.CharField(max_length=100)  # Field name made lowercase.
+    comment_date = models.DateTimeField(auto_now_add=True)
+    comment_date_gmt = models.DateTimeField(auto_now_add=True)
     comment_content = models.TextField()
-    comment_karma = models.IntegerField()
+    comment_karma = models.IntegerField(default=0)
     comment_approved = models.CharField(max_length=20)
     comment_agent = models.CharField(max_length=255)
     comment_type = models.CharField(max_length=20)
-    comment_parent = models.BigIntegerField()
-    user_id = models.BigIntegerField()
+    comment_parent = models.BigIntegerField(default=0)
+    user_id = models.BigIntegerField(default=0)
 
     class Meta:
         managed = db_managed
@@ -191,7 +193,7 @@ class Usermeta(models.Model):
 
 
 class Users(models.Model):
-    id = models.BigIntegerField(db_column='ID', primary_key=True)  # Field name made lowercase.
+    id = models.BigIntegerField(primary_key=True)  # Field name made lowercase.
     user_login = models.CharField(max_length=60)
     user_pass = models.CharField(max_length=64)
     user_nicename = models.CharField(max_length=50)
