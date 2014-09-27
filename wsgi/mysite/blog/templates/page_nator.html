@@ -1,7 +1,7 @@
 <div class="pagination">
     <span class="step-links">
         {% if page.has_previous %}
-            <a href="/blog/page{{ posts.previous_page_number }}">上一页</a>
+            <a href="/blog/pages{{ posts.previous_page_number }}">上一页</a>
         {% endif %}
     
         {% for i in page.paginator.page_range_ext %}
@@ -12,7 +12,7 @@
             {%endif%}
         {% endfor%}
         {% if page.has_next %}
-            <a href="/blog/page{{ page.next_page_number }}">下一页</a>
+            <a href="/blog/pages{{ page.next_page_number }}">下一页</a>
         {% endif %}
          共{{ page.paginator.num_pages }}页.
     </span>
