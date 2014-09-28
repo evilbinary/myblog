@@ -1,3 +1,4 @@
+ {% load my_filter  %}
 {%for post in posts%} 
 <article id="post-{{post.id}}" class="post-{{post.id}} post type-post status-publish format-standard hentry category-uncategorized">       
     <header class="entry-header">
@@ -20,7 +21,7 @@
     </header>
 
     <div class="entry-content">
-        <p> {{post.post_content}} </p>
+        <p> {{post.post_content|autop}} </p>
     </div>
 
     <footer class="entry-meta">
