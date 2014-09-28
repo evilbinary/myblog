@@ -3,6 +3,7 @@ from blog import views
 from django.conf import settings
 from views import *
 from django.contrib import admin
+from feeds import ArticlesFeed,CommentsFeed
 
 
 urlpatterns= patterns('',
@@ -20,6 +21,8 @@ urlpatterns= patterns('',
             url(r'^comment',views.comment),
             url(r'^search/$',views.search),
             url(r'^cat/(?P<num>\d+)$',views.cat),
-            url(r'^feed/(?P<str>\S+)$',views.feed),
+            url(r'^feeds/rss2$',ArticlesFeed()),
+            url(r'^feeds/comments-rss2$',CommentsFeed()),
+            url(r'^feeds/(?P<str>\S+)$',views.feed),
             url(r'^test$',views.test),
             )

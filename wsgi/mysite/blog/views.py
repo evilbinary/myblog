@@ -9,7 +9,7 @@ import datetime
 from django.db import connection
 from django.db.models import Q
 from django.core.context_processors import csrf
-
+from feeds import ArticlesFeed
 
 
 #This is for response request
@@ -78,7 +78,7 @@ def render_sidebar(request):
     engine=connection.settings_dict['ENGINE']
     archives=[]
     if engine=='django.db.backends.sqlite3':
-        archives=Posts.objects.filter(post_status='publish',post_type='post').extra(select={'year':"strftime('%Y',post_date)",'month':"strftime('%m',post_date)"}).values('year','month').annotate(Count('id')).order_by('-post_date')
+        archives=Posts.objects.filter(post_status='publish',post_type='post').extra(select={'year':"strftime('%Y',post_date)",'month':"strftime('%m',post_date)"}).values('year','month').annotate(Count('id')).order_by('-year','-month') #.order_by('-post_date') a bug?? wat hell
     elif engine=='django.db.backends.mysql':
         archives=Posts.objects.filter(post_status='publish',post_type='post').extra(select={'year':'year(post_date)','month':'month(post_date)'}).values('year','month').annotate(Count('id')).order_by('-post_date')
     else:

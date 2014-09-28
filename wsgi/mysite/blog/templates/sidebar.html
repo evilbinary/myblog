@@ -35,7 +35,7 @@
 		<ul>
 			{%for archive in archives%}
 			<li>
-				<a href="/blog/archive/{{archive.year}}/{{archive.month}}">{{archive.year}}年 {{archive.month}}月</a>
+				<a href="/blog/archive/{{archive.year}}/{{archive.month}}">{{archive.year}}年 {{archive.month}}月 {{archive.id__count}}篇</a>
 			</li>
 			{%endfor%}
 		</ul>
@@ -55,10 +55,10 @@
 			<!--<li><a href="http://localhost/php/wordpress/wp-login.php?action=logout&amp;_wpnonce=9cf5819c50">注销</a>
 			</li>-->
 			<li>
-				<a href="/blog/feed/rss2">订阅 <abbr title="Really Simple Syndication">RSS</abbr></a>
+				<a href="/blog/feeds/rss2">订阅 <abbr title="Really Simple Syndication">RSS</abbr></a>
 			</li>
 			<li>
-				<a href="/blog/feed/comments-rss2">评论 <abbr title="Really Simple Syndication">RSS</abbr></a>
+				<a href="/blog/feeds/comments-rss2">评论 <abbr title="Really Simple Syndication">RSS</abbr></a>
 			</li>
 			<!--<li><a href="#" title="Powered by evilbinary, state-of-the-art semantic personal publishing platform.">evilbinary.org</a>
 			</li>-->			

@@ -126,7 +126,7 @@ class Comments(models.Model):
     comment_date_gmt = models.DateTimeField(auto_now_add=True)
     comment_content = models.TextField()
     comment_karma = models.IntegerField(default=0)
-    comment_approved = models.CharField(max_length=20)
+    comment_approved = models.CharField(max_length=20,default=0)
     comment_agent = models.CharField(max_length=255)
     comment_type = models.CharField(max_length=20)
     comment_parent = models.BigIntegerField(default=0)
