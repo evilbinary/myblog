@@ -256,41 +256,14 @@ def render_pages(request,num='1'):
     context={}
     if(long(num)<=0):
         num=1
-    page=None
-    
+    page=None    
     post_id=request.GET.get('p')
     if post_id:
-        # objs=Posts.objects.all().filter(post_status='publish',post_type='post')
-        # prev_post=objs.filter(id__lt=post_id).only('id','post_title').last()
-        # cur_post=Posts.objects.all().filter(id=post_id,post_status='publish',post_type='post')
-        # next_post=objs.filter(id__gt=post_id).only('id','post_title').first()
-        # contents=render_contents(cur_post)
-        # nator=render_nator2(prev_post,next_post)
-        # context={
-        #     'page_contents':contents,
-        #     'page_comment':render_comment(post_id),
-        #     'page_nator':nator,
-        #     }
-        # return render_page1(cur_post,1,nator,render_comment(request,post_id))
         return render_article(request,post_id)
     else:
         #get post data
         posts_list=Posts.objects.all().filter(post_status='publish',post_type='post').order_by('-post_date')
         return render_page1(posts_list,num)
-        # paginator = MyPaginator(posts_list, 5)
-        # try:
-        #     page=paginator.page(num)
-        # except PageNotAnInteger:
-        #     page = paginator.page(1)
-        # except EmptyPage:
-        #     page= paginator.page(paginator.num_pages)
-        # contents=render_contents(page)
-        # nator=render_nator(page)
-        # context={ 
-        #     'page_contents':contents,
-        #     'page_nator':nator,
-        #    }
-
     return render_to_string('page.html',context)
 
 

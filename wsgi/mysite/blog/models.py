@@ -15,6 +15,28 @@ from django.db import models
 db_prefix='wp_'
 db_managed=True
 
+USER_STATUS=(
+    (1,'active'),
+    (0,'inactive')
+)
+STATUS = (
+    ('closed', 'closed'),
+    ('open', 'open'),
+)
+POST_STATUS = (
+    ('draft', 'draft'),
+    ('inherit', 'inherit'),
+    ('private', 'private'),
+    ('publish', 'publish'),
+)
+POST_TYPE = (
+    ('attachment', 'attachment'),
+    ('page', 'page'),
+    ('post', 'post'),
+    ('revision', 'revision'),
+)
+
+
 class DjangoMigrations(models.Model):
     id = models.IntegerField(primary_key=True)  # AutoField?
     app = models.CharField(max_length=255)
@@ -60,6 +82,35 @@ class Options(models.Model):
         db_table = db_prefix+'options'
 
 
+
+class Usermeta(models.Model):
+    umeta_id = models.BigIntegerField(primary_key=True)
+    user_id = models.BigIntegerField()
+    meta_key = models.CharField(max_length=255, blank=True)
+    meta_value = models.TextField(blank=True)
+
+    class Meta:
+        managed = db_managed
+        db_table = db_prefix+'usermeta'
+
+
+class Users(models.Model):
+    #id = models.BigIntegerField(primary_key=True)  # Field name made lowercase.
+    id=models.AutoField(primary_key=True) 
+    user_login = models.CharField(max_length=60)
+    user_pass = models.CharField(max_length=64)
+    user_nicename = models.CharField(max_length=50)
+    user_email = models.CharField(max_length=100)
+    user_url = models.CharField(max_length=100)
+    user_registered = models.DateTimeField()
+    user_activation_key = models.CharField(max_length=60)
+    user_status = models.IntegerField(choices=USER_STATUS)
+    display_name = models.CharField(max_length=250)
+
+    class Meta:
+        managed = db_managed
+        db_table = db_prefix+'users'
+
 class Postmeta(models.Model):
     meta_id = models.BigIntegerField(primary_key=True)
     post_id = models.BigIntegerField()
@@ -74,13 +125,14 @@ class Postmeta(models.Model):
 class Posts(models.Model):
     #id = models.BigIntegerField(db_column='ID', primary_key=True)  # Field name made lowercase.
     id=models.AutoField(primary_key=True) 
-    post_author = models.BigIntegerField()
+    #post_author = models.BigIntegerField()
+    post_author = models.ForeignKey(Users)
     post_date = models.DateTimeField()
     post_date_gmt = models.DateTimeField()
     post_content = models.TextField()
     post_title = models.TextField()
     post_excerpt = models.TextField()
-    post_status = models.CharField(max_length=20)
+    post_status = models.CharField(choices=POST_STATUS,max_length=20)
     comment_status = models.CharField(max_length=20)
     ping_status = models.CharField(max_length=20)
     post_password = models.CharField(max_length=20)
@@ -93,7 +145,7 @@ class Posts(models.Model):
     post_parent = models.BigIntegerField()
     guid = models.CharField(max_length=255)
     menu_order = models.IntegerField()
-    post_type = models.CharField(max_length=20)
+    post_type = models.CharField(choices=POST_TYPE,max_length=20)
     post_mime_type = models.CharField(max_length=100)
     comment_count = models.BigIntegerField()
 
@@ -177,33 +229,3 @@ class TermRelationships(models.Model):
 
 
 
-
-
-
-
-class Usermeta(models.Model):
-    umeta_id = models.BigIntegerField(primary_key=True)
-    user_id = models.BigIntegerField()
-    meta_key = models.CharField(max_length=255, blank=True)
-    meta_value = models.TextField(blank=True)
-
-    class Meta:
-        managed = db_managed
-        db_table = db_prefix+'usermeta'
-
-
-class Users(models.Model):
-    id = models.BigIntegerField(primary_key=True)  # Field name made lowercase.
-    user_login = models.CharField(max_length=60)
-    user_pass = models.CharField(max_length=64)
-    user_nicename = models.CharField(max_length=50)
-    user_email = models.CharField(max_length=100)
-    user_url = models.CharField(max_length=100)
-    user_registered = models.DateTimeField()
-    user_activation_key = models.CharField(max_length=60)
-    user_status = models.IntegerField()
-    display_name = models.CharField(max_length=250)
-
-    class Meta:
-        managed = db_managed
-        db_table = db_prefix+'users'
