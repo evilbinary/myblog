@@ -1,4 +1,5 @@
- {% load my_filter  %}
+ {% load myfilter  %}
+ {% load md2 %}
 {%for post in posts%} 
 <article id="post-{{post.id}}" class="post-{{post.id}} post type-post status-publish format-standard hentry category-uncategorized">       
     <header class="entry-header">
@@ -21,7 +22,11 @@
     </header>
 
     <div class="entry-content">
-        <p> {{post.post_content|autop}} </p>
+        {% if post.post_mime_type == "markdown" %}
+            <p> {{post.post_content|markdown:"codehilite,nl2br"}} </p>
+        {%else%}
+            <p> {{post.post_content|autop:'true'}} </p>
+        {%endif%}
     </div>
 
     <footer class="entry-meta">

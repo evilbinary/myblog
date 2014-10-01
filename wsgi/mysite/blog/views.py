@@ -64,7 +64,7 @@ def month_archive(request,year,month):
 def render_sidebar(request):
     #ToDo profile
     #recent_comments=Comments.objects.all().only('comment_id','comment_post','comment_author').order_by('comment_date')
-    recent_comments=Comments.objects.select_related('comment_post').filter(comment_post__post_status='publish',comment_post__post_type='post').order_by('comment_date')[:7]
+    recent_comments=Comments.objects.select_related('comment_post').filter(comment_post__post_status='publish',comment_post__post_type='post').order_by('-comment_date')[:7]
     #recent_comments=''
     #return test(request,{'test':recent_comments})
 
@@ -186,7 +186,8 @@ def render_header(request):
     context=RequestContext(request,{'pages':pages}) 
     return render_to_string('header.html',context)
 def render_footer(request):
-    return render_to_string('footer.html')
+    context=RequestContext(request) 
+    return render_to_string('footer.html',context)
 
 def render_contents(posts,cat=''):
     cats=TermRelationships.objects.select_related('term_taxonomy__term').filter(term_taxonomy__taxonomy__in=('category', 'post_tag', 'post_format'),object_id__in=posts)

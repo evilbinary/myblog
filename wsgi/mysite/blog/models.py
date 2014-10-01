@@ -35,6 +35,13 @@ POST_TYPE = (
     ('post', 'post'),
     ('revision', 'revision'),
 )
+POST_MIME_TYPE=(
+    ('markdown','markdown'),
+    ('image/gif','image/gif'),
+    ('text/html','text/html '),
+    ('text/plain','text/plain'),
+
+)
 
 
 class DjangoMigrations(models.Model):
@@ -146,7 +153,7 @@ class Posts(models.Model):
     guid = models.CharField(max_length=255)
     menu_order = models.IntegerField()
     post_type = models.CharField(choices=POST_TYPE,max_length=20)
-    post_mime_type = models.CharField(max_length=100)
+    post_mime_type = models.CharField(choices=POST_MIME_TYPE,max_length=100)
     comment_count = models.BigIntegerField()
 
     class Meta:
