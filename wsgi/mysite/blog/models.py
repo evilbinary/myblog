@@ -42,6 +42,12 @@ POST_MIME_TYPE=(
     ('text/plain','text/plain'),
 
 )
+APPROVED_TYPE=(
+    ('1','approved'),
+    ('0','unapproved'),
+    ('spam','spam'),
+    ('trash','trash'),
+)
 
 
 class DjangoMigrations(models.Model):
@@ -179,15 +185,15 @@ class Comments(models.Model):
     comment_post=models.ForeignKey(Posts)
     comment_author = models.TextField()
     comment_author_email = models.CharField(max_length=100)
-    comment_author_url = models.CharField(max_length=200)
-    comment_author_ip = models.CharField(max_length=100)  # Field name made lowercase.
+    comment_author_url = models.CharField(max_length=200,blank=True)
+    comment_author_ip = models.CharField(default='',max_length=100,blank=True)  # Field name made lowercase.
     comment_date = models.DateTimeField(auto_now_add=True)
     comment_date_gmt = models.DateTimeField(auto_now_add=True)
     comment_content = models.TextField()
     comment_karma = models.IntegerField(default=0)
-    comment_approved = models.CharField(max_length=20,default=0)
-    comment_agent = models.CharField(max_length=255)
-    comment_type = models.CharField(max_length=20)
+    comment_approved = models.CharField(choices=APPROVED_TYPE,max_length=20,default=0)
+    comment_agent = models.CharField(default='',max_length=255,blank=True)
+    comment_type = models.CharField(default='',max_length=20,blank=True)
     comment_parent = models.BigIntegerField(default=0)
     user_id = models.BigIntegerField(default=0)
 

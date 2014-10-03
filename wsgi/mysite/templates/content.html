@@ -1,0 +1,58 @@
+ {% load myfilter  %}
+ {% load md2 %}
+{%for post in posts%} 
+<article id="post-{{post.id}}" class="post-{{post.id}} post type-post status-publish format-standard hentry category-uncategorized">       
+    <header class="entry-header">
+        {%if post.post_type == 'post'%}
+        <h1 class="entry-title"><a href="/blog/article/{{post.id}}" rel="bookmark">{{post.post_title}}</a></h1>
+        {%endif%}
+        <div class="comments-link">
+            {%if post.post_type == 'post'%}
+            <a href="/blog/?p={{post.id}}#respond" title="评论 {{post.post_titile}}">
+            {%else%}
+                <a href="/blog/page/{{post.id}}#respond" title="评论 {{post.post_titile}}">
+            {%endif%}
+                {%if post.comment_count > 0%}
+                    <span class="leave-reply">{{post.comment_count}}条回复</span>
+                {%else%}
+                <span class="leave-reply">发表回复</span>
+                {%endif%}
+            </a>
+        </div>
+    </header>
+
+    <div class="entry-content">
+        {% if post.post_mime_type == "markdown" %}
+            <p> {{post.post_content|markdown:"codehilite,nl2br"}} </p>
+        {%else%}
+            <p> {{post.post_content|autop:'true'}} </p>
+        {%endif%}
+    </div>
+
+    <footer class="entry-meta">
+    发布在 
+    {%if post.cat %}
+    <a href="/blog/cat/{{post.cat.term_id}}" rel="category">{{post.cat.name}}</a> 
+    {%else%}
+        未分类
+    {%endif%}
+    {%if post.post_type == 'post'%}
+     <a href="/blog/?p={{post.id}}" title="{{post.post_date}}" rel="bookmark">
+     {%else%}
+     <a href="/blog/page/{{post.id}}" title="{{post.post_date}}" rel="bookmark">
+     {%endif%}
+            <time class="entry-date" datetime="{{post.post_date}}">{{post.post_date|date:"Y M d D"}}</time></a>
+            <span class="by-author"> by 
+                <span class="author vcard">
+                    <a class="url fn n" href="/blog/author/1" title="View all posts by root" rel="author">{{post.post_author}}</a>
+                </span>
+            </span>        
+            <!--<span class="edit-link">
+                <a class="post-edit-link" href="wp-admin/post.php?post=5&amp;action=edit">编辑</a>
+            </span>-->                    
+    </footer>
+
+</article><!-- #post -->
+{%endfor%}
+
+{{info}}

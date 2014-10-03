@@ -26,7 +26,7 @@ def index(request):
 def page(request,page_id):
     posts_list=Posts.objects.filter(post_status='publish',post_type='page',id=page_id)
 
-    comments=Comments.objects.filter(comment_post_id=page_id).order_by('comment_date')
+    comments=Comments.objects.filter(comment_post_id=page_id,comment_approved='1').order_by('comment_date')
     contents=render_page1(posts_list,1,'',render_comment(request,page_id,comments),1)
     context={
     'header':render_header(request),
@@ -64,7 +64,7 @@ def month_archive(request,year,month):
 def render_sidebar(request):
     #ToDo profile
     #recent_comments=Comments.objects.all().only('comment_id','comment_post','comment_author').order_by('comment_date')
-    recent_comments=Comments.objects.select_related('comment_post').filter(comment_post__post_status='publish',comment_post__post_type='post').order_by('-comment_date')[:7]
+    recent_comments=Comments.objects.select_related('comment_post').filter(comment_approved='1',comment_post__post_status='publish',comment_post__post_type='post').order_by('-comment_date')[:7]
     #recent_comments=''
     #return test(request,{'test':recent_comments})
 
@@ -104,7 +104,7 @@ def comment(request):
     if comment_post_id==None or comment_parent==None:
         return index(request)
     p=Posts.objects.get(pk=comment_post_id)
-    comment=Comments(comment_post=p,comment_author=comment_author,comment_parent=comment_parent,comment_content=comment_content,comment_author_email=comment_email,comment_author_url=comment_url)
+    comment=Comments(comment_post=p,comment_approved='0',comment_author=comment_author,comment_parent=comment_parent,comment_content=comment_content,comment_author_email=comment_email,comment_author_url=comment_url)
     # comment.comment_date=datetime()
     p.comment_count=p.comment_count+1
     p.save()
@@ -249,7 +249,7 @@ def render_article(request,post_id):
     next_post=objs.filter(id__gt=post_id).only('id','post_title').first()
     contents=render_contents(cur_post)
     nator=render_nator2(prev_post,next_post)
-    comments=Comments.objects.filter(comment_post_id=post_id).order_by('comment_date')
+    comments=Comments.objects.filter(comment_post_id=post_id,comment_approved='1').order_by('comment_date')
     return render_page1(cur_post,1,nator,render_comment(request,post_id,comments))
 
 

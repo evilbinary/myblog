@@ -1,0 +1,67 @@
+<div id="secondary" class="widget-area" role="complementary">
+	<aside id="search-2" class="widget widget_search">
+		<form role="search" method="get" id="searchform" class="searchform" action="/blog/search/">
+			<div>
+				<label class="screen-reader-text" for="s">Search for:</label>
+				<input type="text" value="" name="s" id="s">
+				<input type="submit" id="searchsubmit" value="搜索">
+			</div>
+		</form>
+	</aside>		
+	<aside id="recent-posts-2" class="widget widget_recent_entries">	
+		<h3 class="widget-title">最新发布</h3>	
+			<ul>
+			{%for post in recent_posts%}
+				<li>
+					<a href="/blog/?p={{post.id}}">{{post.post_title}}</a>
+				</li>
+			{%endfor%}
+			</ul>
+	</aside>
+
+	<aside id="recent-comments-2" class="widget widget_recent_comments">
+		<h3 class="widget-title">最新评论</h3>
+		<ul id="recentcomments">
+			{%for comment in recent_comments%}
+				<li class="recentcomments">
+					<span class="comment-author-link"><a href="{{comment.comment_author_url}}" rel="external nofollow" class="url">{{comment.comment_author}}</a></span> on 
+					<a href="/blog/?p={{comment.comment_post.id}}#comment-{{comment.comment_id}}">{{comment.comment_post.post_title}}</a>
+				</li>
+			{%endfor%}
+		</ul>
+	</aside>
+	<aside id="archives-2" class="widget widget_archive">
+		<h3 class="widget-title">全部归档</h3>		
+		<ul>
+			{%for archive in archives%}
+			<li>
+				<a href="/blog/archive/{{archive.year}}/{{archive.month}}">{{archive.year}}年 {{archive.month}}月 {{archive.id__count}}篇</a>
+			</li>
+			{%endfor%}
+		</ul>
+	</aside>
+
+	<aside id="categories-2" class="widget widget_categories"><h3 class="widget-title">分类列表</h3>	
+		<ul>
+			{%for cat in categories%}
+			<li class="cat-item cat-item-1"><a href="/blog/cat/{{cat.term_id}}">{{cat.name}}</a>
+			</li>
+			{%endfor%}
+		</ul>
+	</aside>
+	<aside id="meta-2" class="widget widget_meta"><h3 class="widget-title">功能</h3>			
+		<ul>
+			<li><a href="/admin/">站点管理</a></li>			
+			<!--<li><a href="http://localhost/php/wordpress/wp-login.php?action=logout&amp;_wpnonce=9cf5819c50">注销</a>
+			</li>-->
+			<li>
+				<a href="/blog/feeds/rss2">订阅 <abbr title="Really Simple Syndication">RSS</abbr></a>
+			</li>
+			<li>
+				<a href="/blog/feeds/comments-rss2">评论 <abbr title="Really Simple Syndication">RSS</abbr></a>
+			</li>
+			<!--<li><a href="#" title="Powered by evilbinary, state-of-the-art semantic personal publishing platform.">evilbinary.org</a>
+			</li>-->			
+		</ul>
+	</aside>		
+</div>

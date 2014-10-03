@@ -1,0 +1,14 @@
+<nav class="nav-single">
+    <h3 class="assistive-text">Post navigation</h3>
+    <span class="nav-previous">
+        {% if prev_post %}
+            上一篇 <a href="/blog/pages{{ page.previous_page_number }}/?p={{prev_post.id}}"> {{prev_post.post_title}}</a>
+        {% endif %}
+    </span>
+        
+    <span class="nav-next">    
+            {% if next_post %}
+                下一篇 <a href="/blog/pages{{ page.next_page_number }}/?p={{next_post.id}}"> {{next_post.post_title}}</a>
+            {% endif %}
+    </span>
+</nav>

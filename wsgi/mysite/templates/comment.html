@@ -1,0 +1,100 @@
+
+<div id="comments" class="comments-area">
+	<!--<h2 class="comments-title">
+		引用 “<span>发生地方</span>”		
+	</h2>-->
+
+	<ol class="commentlist">
+		
+		{%for comment in comments%}
+		<li class="comment byuser comment-author-root bypostauthor even thread-even depth-{{forloop.counter}}" id="li-comment-{{forloop.counter}}">
+			<article id="comment-{{comment.comment_id}}" class="comment">
+				<header class="comment-meta comment-author vcard">
+					<img alt="" src="{{STATIC_URL}}img/avatar.jpg" height="44" width="44">
+					<cite>
+						<b class="fn">
+							{%if comment.comment_author_url != ''%}
+								<a href="{{comment.comment_author_url}}" rel="external nofollow" class="url">{{comment.comment_author}}</a>
+							{%else%}
+								{{comment.comment_author}}
+							{%endif%}
+						</b> 
+						{%if comment.user_id != 0%}
+							<span>Post author</span>
+						{%else%}
+
+						{%endif%}
+					</cite>
+					<a href="/blog/?p={{comment.comment_post_id}}#comment-{{comment.comment_id}}">
+						<time datetime="{{comment.comment_date}}">{{comment.comment_date}}</time>
+					</a>			
+				</header><!-- .comment-meta -->
+
+				<section class="comment-content comment">
+					<p>{{comment.comment_content}}</p>
+					<!--<p class="edit-link"><a class="comment-edit-link" href="/blog/comment">Edit</a></p>-->			
+				</section><!-- .comment-content -->
+
+				<div class="reply">
+					<a class="comment-reply-link" href="/blog/?p={{comment.comment_post_id}}&amp;replytocom={{comment.comment_id}}#respond" onclick="return addComment.moveForm(&quot;comment-{{comment.comment_id}}&quot;, &quot;{{comment.comment_id}}&quot;, &quot;respond&quot;, &quot;{{comment.comment_post_id}}&quot;)">回复</a> <span>↓</span>			
+				</div><!-- .reply -->
+			</article><!-- #comment-## -->
+		</li><!-- #comment-## -->
+		{%endfor%}
+		
+
+
+	</ol><!-- .commentlist -->
+
+
+		
+	<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">回复
+			<small>
+			<a rel="nofollow" id="cancel-comment-reply-link" href="/blog/?p={{comment_post_id}}#respond" style="display:none;">取消回复</a>
+			</small>
+		</h3>
+		<form action="/blog/comment" method="post" id="commentform" class="comment-form">
+			{%csrf_token%}
+
+			<!--<p class="logged-in-as">Logged in as 
+				<a href="/blog/profile.php">root</a>. 
+				<a href="/blog/login.php?action=logout&amp;redirect_to=http%3A%2F%2Flocalhost%2Fphp%2Fwordpress%2F%3Fp%3D29&amp;_wpnonce=4c698ae045" title="Log out of this account">Log out?</a>
+			</p>-->	
+					
+
+			<p class="comment-notes">邮箱地址不会公开，标记成 
+				<span class="required">*</span>是必填.
+			</p>							
+			<p class="comment-form-author">
+				<label for="author">昵称 <span class="required">*</span></label>
+				 <input id="author" name="author" type="text" value="" size="30" aria-required="true">
+			</p>
+			<p class="comment-form-email">
+				<label for="email">邮箱 <span class="required">*</span></label> 
+				<input id="email" name="email" type="text" value="" size="30" aria-required="true">
+			</p>
+			<p class="comment-form-url"><label for="url">网站</label>
+			 <input id="url" name="url" type="text" value="" size="30">
+			</p>
+
+
+			<p class="comment-form-comment">
+				<label for="comment">评论</label> 
+				<textarea id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea>
+			</p>						
+			<p class="form-allowed-tags">你可以使用这些 
+				<abbr title="HyperText Markup Language">HTML</abbr> 标签和属性:  <code>&lt;a href="" title=""&gt; &lt;abbr title=""&gt; &lt;acronym title=""&gt; &lt;b&gt; &lt;blockquote cite=""&gt; &lt;cite&gt; &lt;code&gt; &lt;del datetime=""&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=""&gt; &lt;strike&gt; &lt;strong&gt; </code>
+			</p>
+			<p class="form-submit">
+				<input name="submit" type="submit" id="submit" value="发表回复">
+				<input type="hidden" name="comment_post_ID" value="{{comment_post_id}}" id="comment_post_ID">
+				<input type="hidden" name="comment_parent" id="comment_parent" value="0">
+			</p>
+				<input type="hidden" id="_wp_unfiltered_html_comment_disabled" name="_wp_unfiltered_html_comment" value="ec2af034c7">
+				<script>(function(){if(window===window.parent){document.getElementById('_wp_unfiltered_html_comment_disabled').name='_wp_unfiltered_html_comment';}})();
+				</script>
+			</form>
+	</div><!-- #respond -->
+
+</div>

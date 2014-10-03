@@ -38,10 +38,27 @@ class  UsersAdmin(admin.ModelAdmin):
 	list_display=('user_nicename','user_login','user_pass','user_email','user_status','user_registered')
 	list_display_links = ('user_nicename','user_login',)
 
+class CommentsAdmin(admin.ModelAdmin):
+	list_display=('comment_post_post_title','comment_content','comment_author','comment_approved','comment_date')
+	list_display_links = ('comment_post_post_title',)
+	actions=('make_approve','make_unapprove')
+	
+	def make_approve(self, request, queryset):
+		queryset.update(comment_approved='1')
+	make_approve.short_description = "同意评论"
+	def make_unapprove(self, request, queryset):
+		queryset.update(comment_approved='0')
+	make_unapprove.short_description = "不同意评论"
 
+	def comment_post_id(self,obj):
+		return obj.comment_post.id
+	pass
+	def comment_post_post_title(self,obj):
+		return obj.comment_post.post_title
+	pass
 
 admin.site.register( Commentmeta)
-admin.site.register( Comments)
+admin.site.register( Comments,CommentsAdmin)
 admin.site.register( Links)
 admin.site.register( Postmeta)
 admin.site.register( Posts,PostsAdmin)
