@@ -108,11 +108,11 @@ def comment(request):
     comment_email=request.POST.get('email')
     comment_url=request.POST.get('url')
     comment_parent=request.POST.get('comment_parent')
-    
+    comment_author_ip=get_client_ip(request)
     if comment_post_id==None or comment_parent==None:
         return index(request)
     p=Posts.objects.get(pk=comment_post_id)
-    comment=Comments(comment_post=p,comment_approved='0',comment_author=comment_author,comment_parent=comment_parent,comment_content=comment_content,comment_author_email=comment_email,comment_author_url=comment_url)
+    comment=Comments(comment_post=p,comment_approved='0',comment_author=comment_author,comment_parent=comment_parent,comment_content=comment_content,comment_author_email=comment_email,comment_author_url=comment_url,comment_author_ip=comment_author_ip)
     # comment.comment_date=datetime()
     p.comment_count=p.comment_count+1
     p.save()
@@ -280,7 +280,28 @@ def render_pages(request,num='1'):
         return render_page1(posts_list,num)
     return render_to_string('page.html',context)
 
+#get ip for comment
+def get_client_ip(request):
+    """get the client ip from the request
+    """
+    remote_address = request.META.get('REMOTE_ADDR')
+    # set the default value of the ip to be the REMOTE_ADDR if available
+    # else None
+    ip = remote_address
+    # try to get the first non-proxy ip (not a private ip) from the
+    # HTTP_X_FORWARDED_FOR
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        proxies = x_forwarded_for.split(',')
+        # remove the private ips from the beginning
+        while (len(proxies) > 0 and
+                proxies[0].startswith(PRIVATE_IPS_PREFIX)):
+            proxies.pop(0)
+        # take the first ip which is not a private one (of a proxy)
+        if len(proxies) > 0:
+            ip = proxies[0]
 
+    return ip
 
 #Paging navigator
 class MyPaginator(Paginator):

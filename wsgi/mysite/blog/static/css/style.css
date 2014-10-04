@@ -679,7 +679,13 @@ footer[role="contentinfo"] a {
 footer[role="contentinfo"] a:hover {
 	color: #21759b;
 }
-
+footer{
+	color: #999;
+	margin-bottom: 12px
+}
+footer p{
+	font-size: 13px;
+}
 
 /* =Main content and comment content
 -------------------------------------------------------------- */
@@ -1380,6 +1386,48 @@ a.comment-edit-link:hover {
 	margin: 8px 24px 8px 0;
 	margin: 0.571428571rem 1.714285714rem 0.571428571rem 0;
 }
+/*pagination
+----------------------------------------------------------------*/
+div.pagination{
+    width: 600px;
+    padding: 10px 10px 20px 10px;
+    margin: 0px 0px 0px 0px;
+    text-align: center;
+    background-color: #ffffff;
+    border-radius: 5px;
+}
+div.pagination a{
+    display: block;
+    font-size: 13px;
+    border: 1px solid #DDD;
+    padding: 8px 10px 8px 10px;
+    font-weight: normal;
+    /*background-color: #2099AB;*/
+    color: #21759b;
+    border-radius: 1px;
+    text-decoration: none;
+    display: inline; /* do not show the dot of list */
+}
+
+
+
+div.pagination span.deactive{
+    color: #999999;
+    border-radius: 5px;
+    font-size: 12px;
+    border: 1px solid #DDD;
+    padding: 8px 10px 8px 10px;
+    font-weight: normal;
+    background-color: #FFFFFF;
+    border-radius: 1px;
+    text-decoration: none;
+}
+div.pagination span.currentpage span.currentpage.a{
+    font-weight: normal;
+    font-size: 20px;
+    border:0;
+}
+
 
 
 /* =Widgets
@@ -1660,6 +1708,8 @@ img#wpstats {
 		box-shadow: none;
 	}
 }
+
+
 
 
 /* =Print

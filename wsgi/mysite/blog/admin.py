@@ -102,6 +102,8 @@ class OptionsAdmin(admin.ModelAdmin):
 	list_display=('option_id','option_name','option_value')
 	pass
 
+
+
 admin.site.register( Users,UsersAdmin)
 admin.site.register( Posts,PostsAdmin)
 admin.site.register( Comments,CommentsAdmin)
@@ -113,3 +115,4 @@ admin.site.register( Options,OptionsAdmin)
 #admin.site.register( TermTaxonomy)
 #admin.site.register( Terms)
 #admin.site.register( Usermeta)
+
