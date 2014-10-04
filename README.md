@@ -1,5 +1,10 @@
-Django on OpenShift
+#MyBlog
+###myblog是一个开源的博客，兼容wp博客系统，同时支持markdown语法高亮功能，还有多种数据库(sqlite、mysql等)。
+###这里是个人[博客地址](http://evilbinary.org)，也就是用本开源软件搭建的。下面推荐用openshift搭建。
+
+MyBlog on OpenShift
 ===================
+
 
 This git repository helps you get up and running quickly w/ a Django
 installation on OpenShift.  The Django project name used in this repo
