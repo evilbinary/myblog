@@ -182,7 +182,7 @@ def feed(request,str=''):
 
 
 def render_header(request):
-    pages=Posts.objects.all().filter(post_status='publish',post_type='page').only('id','post_title').order_by('-post_date')
+    pages=Posts.objects.all().filter(post_status='publish',post_type='page').only('id','post_title').order_by('menu_order','-post_date')
     # headeinfo=
     
     # headinfo={'blogname':'',''}

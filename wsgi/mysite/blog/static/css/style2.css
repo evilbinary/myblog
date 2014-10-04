@@ -1,0 +1,815 @@
+/*
+Theme Name: Mathix67
+Theme URI: http://underscores.me
+Author: localhost
+Author URI: http://localhost-8080.com
+Description: Modified based on Matrix67's theme, starter theme: Underscore.
+Version: 1.0
+License: GNU General Public License
+License URI: license.txt
+Text Domain: matrix67
+Domain Path: /languages/
+Tags: professional, minimal, design with love
+
+This theme, like WordPress, is licensed under the GPL.
+Use it to make something cool, have fun, and share what you've learned with others.
+
+ Mathix67 is based on Underscores http://underscores.me/, (C) 2012-2014 Automattic, Inc.
+
+Resetting and rebuilding styles have been helped along thanks to the fine work of
+Eric Meyer http://meyerweb.com/eric/tools/css/reset/index.html
+along with Nicolas Gallagher and Jonathan Neal http://necolas.github.com/normalize.css/
+and Blueprint http://www.blueprintcss.org/
+*/
+
+/*--------------------------------------------------------------
+>>> TABLE OF CONTENTS:
+----------------------------------------------------------------
+1.0 - normalize.css
+2.0 - Global and Typography
+3.0 - Elements
+4.0 - Forms
+5.0 - Navigation
+	5.1 - Links
+	5.2 - Menus
+	5.3 - RSS
+6.0 - Accessibility
+7.0 - Alignments
+8.0 - Clearings
+9.0 - Widgets
+10.0 - Content
+	10.1 - Posts and pages
+	10.2 - Asides
+	10.3 - Comments
+11.0 - Infinite scroll
+12.0 - Media
+13.0 - Footer
+--------------------------------------------------------------*/
+
+/*--------------------------------------------------------------
+1.0 - normalize.css
+--------------------------------------------------------------*/
+@import "normalize.min.css";
+@import "evil-font.css";
+
+/*--------------------------------------------------------------
+2.0 Global and Typography
+--------------------------------------------------------------*/
+body {
+	background: #f8f8f8;
+}
+#page {
+	width: 700px;
+	margin: 0 auto;
+	font-size: 62.5%;
+	position: relative;
+}
+#masthead {
+	position: relative;
+	margin-top: 2em;
+}
+#masthead h1 {
+	font-weight: normal;
+	font-size: 2.2em;
+}
+#notice {
+	font-size: 12px;
+	background: #fff1ad;
+	text-align: center;
+	padding: 4px;
+}
+#notice a {
+	cursor: pointer;
+}
+::selection {
+	background: #85d7db;
+	color: #fff;
+}
+:focus {
+	outline:none;
+}
+::-moz-focus-inner {
+	border:0;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+	color: #676767;
+	font-family: 'Helvetica Neue', Arial, 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+	font-size: 14px;
+	font-size: 1.4rem;
+	line-height: 1.6;
+}
+h1, h2, h3, h4, h5, h6 {
+	clear: both;
+}
+p {
+	margin: 0 0 1.5em;
+}
+b, strong {
+	font-weight: 700;
+}
+dfn, cite, em, i {
+	font-style: italic;
+}
+blockquote {
+	margin: 1.5em 0;
+	display: block;
+}
+address {
+	margin: 0 0 1.5em;
+}
+pre {
+	/*background: #eee;*/
+	font-family: inherit;
+	/*line-height: 1.6;*/
+	/*margin-bottom: 1.6em;*/
+	/*max-width: 100%;*/
+	/*overflow: auto;*/
+	/*padding: 1.6em;*/
+	padding-left: 2em;
+}
+code, kbd, tt, var {
+	font: 15px Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
+}
+abbr, acronym {
+	border-bottom: 1px dotted #666;
+	cursor: help;
+}
+mark, ins {
+	background: #fff9c0;
+	text-decoration: none;
+}
+sup,
+sub {
+	font-size: 75%;
+	height: 0;
+	line-height: 0;
+	position: relative;
+	vertical-align: baseline;
+}
+sup {
+	bottom: 1ex;
+}
+sub {
+	top: .5ex;
+}
+small {
+	font-size: 75%;
+}
+big {
+	font-size: 125%;
+}
+
+/*--------------------------------------------------------------
+3.0 Elements
+--------------------------------------------------------------*/
+hr {
+	background-color: #ccc;
+	border: 0;
+	height: 1px;
+	margin-bottom: 1.5em;
+}
+ul, ol {
+	margin: 1.5em 0;
+}
+ul {
+	list-style: disc;
+	padding-left: 0;
+}
+ol {
+	list-style: decimal;
+}
+li > ul,
+li > ol {
+	margin-bottom: 0;
+	margin-left: 1.5em;
+}
+dt {
+	font-weight: bold;
+}
+dd {
+	margin: 0 1.5em 1.5em;
+}
+img {
+	height: auto; /* Make sure images are scaled correctly. */
+	max-width: 100%; /* Adhere to container width. */
+}
+figure {
+	margin: 0;
+}
+table {
+	margin: 0 0 1.5em;
+	width: 100%;
+	font-size: 14px;
+	border-collapse: collapse;
+	table-layout: fixed;
+	text-align: center;
+}
+th {
+	font-weight: bold;
+}
+table, th, td {
+	border: 1px solid #c8c8c8;
+}
+/*--------------------------------------------------------------
+4.0 Forms
+--------------------------------------------------------------*/
+button,
+input,
+select,
+textarea {
+	font-size: 100%; /* Corrects font size not being inherited in all browsers */
+	margin: 0; /* Addresses margins set differently in IE6/7, F3/4, S5, Chrome */
+	vertical-align: baseline; /* Improves appearance and consistency in all browsers */
+	*vertical-align: middle; /* Improves appearance and consistency in IE6/IE7 */
+}
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+	cursor: pointer; /* Improves usability and consistency of cursor style between image-type 'input' and others */
+	-webkit-appearance: button; /* Corrects inability to style clickable 'input' types in iOS */
+	font-size: 12px;
+	font-size: 1.2rem;
+	line-height: 1;
+}
+input[type="checkbox"],
+input[type="radio"] {
+	padding: 0; /* Addresses excess padding in IE8/9 */
+}
+input[type="search"] {
+	-webkit-appearance: textfield; /* Addresses appearance set to searchfield in S5, Chrome */
+	-webkit-box-sizing: content-box; /* Addresses box sizing set to border-box in S5, Chrome (include -moz to future-proof) */
+	-moz-box-sizing:    content-box;
+	box-sizing:         content-box;
+}
+input[type="search"]::-webkit-search-decoration { /* Corrects inner padding displayed oddly in S5, Chrome on OSX */
+	-webkit-appearance: none;
+}
+button::-moz-focus-inner,
+input::-moz-focus-inner { /* Corrects inner padding and border displayed oddly in FF3/4 www.sitepen.com/blog/2008/05/14/the-devils-in-the-details-fixing-dojos-toolbar-buttons/ */
+	border: 0;
+	padding: 0;
+}
+input[type="text"],
+input[type="email"],
+input[type="url"],
+input[type="password"],
+input[type="search"],
+textarea {
+	color: #c8c8c8;
+	border: 1px solid #c8c8c8;
+	/*border-radius: 5px;*/
+	font-size: 14px;
+}
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="password"]:focus,
+input[type="search"]:focus,
+textarea:focus {
+	color: #676767;
+	border-color: #85d7db;
+}
+input[type="text"],
+input[type="email"],
+input[type="url"],
+input[type="password"],
+input[type="search"] {
+	padding: 3px;
+}
+textarea {
+	overflow: auto; /* Removes default vertical scrollbar in IE6/7/8/9 */
+	padding: 3px;
+	vertical-align: top; /* Improves readability and alignment in all browsers */
+	width: 100%;
+}
+
+/*--------------------------------------------------------------
+5.0 Navigation
+--------------------------------------------------------------*/
+/*--------------------------------------------------------------
+5.1 Links
+--------------------------------------------------------------*/
+a {
+	text-decoration: none;
+}
+a, a:visited {
+	color: #85d7db;
+}
+a:hover,
+a:focus,
+a:active {
+	color: #bae1e1;
+}
+
+/*--------------------------------------------------------------
+5.2 Menus
+--------------------------------------------------------------*/
+.site-main .comment-navigation,
+.site-main .paging-navigation,
+.site-main .post-navigation {
+	margin: 0 0 1.5em;
+	overflow: hidden;
+}
+.comment-navigation .nav-previous,
+.paging-navigation .nav-previous,
+.post-navigation .nav-previous {
+	float: left;
+}
+.comment-navigation .nav-next,
+.paging-navigation .nav-next,
+.post-navigation .nav-next {
+	float: right;
+}
+.nav-links a {
+	display: block;
+	background: #85d7db;
+	color: #fff;
+	text-align: center;
+	min-width: 70px;
+	max-width: 250px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	padding: 0 5px;
+}
+
+/*--------------------------------------------------------------
+5.3 RSS
+--------------------------------------------------------------*/
+#rss {
+	border-top: 1px solid #eee;
+	text-align: center;
+	margin-bottom: 1em;
+}
+#rss a {
+	position: relative;
+	top: -0.8em;
+	font-family: 'mathix67-font';
+	background: #f8f8f8;
+	color: #c8c8c8;
+	padding: 0 15px;	
+}
+#rss a:hover {
+	color: #ffb648;
+}
+
+/*--------------------------------------------------------------
+6.0 Accessibility
+--------------------------------------------------------------*/
+/* Text meant only for screen readers */
+.screen-reader-text {
+	clip: rect(1px, 1px, 1px, 1px);
+	position: absolute !important;
+}
+
+.screen-reader-text:hover,
+.screen-reader-text:active,
+.screen-reader-text:focus {
+	background-color: #f1f1f1;
+	border-radius: 3px;
+	box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.6);
+	clip: auto !important;
+	color: #21759b;
+	display: block;
+	font-size: 14px;
+	font-weight: bold;
+	height: auto;
+	left: 5px;
+	line-height: normal;
+	padding: 15px 23px 14px;
+	text-decoration: none;
+	top: 5px;
+	width: auto;
+	z-index: 100000; /* Above WP toolbar */
+}
+
+/*--------------------------------------------------------------
+7.0 Alignments
+--------------------------------------------------------------*/
+.alignleft {
+	display: inline;
+	float: left;
+	margin-right: 1.5em;
+}
+.alignright {
+	display: inline;
+	float: right;
+	margin-left: 1.5em;
+}
+.aligncenter {
+	clear: both;
+	display: block;
+	margin: 0 auto;
+}
+
+/*--------------------------------------------------------------
+8.0 Clearings
+--------------------------------------------------------------*/
+.clear:before,
+.clear:after,
+.entry-content:before,
+.entry-content:after,
+.comment-content:before,
+.comment-content:after,
+.site-header:before,
+.site-header:after,
+.site-content:before,
+.site-content:after,
+.site-footer:before,
+.site-footer:after {
+	content: '';
+	display: table;
+}
+
+.clear:after,
+.entry-content:after,
+.comment-content:after,
+.site-header:after,
+.site-content:after,
+.site-footer:after {
+	clear: both;
+}
+
+/*--------------------------------------------------------------
+9.0 Widgets
+--------------------------------------------------------------*/
+
+/* Make sure select elements fit in widgets */
+.widget select {
+	max-width: 100%;
+}
+
+/* Search widget */
+.widget_search {
+	position: absolute;
+	top: 2em;
+	right: 0;
+}
+.widget_search .search-submit {
+	position: relative;
+	right: 0;
+	font-family: 'mathix67-font';
+	font-size: 20px;
+	padding: 0;
+	background: none;
+	color: #c8c8c8;
+	width: 20px;
+	height: 30px;
+	vertical-align: bottom;
+	border: none;
+	z-index: 0;
+}
+.widget_search:hover .search-submit {
+	color: #85d7db;
+}
+.widget_search input.search-field {
+	position: relative;
+	width: 20px;
+	margin-right: -24px;
+	box-sizing: border-box;
+	z-index: 1;
+	opacity: 0;
+	cursor: pointer;
+	-webkit-transition: right 1s ease;
+	transition: right 1s ease;
+}
+.widget_search input.search-field:focus {
+	width: 200px;
+	right: 30px;
+	opacity: 1;
+	cursor: text;
+	-webkit-transition: opacity 1s ease;
+	transition: opacity 1s ease;
+}
+
+/*--------------------------------------------------------------
+10.0 Content
+--------------------------------------------------------------*/
+/*--------------------------------------------------------------
+10.1 Posts and pages
+--------------------------------------------------------------*/
+.sticky {
+}
+.hentry {
+	margin: 0 0 3em;
+	padding: 2em;
+	background: #fff;
+}
+.entry-header {
+	margin: 0 0 2em;
+}
+.entry-title {
+	font-size: 24px;
+	
+}
+.entry-title a {
+	color: #333;
+	font-weight: 300;
+}
+.entry-title a:hover {
+	color: #85d7db;
+}
+.entry-content {
+	font-size: 16px;
+}
+.entry-content h2 {
+	font-size: 20px;
+	margin-top: 2em;
+}
+.entry-content h3 {
+	font-size: 16px;
+	margin-bottom: 0.5em;
+}
+.entry-content ul {
+	list-style: none;
+}
+.entry-content ul li {
+	margin-left: 26px;
+	text-indent: -26px;
+}
+.entry-content ul li:before {
+	content: "\25cf";
+	margin-right: 1em;
+	color: #e6e7e8;
+}
+.byline,
+.updated {
+	display: none;
+}
+.single .byline,
+.group-blog .byline {
+	display: inline;
+}
+.page-content,
+.entry-content,
+.entry-summary {
+	/*margin: 1.5em 0 0;*/
+}
+.page-links {
+	clear: both;
+	margin: 0 0 1.5em;
+}
+.entry-meta {
+	color: #c8c8c8;
+}
+.entry-meta a,
+.entry-meta a:visited {
+	color: #c8c8c8;
+}
+.entry-meta a:hover {
+	color: #85d7db;
+}
+/* Entry type style */
+.entry-content blockquote {
+	font-family: "Palatino Linotype", "Book Antiqua", Palatino, 'STKaiti', 'KaiTi', serif;
+	padding: 0 0 0 1em;
+}
+.entry-content blockquote,
+.entry-content code {
+	/*border-top: 1px solid #eee;*/
+	/*border-bottom: 1px solid #eee;*/
+	border-left: 5px solid #eee;
+	margin-bottom: 1.5em;
+}
+.entry-content code {
+	display: block;
+	margin-left: 2em;
+	padding: 1.5em 1em;
+}
+.entry-content .indent {
+	margin-left: 2em;
+}
+.entry-content em {
+	font-style: normal;
+	color: #5fb4e5;
+}
+.entry-content li {
+	margin-bottom: 0.5em;
+}
+.home .entry-content img,
+.home .entry-content h2 {
+	display: none;
+}
+
+/*--------------------------------------------------------------
+10.2 Asides
+--------------------------------------------------------------*/
+.blog .format-aside .entry-title,
+.archive .format-aside .entry-title {
+	display: none;
+}
+
+/*--------------------------------------------------------------
+10.3 Comments
+--------------------------------------------------------------*/
+.comments-title {
+	margin: 0 0 1em;
+}
+.comment-list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.comment-list li {
+	margin-bottom: 1em;
+}
+.avatar {
+	float: left;
+	vertical-align: middle;
+	margin-top: 5px;
+	opacity: 0.8;
+}
+.comment-text {
+	margin-left: 5em;
+	padding-bottom: 1em;
+	border-bottom: 1px solid #eee;
+}
+.comment-text .fn {
+	font-style: normal;
+	font-weight: bold;
+}
+.comment-text p {
+	margin: 0.5em 0;
+}
+.comment-meta,
+.comment-meta a {
+	color: #c8c8c8;	
+}
+.comment-meta a:hover {
+	color: #85d7db;
+}
+.comment-content a {
+	word-wrap: break-word;
+}
+.comment-list .children {
+	list-style: none;
+	margin: 1em 0 0 3em;
+	padding: 0;
+}
+.comment-list .children li {
+	margin-bottom: 0;
+}
+.comment-list > li > .children {
+	margin: 1em 0 0 5em;
+}
+.comment-list .children .avatar {
+	width: 20px;
+	height: 20px;
+}
+.comment-list .children .fn {
+	float: left;
+	margin-right: 10px;
+}
+.comment-list .children .comment-text{
+	border: none;
+	padding-left: 2em;
+	margin: 0;
+}
+.comment-list > li > .children li:last-of-type .comment-text {
+	border-bottom: 1px solid #eee;
+}
+/* Comment form */
+.comment-respond {
+	margin-top: 3em;
+}
+#commentform > div {
+	margin-bottom: 1em;
+}
+.comment-form .ir {
+	display: inline-block;
+	color: #c8c8c8;
+	width: 5em;
+}
+.comment-form .ir span {
+	color: #e74c39;
+	margin-left: 2px;
+}
+.comment-form-comment label {
+	float: left;
+	color: #c8c8c8;
+	margin-top: 4px;
+}
+.comment-form-comment div {
+	margin-left: 5em;
+}
+#comment {
+	height: 5em;
+}
+#submit_comment {
+	margin-left: 5em;
+	background: #85d7db;
+	color: #fff;
+	border: none;
+	font-size: 14px;
+	padding: 5px 15px;
+}
+
+/*--------------------------------------------------------------
+11.0 Infinite scroll
+--------------------------------------------------------------*/
+/* Globally hidden elements when Infinite Scroll is supported and in use. */
+.infinite-scroll .paging-navigation, /* Older / Newer Posts Navigation (always hidden) */
+.infinite-scroll.neverending .site-footer { /* Theme Footer (when set to scrolling) */
+	display: none;
+}
+/* When Infinite Scroll has reached its end we need to re-display elements that were hidden (via .neverending) before */
+.infinity-end.neverending .site-footer {
+	display: block;
+}
+
+/*--------------------------------------------------------------
+12.0 Media
+--------------------------------------------------------------*/
+.page-content img.wp-smiley,
+.entry-content img.wp-smiley,
+.comment-content img.wp-smiley {
+	border: none;
+	margin-bottom: 0;
+	margin-top: 0;
+	padding: 0;
+}
+.wp-caption {
+	margin-bottom: 1.5em;
+	max-width: 100%;
+}
+.wp-caption img[class*="wp-image-"] {
+	display: block;
+}
+.wp-caption-text {
+	font-size: 12px;
+	margin: 0;
+}
+.site-main .gallery {
+	margin-bottom: 1.5em;
+}
+.gallery-caption {
+}
+.site-main .gallery a img {
+	border: none;
+	height: auto;
+	max-width: 90%;
+}
+.site-main .gallery dd,
+.site-main .gallery figcaption {
+	margin: 0;
+}
+.site-main .gallery-columns-4 .gallery-item {
+}
+.site-main .gallery-columns-4 .gallery-item img {
+}
+/* Make sure embeds and iframes fit their containers */
+embed,
+iframe,
+object {
+	max-width: 100%;
+}
+
+/*--------------------------------------------------------------
+13.0 Footer
+--------------------------------------------------------------*/
+.site-footer {
+	text-align: center;
+	margin-top: 2em;
+	padding-bottom: 0.5em;
+}
+.error-404 {
+	text-align: center;
+}
+.error-404 a {
+	font-size: 404px;
+	font-weight: 500;
+	line-height: 404px;
+}
+
+@media only screen and (max-width: 767px) {
+	#page {
+		width: 90%;
+	}
+	#content {
+		margin-top: 1.5em;
+	}
+	.widget_search {
+		left: 0;
+		bottom: -1em;
+		top: auto;
+	}
+	.widget_search input.search-field:focus {
+		width: 200px;
+		right: 0px;
+		opacity: 1;
+		cursor: text;
+		-webkit-transition: none;
+		transition: none;
+	}
+	input[type="text"],
+	input[type="email"],
+	input[type="url"] {
+		width: 70%;
+	}
+}
