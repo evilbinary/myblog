@@ -354,9 +354,9 @@ class Manager(object):
             def __init__(self,blogname,blogdescription):
                 self.blogname=blogname
                 self.blogdescription=blogdescription
-
-        info =HeadInfo(Options.objects.get(option_name='blogname').option_value,Options.objects.get(option_name='blogdescription').option_value
-)       
+        blogname=Options.objects.filter(option_name='blogname').last().option_value
+        blogdescription=Options.objects.filter(option_name='blogdescription').last().option_value
+        info =HeadInfo(blogname,blogdescription)       
         #info={'blogname':'aaa','blogdescription':'aaa'}
         return info
 
