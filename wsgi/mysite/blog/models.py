@@ -361,8 +361,18 @@ class Manager(object):
             def __init__(self,blogname,blogdescription):
                 self.blogname=blogname
                 self.blogdescription=blogdescription
-        blogname=Options.objects.filter(option_name='blogname').last().option_value
-        blogdescription=Options.objects.filter(option_name='blogdescription').last().option_value
+        blogname=Options.objects.filter(option_name='blogname').last()
+        if blogname!=None:
+            blogname=blogname.option_value
+        else:
+            blogname=''
+
+        blogdescription=Options.objects.filter(option_name='blogdescription').last()
+        if blogdescription!=None:
+            blogdescription=blogdescription.option_value
+        else:
+            blogdescription=''
+        
         info =HeadInfo(blogname,blogdescription)       
         #info={'blogname':'aaa','blogdescription':'aaa'}
         return info
