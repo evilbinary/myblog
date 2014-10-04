@@ -1,3 +1,10 @@
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+#   Author  :   cold
+#   E-mail  :   rootntsd@gmail.com
+#   Date    :   14/10/1 12:21:19
+#   Desc    :   view 视图
+
 from django.shortcuts import render,render_to_response
 from django.template import loader,Context,RequestContext
 from blog.models import Manager,Posts,Comments,TermTaxonomy,Terms,TermRelationships,Options

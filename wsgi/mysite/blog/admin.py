@@ -1,4 +1,11 @@
 #coding=utf-8
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+#   Author  :   cold
+#   E-mail  :   rootntsd@gmail.com
+#   Date    :   14/10/1 12:21:19
+#   Desc    :   admin管理
+
 from django.contrib import admin
 from django.contrib.admin.sites import AdminSite 
 from django.contrib.contenttypes.admin import GenericTabularInline

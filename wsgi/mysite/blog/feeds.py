@@ -1,4 +1,11 @@
 #coding=utf-8
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+#   Author  :   cold
+#   E-mail  :   rootntsd@gmail.com
+#   Date    :   14/10/1 12:21:19
+#   Desc    :   rss生成
+
 
 from django.contrib.syndication.views import Feed  
 from blog.models import Posts,Comments

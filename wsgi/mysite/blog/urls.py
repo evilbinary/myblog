@@ -1,3 +1,10 @@
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+#   Author  :   cold
+#   E-mail  :   rootntsd@gmail.com
+#   Date    :   14/10/1 11:21:19
+#   Desc    :   url定义
+
 from django.conf.urls import *
 from blog import views
 from django.conf import settings

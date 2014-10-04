@@ -1,4 +1,11 @@
 #coding=utf-8
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+#   Author  :   cold
+#   E-mail  :   rootntsd@gmail.com
+#   Date    :   14/10/1 12:21:19
+#   Desc    :   模型定义
+
 # Create your models here.
 # This is an auto-generated Django model module.
 # You'll have to do the following manually to clean this up:
