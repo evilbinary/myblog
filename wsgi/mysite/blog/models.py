@@ -1,3 +1,4 @@
+#coding=utf-8
 # Create your models here.
 # This is an auto-generated Django model module.
 # You'll have to do the following manually to clean this up:
@@ -11,6 +12,8 @@
 #from __future__ import unicode_literals
 
 from django.db import models
+import datetime
+from django.utils import timezone
 
 db_prefix='wp_'
 db_managed=True
@@ -82,20 +85,23 @@ class Links(models.Model):
     class Meta:
         managed = db_managed
         db_table = db_prefix+'links'
-
+        verbose_name=u'链接'
+        verbose_name_plural = u'链接管理'
 
 class Options(models.Model):
-    option_id = models.BigIntegerField(primary_key=True)
+    #option_id = models.BigIntegerField(primary_key=True)
+    option_id = models.AutoField(primary_key=True)
     option_name = models.CharField(unique=True, max_length=64)
     option_value = models.TextField()
-    autoload = models.CharField(max_length=20)
-
+    autoload = models.CharField(default='',blank=True,max_length=20)
     class Meta:
         managed = db_managed
         db_table = db_prefix+'options'
-
-
-
+        verbose_name=u'可选'
+        verbose_name_plural = u'可选管理'
+    def __unicode__(self):
+        return u'id[%s] %s' % (self.option_id,self.option_name)    
+    
 class Usermeta(models.Model):
     umeta_id = models.BigIntegerField(primary_key=True)
     user_id = models.BigIntegerField()
@@ -119,10 +125,15 @@ class Users(models.Model):
     user_activation_key = models.CharField(max_length=60)
     user_status = models.IntegerField(choices=USER_STATUS)
     display_name = models.CharField(max_length=250)
-
+    def __unicode__(self):
+        return u'id[%s] %s' % (self.id,self.user_nicename)
+        #return u'id['+str(self.id)+'] '+self.user_nicename
     class Meta:
         managed = db_managed
         db_table = db_prefix+'users'
+        verbose_name=u'用户'
+        verbose_name_plural = u'用户管理'
+        #app_label = u'系统管理'
 
 class Postmeta(models.Model):
     meta_id = models.BigIntegerField(primary_key=True)
@@ -139,33 +150,37 @@ class Posts(models.Model):
     #id = models.BigIntegerField(db_column='ID', primary_key=True)  # Field name made lowercase.
     id=models.AutoField(primary_key=True) 
     #post_author = models.BigIntegerField()
-    post_author = models.ForeignKey(Users)
-    post_date = models.DateTimeField()
-    post_date_gmt = models.DateTimeField()
-    post_content = models.TextField()
-    post_title = models.TextField()
-    post_excerpt = models.TextField()
-    post_status = models.CharField(choices=POST_STATUS,max_length=20)
-    comment_status = models.CharField(max_length=20)
-    ping_status = models.CharField(max_length=20)
-    post_password = models.CharField(max_length=20)
-    post_name = models.CharField(max_length=200)
-    to_ping = models.TextField()
-    pinged = models.TextField()
-    post_modified = models.DateTimeField()
-    post_modified_gmt = models.DateTimeField()
-    post_content_filtered = models.TextField()
-    post_parent = models.BigIntegerField()
-    guid = models.CharField(max_length=255)
-    menu_order = models.IntegerField()
-    post_type = models.CharField(choices=POST_TYPE,max_length=20)
-    post_mime_type = models.CharField(choices=POST_MIME_TYPE,max_length=100)
-    comment_count = models.BigIntegerField()
-
+    post_author = models.ForeignKey(Users,verbose_name='作者')
+    post_date = models.DateTimeField(verbose_name='发布时间',default=datetime.datetime.now,blank=True)
+    post_date_gmt = models.DateTimeField(default=timezone.now,blank=True)
+    post_content = models.TextField(verbose_name='内容')
+    post_title = models.TextField(verbose_name='标题')
+    post_excerpt = models.TextField(default='',blank=True)
+    post_status = models.CharField(verbose_name='发布状态',choices=POST_STATUS,max_length=20)
+    comment_status = models.CharField(default='',blank=True,max_length=20)
+    ping_status = models.CharField(verbose_name='ping状态',default='',blank=True,max_length=20)
+    post_password = models.CharField(default='',blank=True,max_length=20)
+    post_name = models.CharField(default='',blank=True,max_length=200)
+    to_ping = models.TextField(default='',blank=True)
+    pinged = models.TextField(default='',blank=True)
+    post_modified = models.DateTimeField(default=datetime.datetime.now,blank=True)
+    post_modified_gmt = models.DateTimeField(default=timezone.now,blank=True)
+    post_content_filtered = models.TextField(default='',blank=True)
+    post_parent = models.BigIntegerField(default=0,blank=True)
+    guid = models.CharField(max_length=255,default='',blank=True)
+    menu_order = models.IntegerField(default=0,blank=True)
+    post_type = models.CharField(verbose_name='发布类型',choices=POST_TYPE,max_length=20)
+    post_mime_type = models.CharField(verbose_name='文档类型',choices=POST_MIME_TYPE,max_length=100)
+    comment_count = models.BigIntegerField(default=0,blank=True)
+    def __unicode__(self):
+        return u'id[%s] %s' % (self.id,self.post_title)
+        #return u'id['+str(self.id)+'] '+self.post_title
+    
     class Meta:
         managed = db_managed
         db_table = db_prefix+'posts'
-
+        verbose_name=u'发布'
+        verbose_name_plural = u'发布管理'
 
 class Commentmeta(models.Model):
     meta_id = models.BigIntegerField(primary_key=True)
@@ -187,8 +202,8 @@ class Comments(models.Model):
     comment_author_email = models.CharField(max_length=100)
     comment_author_url = models.CharField(max_length=200,blank=True)
     comment_author_ip = models.CharField(default='',max_length=100,blank=True)  # Field name made lowercase.
-    comment_date = models.DateTimeField(auto_now_add=True)
-    comment_date_gmt = models.DateTimeField(auto_now_add=True)
+    comment_date = models.DateTimeField(default=datetime.datetime.now,blank=True)
+    comment_date_gmt = models.DateTimeField(default=timezone.now,blank=True)
     comment_content = models.TextField()
     comment_karma = models.IntegerField(default=0)
     comment_approved = models.CharField(choices=APPROVED_TYPE,max_length=20,default=0)
@@ -200,7 +215,8 @@ class Comments(models.Model):
     class Meta:
         managed = db_managed
         db_table = db_prefix+'comments'
-
+        verbose_name=u'评论'
+        verbose_name_plural = u'评论管理'
 
 
 class Terms(models.Model):
@@ -241,4 +257,106 @@ class TermRelationships(models.Model):
         #unique_together=('object','term_taxonomy_id')
 
 
+#manager all models
+class Manager(object):
+    """docstring for Manager"""
+    def __new__(cls,*args,**kwargs):
+        #print '#####new'
+        if not hasattr(cls,'_instance'):
+            o=super(Manager,cls)
+            #print 'new',type(o),type(cls),cls
+            cls._instance=o.__new__(cls,*args,**kwargs)
+            cls.instances={}
+            #print 'type:',cls
+        return cls._instance
+    def _get_class(self,cls=''):
+            module_name=''
+            class_name=''
+            ws=cls.rsplit('.',1)
+            if len(ws)==2:
+                (module_name, class_name) = ws
+            else:
+                class_name=ws[0]
+                module_name= __file__ and os.path.splitext(os.path.basename(__file__))[0] 
+            print module_name
+            module_meta = __import__(module_name, globals(), locals(), [class_name]) 
+            #print 'module_meta:',module_meta,' class_name:',class_name
+            class_meta = getattr(module_meta, class_name) 
+            cls=class_meta 
+            return cls
+    def __init__(self, cls=None,*args,**kwargs):
+        #print '#####init self=',self.__class__.__name__,' cls:',cls
+        self.cls=cls
+        self.args=args
+        self.kwargs=kwargs
+        if cls==None:
+            return
+        if isinstance(cls,str):
+            cls=self._get_class(cls)
+        elif isinstance(cls,cls.__class__):
+            self.instances[cls.__class__]=cls
+            self.cls=cls.__class__
+            return
+        if cls in self.instances:
+            self=self.instances[cls] 
+        else:
+            obj=cls(*args,**kwargs)
+            self.instances[cls]=obj
+            self=obj
+    def instance(self,cls=None,*args,**kwargs):
+        #print 'membermethod'
+        try:
+            if cls==None:
+                if self.cls==None:
+                    return self
+                cls=self.cls
+            if isinstance(cls,str):
+                cls=self._get_class(cls)
+            if cls in self.instances:
+                return self.instances[cls]
+            else:
+                #print 'instance no found',type(cls),args,kwargs
+                obj=cls(*args,**kwargs)
+                self.instances[cls]=obj
+                return obj
+        except TypeError,e:
+            return cls
+        except AttributeError,e:
+            return  cls
+        except Exception , e:
+            return e
+    @classmethod
+    def inst(cls,clz=None,*args,**kwargs):
+        if clz==None:
+            if cls==None:
+                return cls()
+            clz=cls
+        return cls(clz,*args,**kwargs).instance(*args,**kwargs)
+    @staticmethod
+    def ins(cls=None,*args,**kwargs):
+        return Manager(cls,*args,**kwargs).inst(cls,*args,**kwargs) 
+    @classmethod
+    def add_member_method(self,cls,fun,*args,**kwargs):
+        obj=self.instance(cls,*args,**kwargs);
+        setattr(obj,fun.__name__,type.MethodType(fun,obj))
+        return obj
+    @classmethod
+    def add_static_method(self,cls,fun,*args,**kwargs):
+        obj=self.instance(cls,*args,**kwargs)
+        setattr(obj,fun.__name__,fun)
+        return obj
+    @classmethod
+    def add_class_method(self):
+        pass
+
+    def get_head_info(self):
+        class HeadInfo:
+            def __init__(self,blogname,blogdescription):
+                self.blogname=blogname
+                self.blogdescription=blogdescription
+
+        info =HeadInfo(Options.objects.get(option_name='blogname').option_value,Options.objects.get(option_name='blogdescription').option_value
+)       
+        #info={'blogname':'aaa','blogdescription':'aaa'}
+        return info
 

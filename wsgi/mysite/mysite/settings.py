@@ -82,7 +82,12 @@ DATABASES = {
 LANGUAGE_CODE = 'zh-CN'
 
 
-TIME_ZONE = 'UTC'
+LANGUAGE_CODE = 'zh-CN'
+
+TIME_ZONE = 'Asia/Shanghai'
+
+#TIME_FORMAT = 'a'
+DATETIME_FORMAT='Y/m/d H:i:s'
 
 USE_I18N = True
 

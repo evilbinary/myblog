@@ -1,6 +1,6 @@
 from django.shortcuts import render,render_to_response
 from django.template import loader,Context,RequestContext
-from blog.models import Posts,Comments,TermTaxonomy,Terms,TermRelationships
+from blog.models import Manager,Posts,Comments,TermTaxonomy,Terms,TermRelationships,Options
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator,Page,EmptyPage, PageNotAnInteger
@@ -12,6 +12,7 @@ from django.core.context_processors import csrf
 from feeds import ArticlesFeed
 
 
+manager=Manager()
 #This is for response request
 
 
@@ -182,8 +183,13 @@ def feed(request,str=''):
 
 def render_header(request):
     pages=Posts.objects.all().filter(post_status='publish',post_type='page').only('id','post_title').order_by('-post_date')
-
-    context=RequestContext(request,{'pages':pages}) 
+    # headeinfo=
+    
+    # headinfo={'blogname':'',''}
+    # headinfo['blogname']='aaaa'
+    # headinfo['blogname']='bbb'
+    headinfo=Manager().get_head_info()
+    context=RequestContext(request,{'pages':pages,'headeinfo':headinfo}) 
     return render_to_string('header.html',context)
 def render_footer(request):
     context=RequestContext(request) 
