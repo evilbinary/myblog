@@ -1628,6 +1628,7 @@ img#wpstats {
 	.main-navigation .current_page_ancestor > a {
 		color: #636363;
 		font-weight: bold;
+		font-size:20px;
 	}
 	.menu-toggle {
 		display: none;
