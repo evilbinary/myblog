@@ -115,4 +115,3 @@ admin.site.register( Options,OptionsAdmin)
 #admin.site.register( TermTaxonomy)
 #admin.site.register( Terms)
 #admin.site.register( Usermeta)
-

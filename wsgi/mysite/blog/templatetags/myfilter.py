@@ -17,7 +17,7 @@ register=template.Library()
 @register.filter(name='markdown')
 def markdown_filter(value,arg=None):
     extensions=(arg and arg.split(','))
-    ret=markdown.markdown(value,extensions=extensions,safe_mode=True,enable_attributes=False)
+    ret=markdown.markdown(value,extensions=extensions,safe_mode=False,enable_attributes=False)
     return mark_safe(ret)
 
 @register.filter(name='highlight')

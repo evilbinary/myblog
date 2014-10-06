@@ -807,6 +807,7 @@ article.sticky .featured-post {
 	margin: 0 0 24px;
 	margin: 0 0 1.714285714rem;
 	line-height: 1.714285714;
+	/*text-indent: 2em;add to indent 2parm text*/
 }
 .entry-content a:visited,
 .comment-content a:visited {
