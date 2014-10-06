@@ -27,11 +27,22 @@ class MyModelAdmin( admin.ModelAdmin ):
 # 	pass
 
 
+class TermRelationshipsInline(admin.TabularInline):
+	model=TermRelationships
+	fk_name='object'
+	list_display=('cat_name',)
+		
+	#fields=('term_relationship_id','cat_name')
+
+	def cat_name(self,obj):
+		return obj.term_taxonomy.term.name
+		
+	
 
 
 class  PostsAdmin(admin.ModelAdmin):
 	#fields=('post_title','post_content','post_author')
-	list_display=('post_title','post_content','post_author_name','post_date','post_status')
+	list_display=('post_title','post_content_more','post_author_name','post_date','post_status')
 	list_display_links = ('post_title','post_author_name')
 	list_select_related = ('post_author', )
 	#inlines=(UsersInline,)
@@ -42,6 +53,8 @@ class  PostsAdmin(admin.ModelAdmin):
 	actions_on_bottom=True
 	actions_on_top=False
 	actions=('make_publish','make_private',)
+	#inlines=(TermRelationshipsInline,)
+	# list_editable=('post_content',)
 	fieldsets=(
 		(None,{
 			'fields':('post_title','post_content','post_author','post_type','post_mime_type','post_status')
@@ -55,16 +68,25 @@ class  PostsAdmin(admin.ModelAdmin):
 			'fields':('to_ping','pinged','post_modified','post_modified_gmt','post_content_filtered','post_parent','guid','menu_order','comment_count')
 		}),
 	)
+	#actions
 	def make_publish(self, request, queryset):
-		queryset.update(post_status='publish')
+		rows_updated=queryset.update(post_status='publish')
+		message_bit = "%s 条记录已" % rows_updated
+		self.message_user(request, "%s成功修改为发布." % message_bit)
 	make_publish.short_description = "标记为发表"
 	def make_private(self, request, queryset):
-		queryset.update(post_status='private')
+		rows_updated=queryset.update(post_status='private')
+		message_bit = "%s 条记录已" % rows_updated
+		self.message_user(request, "%s成功修改为私有." % message_bit)
 	make_private.short_description = "标记为私有"
 
+	#colums
 	def post_author_name(self,obj):
 		return obj.post_author.user_nicename
-
+	post_author_name.short_description='发布人'
+	def post_content_more(self,obj):
+		return obj.post_content[0:200]#+u'更多'
+	post_content_more.short_description='内容摘要'
 	pass
 
 class  UsersAdmin(admin.ModelAdmin):
@@ -89,10 +111,14 @@ class CommentsAdmin(admin.ModelAdmin):
 	)
 	
 	def make_approve(self, request, queryset):
-		queryset.update(comment_approved='1')
+		rows_updated =queryset.update(comment_approved='1')
+		message_bit = "%s 条记录已" % rows_updated
+		self.message_user(request, "%s同意评论." % message_bit)
 	make_approve.short_description = "同意评论"
 	def make_unapprove(self, request, queryset):
-		queryset.update(comment_approved='0')
+		rows_updated =rows_updated =queryset.update(comment_approved='0')
+		message_bit = "%s 条记录已" % rows_updated
+		self.message_user(request, "%s不同意评论." % message_bit)
 	make_unapprove.short_description = "不同意评论"
 
 	def comment_post_id(self,obj):
@@ -104,6 +130,25 @@ class OptionsAdmin(admin.ModelAdmin):
 	list_display=('option_id','option_name','option_value')
 	pass
 
+class TermsAdmin(admin.ModelAdmin):
+	"""docstring for TermsAdmin"""
+	list_display=('name','slug','term_group')
+
+class TermRelationshipsAdmin(admin.ModelAdmin):
+	list_display=('post_title','cat','term_order')
+	def post_title(self,obj):
+		return obj.object.post_title
+	post_title.short_description=u'标题'
+	def cat(self,obj):
+		return obj.term_taxonomy
+	cat.short_description=u'分类'
+
+class TermTaxonomyAdmin(admin.ModelAdmin):
+	"""docstring for TermTaxonomy"""
+	list_display=('term','taxonomy','count')
+
+
+
 class MyAdminSite(AdminSite):
 
 	site_header='evilbianry 管理'
@@ -112,7 +157,7 @@ class MyAdminSite(AdminSite):
 	def __init__(self,name='admin',app_name='admin'):
 		super(MyAdminSite,self).__init__(name,app_name)
 	pass
-		
+
 
 # AdminSite.site_header='evilbianry 管理'
 # AdminSite.site_title='evilbianry 站点管理'
@@ -128,7 +173,7 @@ admin.site.register( Links)
 admin.site.register( Options,OptionsAdmin)
 #admin.site.register( Commentmeta)
 #admin.site.register( Postmeta)
-#admin.site.register( TermRelationships)
-#admin.site.register( TermTaxonomy)
-#admin.site.register( Terms)
+admin.site.register( TermRelationships,TermRelationshipsAdmin)
+admin.site.register( TermTaxonomy,TermTaxonomyAdmin)
+admin.site.register( Terms,TermsAdmin)
 #admin.site.register( Usermeta)

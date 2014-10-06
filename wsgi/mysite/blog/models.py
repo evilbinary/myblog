@@ -34,10 +34,10 @@ STATUS = (
     ('open', 'open'),
 )
 POST_STATUS = (
-    ('draft', 'draft'),
+    ('draft', '垃圾'),
     ('inherit', 'inherit'),
-    ('private', 'private'),
-    ('publish', 'publish'),
+    ('private', '私有'),
+    ('publish', '已发布'),
 )
 POST_TYPE = (
     ('attachment', 'attachment'),
@@ -58,7 +58,11 @@ APPROVED_TYPE=(
     ('spam','spam'),
     ('trash','trash'),
 )
-
+TAXONOMY_TYPE=(
+    ('category','文章分类'),
+    ('post_tag','文章标签'),
+    ('post_format','post_format'),
+    )
 
 class DjangoMigrations(models.Model):
     id = models.IntegerField(primary_key=True)  # AutoField?
@@ -133,7 +137,7 @@ class Users(models.Model):
     user_status = models.IntegerField(choices=USER_STATUS)
     display_name = models.CharField(max_length=250)
     def __unicode__(self):
-        return u'id[%s] %s' % (self.id,self.user_nicename)
+        return u'%s' % (self.user_nicename)
         #return u'id['+str(self.id)+'] '+self.user_nicename
     class Meta:
         managed = db_managed
@@ -157,7 +161,7 @@ class Posts(models.Model):
     #id = models.BigIntegerField(db_column='ID', primary_key=True)  # Field name made lowercase.
     id=models.AutoField(primary_key=True) 
     #post_author = models.BigIntegerField()
-    post_author = models.ForeignKey(Users,verbose_name='作者')
+    post_author = models.ForeignKey(Users,db_column='post_author',verbose_name='作者')
     post_date = models.DateTimeField(verbose_name='发布时间',default=datetime.datetime.now,blank=True)
     post_date_gmt = models.DateTimeField(default=timezone.now,blank=True)
     post_content = models.TextField(verbose_name='内容')
@@ -180,7 +184,7 @@ class Posts(models.Model):
     post_mime_type = models.CharField(verbose_name='文档类型',choices=POST_MIME_TYPE,max_length=100)
     comment_count = models.BigIntegerField(default=0,blank=True)
     def __unicode__(self):
-        return u'id[%s] %s' % (self.id,self.post_title)
+        return u'%s' % (self.post_title)
         #return u'id['+str(self.id)+'] '+self.post_title
     
     class Meta:
@@ -227,42 +231,53 @@ class Comments(models.Model):
 
 
 class Terms(models.Model):
-    term_id = models.BigIntegerField(primary_key=True)
-    name = models.CharField(max_length=200)
-    slug = models.CharField(unique=True, max_length=200)
-    term_group = models.BigIntegerField()
-
+    term_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=200,verbose_name=u'分类名')
+    slug = models.CharField(unique=True, max_length=200,verbose_name=u'缩略名')
+    term_group = models.BigIntegerField(default=0,verbose_name='分组号')
+    def __unicode__(self):
+        return u'%s' % (self.name)
+      
     class Meta:
         managed = db_managed
         db_table = db_prefix+'terms'
+        verbose_name=u'目录/标签'
+        verbose_name_plural=u'目录/标签管理'
 
 
 class TermTaxonomy(models.Model):
-    term_taxonomy_id = models.BigIntegerField(primary_key=True)
+    term_taxonomy_id = models.AutoField(primary_key=True)
     #term_id = models.BigIntegerField()
-    term=models.ForeignKey(Terms)
-    taxonomy = models.CharField(max_length=32)
-    description = models.TextField()
-    parent = models.BigIntegerField()
-    count = models.BigIntegerField()
-
+    term=models.ForeignKey(Terms,verbose_name=u'目录/标签')
+    taxonomy = models.CharField(max_length=32,choices=TAXONOMY_TYPE,verbose_name='分类方法(category/post_tag)')
+    description = models.TextField(verbose_name='分类描述')
+    parent = models.BigIntegerField(default=0,verbose_name='父分类id')
+    count = models.BigIntegerField(default=0,verbose_name='文章数统计')
+    def __unicode__(self):
+        return u'%s ->%s(%s)' % (self.taxonomy,self.term.name,self.description)
+    
     class Meta:
         managed = db_managed
         db_table = db_prefix+'term_taxonomy'
+        verbose_name=u'目录/标签分类'
+        verbose_name_plural=u'目录/标签分类管理'
 
 class TermRelationships(models.Model):
     #object_id = models.BigIntegerField()
-    term_relationship_id=models.BigIntegerField(primary_key=True)
-    object=models.ForeignKey(Posts)
+    term_relationship_id=models.AutoField(primary_key=True)
+    object=models.ForeignKey(Posts,verbose_name='文章')
     #term_taxonomy_id = models.BigIntegerField()
-    term_taxonomy = models.ForeignKey(TermTaxonomy)
-    term_order = models.IntegerField()
-
+    term_taxonomy = models.ForeignKey(TermTaxonomy,verbose_name='分类/标签')
+    term_order = models.IntegerField(default=0,verbose_name='排序')
+    def __unicode__(self):
+        return u'%s 属于 %s分类' % (self.object.post_title,self.term_taxonomy.term.name)
+    
     class Meta:
         managed = db_managed
         db_table = db_prefix+'term_relationships'
         #unique_together=('object','term_taxonomy_id')
-
+        verbose_name_plural=u'文章/链接分类管理'
+        verbose_name=u'文章/链接分类'
 
 #manager all models
 class Manager(object):

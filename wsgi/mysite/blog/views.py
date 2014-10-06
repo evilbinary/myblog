@@ -143,7 +143,7 @@ def search(request):
 
 def cat(request,num='1'):
     #test=TermRelationships.objects.select_related('object').filter(term_taxonomy_id=num,object__post_type='post')
-    posts_list=Posts.objects.select_related('termrelationship').filter(termrelationships__term_taxonomy_id=num,post_type='post')
+    posts_list=Posts.objects.select_related('termrelationship').filter(termrelationships__term_taxonomy__term_id=num,post_type='post')
     
     context={
     'header':render_header(request),
@@ -205,13 +205,18 @@ def render_footer(request):
 def render_contents(posts,cat=''):
     cats=TermRelationships.objects.select_related('term_taxonomy__term').filter(term_taxonomy__taxonomy__in=('category', 'post_tag', 'post_format'),object_id__in=posts)
     #cats=Terms.objects.select_related('termtaxonomy').select_related('termrelationships').filter(termtaxonomy__taxonomy__in=('category', 'post_tag', 'post_format'))
-    i=0
+    cat_terms={}
+    for cat in cats:
+        cat_terms[cat.object.id]=cat.term_taxonomy.term
+    # i=0
     for post in posts:
-        if i< len(cats):
-            post.cat=cats[i].term_taxonomy.term
+        #if i< len(cats):
+        #    post.cat=cats[i].term_taxonomy.term
+        if post.id in cat_terms:
+            post.cat=cat_terms[post.id]
         else:
             post.cat=None
-        i=i+1
+        # i=i+1
         pass
     context={'posts':posts,}
     return render_to_string('content.html',context)
