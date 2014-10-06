@@ -6,7 +6,7 @@
 #   Date    :   14/10/1 12:21:19
 #   Desc    :   admin管理
 
-from django.contrib import admin
+from django.contrib import admin,auth
 from django.contrib.admin.sites import AdminSite 
 from django.contrib.contenttypes.admin import GenericTabularInline
 from django import forms
@@ -39,6 +39,8 @@ class  PostsAdmin(admin.ModelAdmin):
 	search_fields = ['post_title','post_content']
 	#list_per_page=10
 	#form=PostsAdminFrom
+	actions_on_bottom=True
+	actions_on_top=False
 	actions=('make_publish','make_private',)
 	fieldsets=(
 		(None,{
@@ -102,7 +104,22 @@ class OptionsAdmin(admin.ModelAdmin):
 	list_display=('option_id','option_name','option_value')
 	pass
 
+class MyAdminSite(AdminSite):
 
+	site_header='evilbianry 管理'
+	site_title='evilbianry 站点管理'
+	index_title='evilbinary'
+	def __init__(self,name='admin',app_name='admin'):
+		super(MyAdminSite,self).__init__(name,app_name)
+	pass
+		
+
+# AdminSite.site_header='evilbianry 管理'
+# AdminSite.site_title='evilbianry 站点管理'
+admin.site=MyAdminSite()
+
+admin.site.register(auth.models.User)
+admin.site.register(auth.models.Group)
 
 admin.site.register( Users,UsersAdmin)
 admin.site.register( Posts,PostsAdmin)
