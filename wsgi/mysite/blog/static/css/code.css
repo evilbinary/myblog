@@ -8,7 +8,7 @@
 
 .hll { background-color: #ffffcc }
 .c { color: #008800; font-style: italic } /* Comment */
-.err { border: 1px solid #FF0000 } /* Error */
+.err { border: 0px solid #FF0000 } /* Error */
 .k { color: #AA22FF; font-weight: bold } /* Keyword */
 .o { color: #666666 } /* Operator */
 .cm { color: #008800; font-style: italic } /* Comment.Multiline */
