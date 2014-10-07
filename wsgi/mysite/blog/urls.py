@@ -33,4 +33,5 @@ urlpatterns= patterns('',
             url(r'^feeds/comments-rss2$',CommentsFeed()),
             url(r'^feeds/(?P<str>\S+)$',views.feed),
             url(r'^test$',views.test),
+
             )

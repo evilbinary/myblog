@@ -1,3 +1,10 @@
+.codehilite  pre{
+	background: #dff0d7;/*#d5e4f6;*/
+	border-radius:.5em;
+	border:thin solid green;/*#AAF;*/
+	/*background: #E0E0FF;
+	border:thin solid #AAF;*/
+}
 
 .hll { background-color: #ffffcc }
 .c { color: #008800; font-style: italic } /* Comment */
