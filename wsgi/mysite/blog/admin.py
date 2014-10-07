@@ -127,7 +127,7 @@ class CommentsAdmin(admin.ModelAdmin):
 		return obj.comment_post.post_title
 
 class OptionsAdmin(admin.ModelAdmin):
-	list_display=('option_id','option_name','option_value')
+	list_display=('option_name','option_value','autoload')
 	pass
 
 class TermsAdmin(admin.ModelAdmin):

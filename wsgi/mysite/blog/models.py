@@ -102,9 +102,9 @@ class Links(models.Model):
 class Options(models.Model):
     #option_id = models.BigIntegerField(primary_key=True)
     option_id = models.AutoField(primary_key=True)
-    option_name = models.CharField(unique=True, max_length=64)
-    option_value = models.TextField()
-    autoload = models.CharField(default='',blank=True,max_length=20)
+    option_name = models.CharField(verbose_name='名称', unique=True, max_length=64)
+    option_value = models.TextField(verbose_name='值')
+    autoload = models.CharField(verbose_name='自动加载' ,default='',blank=True,max_length=20)
     class Meta:
         managed = db_managed
         db_table = db_prefix+'options'
