@@ -886,10 +886,14 @@ article.sticky .featured-post {
 .entry-summary p,
 .comment-content p,
 .mu_register p {
-	margin: 0 0 24px;
-	margin: 0 0 1.714285714rem;
-	line-height: 1.714285714;
+	/*margin: 0 0 24px;
+	margin: 0 0 1.714285714rem;*/
+	margin:  0 0 1.5em;
+	line-height: 1.6;
+	font-size: 16px;
 	/*text-indent: 2em;add to indent 2parm text*/
+	font-family: "Helvetica Neue", Helvetica, "Hiragino Sans GB", Arial, sans-serif;
+
 }
 .entry-content a:visited,
 .comment-content a:visited {
@@ -945,7 +949,7 @@ article.sticky .featured-post {
 .comment-content code {
 	font-family: Consolas, Monaco, Lucida Console, monospace;
 	font-size: 12px;
-	font-size: 0.857142857rem;
+	font-size: 0.997142857rem;
 	line-height: 2;
 }
 .entry-content pre,
