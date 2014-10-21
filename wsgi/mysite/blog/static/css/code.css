@@ -1,7 +1,8 @@
 .codehilite  pre{
-	background: #dff0d7;/*#d5e4f6;*/
+	background: #242424;//#dff0d7;/*#d5e4f6;*/
 	border-radius:.5em;
 	border:thin solid green;/*#AAF;*/
+    color:#e0e0e0;
 	/*background: #E0E0FF;
 	border:thin solid #AAF;*/
 }
