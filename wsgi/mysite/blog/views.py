@@ -83,11 +83,11 @@ def render_sidebar(request):
     #this sql equal to SELECT YEAR(post_date) AS `year`, MONTH(post_date) AS `month`, count(ID) as posts FROM e_posts  WHERE post_type = 'post' AND post_status = 'publish' GROUP BY YEAR(post_date), MONTH(post_date) ORDER BY post_date DESC
     #archives=Posts.objects.filter(post_status='publish',post_type='post').extra(select={'year':'year(post_date)','month':'month(post_date)'}).values('year','month').annotate(Count('id')).order_by('-post_date')
     #hack to port to mysql and sqlite
-    engine=connection.settings_dict['ENGINE']
+    engine=connection.vendor
     archives=[]
-    if engine=='django.db.backends.sqlite3':
+    if engine=='sqlite':
         archives=Posts.objects.filter(post_status='publish',post_type='post').extra(select={'year':"strftime('%Y',post_date)",'month':"strftime('%m',post_date)"}).values('year','month').annotate(Count('id')).order_by('-year','-month') #.order_by('-post_date') a bug?? wat hell
-    elif engine=='django.db.backends.mysql':
+    elif engine=='mysql':
         archives=Posts.objects.filter(post_status='publish',post_type='post').extra(select={'year':'year(post_date)','month':'month(post_date)'}).values('year','month').annotate(Count('id')).order_by('-post_date')
     else:
         pass;
@@ -109,10 +109,11 @@ def comment(request):
     comment_url=request.POST.get('url')
     comment_parent=request.POST.get('comment_parent')
     comment_author_ip=get_client_ip(request)
+    comment_agent=request.META.get('HTTP_USER_AGENT',None)
     if comment_post_id==None or comment_parent==None:
         return index(request)
     p=Posts.objects.get(pk=comment_post_id)
-    comment=Comments(comment_post=p,comment_approved='0',comment_author=comment_author,comment_parent=comment_parent,comment_content=comment_content,comment_author_email=comment_email,comment_author_url=comment_url,comment_author_ip=comment_author_ip)
+    comment=Comments(comment_post=p,comment_approved='0',comment_author=comment_author,comment_parent=comment_parent,comment_content=comment_content,comment_author_email=comment_email,comment_author_url=comment_url,comment_author_ip=comment_author_ip,comment_agent=comment_agent)
     # comment.comment_date=datetime()
     p.comment_count=p.comment_count+1
     p.save()
@@ -159,7 +160,8 @@ def test(request):
     post_list=Posts.objects.all()
     
     cats=TermRelationships.objects.select_related('term_taxonomy__term').filter(term_taxonomy__taxonomy__in=('category', 'post_tag', 'post_format'),object_id__in=post_list)
-    context={'test':cats}
+    context=RequestContext(request,{'test':cats}) 
+    #context={'test':cats}
     return render_to_response('test.html',context)
 
 #This is for render templete

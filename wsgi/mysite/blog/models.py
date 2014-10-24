@@ -53,8 +53,8 @@ POST_MIME_TYPE=(
 
 )
 APPROVED_TYPE=(
-    ('1','approved'),
-    ('0','unapproved'),
+    ('1','同意'),
+    ('0','未审核'),
     ('spam','spam'),
     ('trash','trash'),
 )
@@ -209,15 +209,15 @@ class Comments(models.Model):
     comment_id=models.AutoField(primary_key=True)
     #comment_post_id = models.BigIntegerField(db_column='comment_post_ID')  # Field name made lowercase.
     comment_post=models.ForeignKey(Posts)
-    comment_author = models.TextField()
+    comment_author = models.TextField(verbose_name='评论者')
     comment_author_email = models.CharField(max_length=100)
     comment_author_url = models.CharField(max_length=200,blank=True)
     comment_author_ip = models.CharField(default='',max_length=100,blank=True)  # Field name made lowercase.
-    comment_date = models.DateTimeField(default=datetime.datetime.now,blank=True)
+    comment_date = models.DateTimeField(verbose_name='评论日期',default=datetime.datetime.now,blank=True)
     comment_date_gmt = models.DateTimeField(default=timezone.now,blank=True)
-    comment_content = models.TextField()
+    comment_content = models.TextField(verbose_name='评论内容')
     comment_karma = models.IntegerField(default=0)
-    comment_approved = models.CharField(choices=APPROVED_TYPE,max_length=20,default=0)
+    comment_approved = models.CharField(verbose_name='审核情况',choices=APPROVED_TYPE,max_length=20,default=0)
     comment_agent = models.CharField(default='',max_length=255,blank=True)
     comment_type = models.CharField(default='',max_length=20,blank=True)
     comment_parent = models.BigIntegerField(default=0)

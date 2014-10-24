@@ -496,10 +496,12 @@ body.custom-font-enabled {
 }
 a {
 	outline: none;
-	color: #21759b;
+	color: #0f3647;
+
 }
 a:hover {
-	color: #0f3647;
+	color: #21759b;
+
 }
 
 /* Assistive text */
@@ -788,15 +790,19 @@ footer p{
 	font-size: 1.428571429rem;
 	line-height: 1.2;
 	font-weight: normal;
+	text-align:center;
+	font-size:1.6em;
 }
 .entry-header .entry-title a {
 	text-decoration: none;
+	text-shadow:rgba(50,50,50,.3) 2px 2px 3px;
 }
 .entry-header .entry-format {
 	margin-top: 24px;
 	margin-top: 1.714285714rem;
 	font-weight: normal;
 }
+
 .entry-header .comments-link {
 	margin-top: 24px;
 	margin-top: 1.714285714rem;
@@ -808,7 +814,10 @@ footer p{
 .comments-link a,
 .entry-meta a {
 	color: #757575;
+	text-decoration:none;
+	border-bottom:1px dotted #ccc;
 }
+
 .comments-link a:hover,
 .entry-meta a:hover {
 	color: #21759b;
@@ -1657,6 +1666,8 @@ img#wpstats {
 		line-height: 3.692307692;
 		text-transform: uppercase;
 		white-space: nowrap;
+		text-decoration:none;
+		font-size: 1.3em;
 	}
 	.main-navigation li a:hover,
 	.main-navigation li a:focus {
@@ -1774,7 +1785,7 @@ img#wpstats {
 /* Minimum width of 960 pixels. */
 @media screen and (min-width: 960px) {
 	body {
-		background-color: #f3f3f3;
+		background-color:#f5f5f5 ;/*#f3f3f3;*/
 	}
 	body .site {
 		padding: 0 40px;

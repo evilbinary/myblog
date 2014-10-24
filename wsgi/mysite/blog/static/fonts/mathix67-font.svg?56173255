@@ -1,0 +1,15 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg">
+<metadata>Copyright (C) 2014 by original authors @ fontello.com</metadata>
+<defs>
+<font id="mathix67-font" horiz-adv-x="1000" >
+<font-face font-family="mathix67-font" font-weight="400" font-stretch="normal" units-per-em="1000" ascent="850" descent="-150" />
+<missing-glyph horiz-adv-x="1000" />
+<glyph glyph-name="left-dir" unicode="&#xe802;" d="m510 93l-510 256l510 259l0-515z" horiz-adv-x="510" />
+<glyph glyph-name="right-dir" unicode="&#xe803;" d="m0 608l510-257l-510-258l0 515z" horiz-adv-x="510" />
+<glyph glyph-name="search-1" unicode="&#xe801;" d="m746 209l254-255l-105-105l-254 254q-106-72-232-72q-169 0-289 120t-120 289t120 289t289 120t289-120t120-289q0-127-72-231z m-65 231q0 113-79 193t-193 80t-193-80t-80-193t80-192t193-80t193 80t79 192z" horiz-adv-x="1000" />
+<glyph glyph-name="rss" unicode="&#xe800;" d="m1000-151h-193q0 164-64 314t-172 258t-257 172t-314 64v192q203 0 388-79t319-214t214-319t79-388z m-340 0h-192q0 194-137 331t-331 137v192q179 0 331-88t241-241t88-331z m-410 125q0-52-36-89t-89-36t-88 36t-37 89t37 89t88 36t89-36t36-89z" horiz-adv-x="1000" />
+</font>
+</defs>
+</svg>

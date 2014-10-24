@@ -13,9 +13,9 @@
                 <a href="/blog/page/{{post.id}}#respond" title="评论 {{post.post_titile}}">
             {%endif%}
                 {%if post.comment_count > 0%}
-                    <span class="leave-reply">{{post.comment_count}}条回复</span>
+                    <i class="fa fa-comments "></i><span class="leave-reply">{{post.comment_count}}条回复</span>
                 {%else%}
-                <span class="leave-reply">发表回复</span>
+                <i class="fa fa-comment-o  "></i><span class="leave-reply">发表回复</span>
                 {%endif%}
             </a>
         </div>

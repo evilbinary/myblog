@@ -125,7 +125,7 @@ class CommentsAdmin(admin.ModelAdmin):
 		return obj.comment_post.id
 	def comment_post_post_title(self,obj):
 		return obj.comment_post.post_title
-
+	comment_post_post_title.short_description = "评论文章标题"
 class OptionsAdmin(admin.ModelAdmin):
 	list_display=('option_name','option_value','autoload')
 	pass
