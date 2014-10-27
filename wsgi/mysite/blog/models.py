@@ -373,9 +373,10 @@ class Manager(object):
 
     def get_head_info(self):
         class HeadInfo:
-            def __init__(self,blogname,blogdescription):
+            def __init__(self,blogname,blogdescription,title='邪恶二进制'):
                 self.blogname=blogname
                 self.blogdescription=blogdescription
+                self.title=title
         blogname=Options.objects.filter(option_name='blogname').last()
         if blogname!=None:
             blogname=blogname.option_value
