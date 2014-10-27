@@ -7,7 +7,7 @@
 
 from django.shortcuts import render,render_to_response
 from django.template import loader,Context,RequestContext
-from blog.models import Manager,Posts,Comments,TermTaxonomy,Terms,TermRelationships,Options
+from blog.models import Manager,Posts,Comments,TermTaxonomy,Terms,TermRelationships,Options,Links
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator,Page,EmptyPage, PageNotAnInteger
@@ -92,12 +92,17 @@ def render_sidebar(request):
     else:
         pass;
 
+
+    links,links_opt=manager.get_all_links()   
+
     context={
         'recent_posts':recent_posts,
         'recent_comments':recent_comments,
         'categories':categories,
         'archives':archives,
-    }
+        'links':links,
+        'links_opt':links_opt,
+   }
     return render_to_string('sidebar.html',context)
 
 #for post
@@ -157,10 +162,30 @@ def cat(request,num='1'):
     pass
 def test(request):
     #cats=Terms.objects.select_related('termtaxonomy') #.select_related('termrelationships').filter(termtaxonomy__taxonomy__in=('category', 'post_tag', 'post_format'))
-    post_list=Posts.objects.all()
+    #post_list=Posts.objects.all()
     
-    cats=TermRelationships.objects.select_related('term_taxonomy__term').filter(term_taxonomy__taxonomy__in=('category', 'post_tag', 'post_format'),object_id__in=post_list)
-    context=RequestContext(request,{'test':cats}) 
+    #cats=TermRelationships.objects.select_related('term_taxonomy__term').filter(term_taxonomy__taxonomy__in=('category', 'post_tag', 'post_format'),object_id__in=[ p.id for p in post_list])
+    cats=''
+
+    #all_links=Links.objects.all().filter(link_visible='Y')
+    #terms=Terms.objects.select_related('term').filter(termtaxonomy__taxonomy='link_category',termtaxonomy__count__gt=0).order_by('name')
+
+    #TermRelationships.objects.select_related('Links').filter(term_taxonomy__taxonomy__in=('link_category',)
+    #TermRelationships.objects.select_related('Links').filter(term_taxonomy__taxonomy__in=('link_category',),object__in=[x.link_id for x in links])
+    #links=terms #TermRelationships.objects.select_related('Links') #.filter(term_taxonomy__taxonomy__in=('link_category',),object_id__in= link_id )
+    
+    links=Links.objects.filter(link_visible='Y').extra(select={'post_id':'link_id'})
+    cats=TermRelationships.objects.select_related('term_taxonomy__term').filter(term_taxonomy__taxonomy__in=('link_category',),term_taxonomy__count__gt=0)
+    all_links={}
+    for l in links:
+        for c in cats:
+            if(c.object_id==l.link_id):
+                if(c.term_taxonomy.term.name in all_links):
+                    all_links[c.term_taxonomy.term.name].append(l)
+                else:
+                    all_links[c.term_taxonomy.term.name]=[l,]   
+
+    context=RequestContext(request,{'cats':cats,'links':all_links}) 
     #context={'test':cats}
     return render_to_response('test.html',context)
 
@@ -205,11 +230,11 @@ def render_footer(request):
     return render_to_string('footer.html',context)
 
 def render_contents(posts,cat=''):
-    cats=TermRelationships.objects.select_related('term_taxonomy__term').filter(term_taxonomy__taxonomy__in=('category', 'post_tag', 'post_format'),object_id__in=posts)
+    cats=TermRelationships.objects.select_related('term_taxonomy__term').filter(term_taxonomy__taxonomy__in=('category', 'post_tag', 'post_format'),object_id__in=[ p.id for p in posts])
     #cats=Terms.objects.select_related('termtaxonomy').select_related('termrelationships').filter(termtaxonomy__taxonomy__in=('category', 'post_tag', 'post_format'))
     cat_terms={}
     for cat in cats:
-        cat_terms[cat.object.id]=cat.term_taxonomy.term
+        cat_terms[cat.object_id]=cat.term_taxonomy.term
     # i=0
     for post in posts:
         #if i< len(cats):

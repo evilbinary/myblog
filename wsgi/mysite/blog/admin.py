@@ -147,8 +147,19 @@ class TermTaxonomyAdmin(admin.ModelAdmin):
 	"""docstring for TermTaxonomy"""
 	list_display=('term','taxonomy','count')
 
-
-
+class LinksAdmin(admin.ModelAdmin):
+	"""docstring for LinksAdmin"""
+	list_display=('link_name','link_url','link_visible')
+	list_display_links=('link_name','link_url')
+	fieldsets=(
+		(None,{
+			'fields':('link_name','link_url','link_visible')
+		}),
+		('其他选项',{
+			'classes': ('collapse',),
+			'fields':('link_image','link_target','link_description','link_owner','link_rating','link_updated','link_rel','link_notes','link_rss')
+		}),
+	)
 class MyAdminSite(AdminSite):
 
 	site_header='evilbianry 管理'
@@ -169,7 +180,7 @@ admin.site.register(auth.models.Group)
 admin.site.register( Users,UsersAdmin)
 admin.site.register( Posts,PostsAdmin)
 admin.site.register( Comments,CommentsAdmin)
-admin.site.register( Links)
+admin.site.register( Links,LinksAdmin)
 admin.site.register( Options,OptionsAdmin)
 #admin.site.register( Commentmeta)
 #admin.site.register( Postmeta)

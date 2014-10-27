@@ -1,3 +1,4 @@
+ {% load myfilter  %}
 <div id="secondary" class="widget-area" role="complementary">
 	<aside id="search-2" class="widget widget_search">
 		<form role="search" method="get" id="searchform" class="searchform" action="/blog/search/">
@@ -75,5 +76,22 @@
 			<!--<li><a href="#" title="Powered by evilbinary, state-of-the-art semantic personal publishing platform.">evilbinary.org</a>
 			</li>-->			
 		</ul>
-	</aside>		
+	</aside>
+ 	{%for x,y in links.items%}
+	<aside id="linkcat-{{links_opt|get:x|get:"object_id"}}" class="widget widget_links">
+ 		<h3 class="widget-title">{{links_opt|get:x|get:"term_taxonomy"|get:"term"|get:"name"}}</h3>
+		<ul class="xoxo blogroll">
+ 			{%for l in y%}
+			<li>
+				<i class="fa fa-smile-o"></i><a href="{{l.link_url}}"
+				{%if l.link_target%}
+					target="{{l.link_target}}"
+				{%endif%}
+				 title="{{l.link_name}}"> {{l.link_name}}</a>
+			</li>
+			{%endfor%}
+		</ul>
+	</aside>
+	{%endfor%}
+
 </div>

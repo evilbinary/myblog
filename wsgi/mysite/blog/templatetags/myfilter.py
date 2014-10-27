@@ -11,6 +11,28 @@ register=template.Library()
 
 
 
+@register.filter(name='dict_get')
+def dict_get(value,key,default=None):
+    return value.get(key,default)
+
+@register.filter(name='get')
+def value_get(value,key,default=None):
+    try:
+        if isinstance(value,dict):
+            return value.get(key,default)
+        elif isinstance(value,list):
+            return vlaue[key]
+        elif isinstance(value,tuple):
+            return value[key]
+        elif isinstance(value,str):
+            return value[key]
+        elif isinstance(value,object):
+            return getattr(value,key)
+        else:
+            return ''
+    except Exception,e:
+        return 'except:',e
+
 
 
 

@@ -30,8 +30,8 @@ USER_STATUS=(
     (0,'inactive')
 )
 STATUS = (
-    ('closed', 'closed'),
-    ('open', 'open'),
+    ('closed', '关闭'),
+    ('open', '打开'),
 )
 POST_STATUS = (
     ('draft', '垃圾'),
@@ -41,8 +41,8 @@ POST_STATUS = (
 )
 POST_TYPE = (
     ('attachment', 'attachment'),
-    ('page', 'page'),
-    ('post', 'post'),
+    ('page', '页面'),
+    ('post', '文章'),
     ('revision', 'revision'),
 )
 POST_MIME_TYPE=(
@@ -55,15 +55,25 @@ POST_MIME_TYPE=(
 APPROVED_TYPE=(
     ('1','同意'),
     ('0','未审核'),
-    ('spam','spam'),
-    ('trash','trash'),
+    ('spam','垃圾'),
+    ('trash','回收站'),
 )
 TAXONOMY_TYPE=(
     ('category','文章分类'),
     ('post_tag','文章标签'),
     ('post_format','post_format'),
+    ('link_category','链接分类'),
     )
 
+VISIBLE_TYPE=(
+    ('Y','可见'),
+    ('N','私有'),
+    )
+TARGET_TYPE=(
+    ('_blank','新建立窗口'),
+    ('_top','弹出'),
+    ('_none','同窗口')
+    )
 class DjangoMigrations(models.Model):
     id = models.IntegerField(primary_key=True)  # AutoField?
     app = models.CharField(max_length=255)
@@ -76,28 +86,6 @@ class DjangoMigrations(models.Model):
 
 
 
-
-
-class Links(models.Model):
-    link_id = models.BigIntegerField(primary_key=True)
-    link_url = models.CharField(max_length=255)
-    link_name = models.CharField(max_length=255)
-    link_image = models.CharField(max_length=255)
-    link_target = models.CharField(max_length=25)
-    link_description = models.CharField(max_length=255)
-    link_visible = models.CharField(max_length=20)
-    link_owner = models.BigIntegerField()
-    link_rating = models.IntegerField()
-    link_updated = models.DateTimeField()
-    link_rel = models.CharField(max_length=255)
-    link_notes = models.TextField()
-    link_rss = models.CharField(max_length=255)
-
-    class Meta:
-        managed = db_managed
-        db_table = db_prefix+'links'
-        verbose_name=u'链接'
-        verbose_name_plural = u'链接管理'
 
 class Options(models.Model):
     #option_id = models.BigIntegerField(primary_key=True)
@@ -252,7 +240,7 @@ class TermTaxonomy(models.Model):
     taxonomy = models.CharField(max_length=32,choices=TAXONOMY_TYPE,verbose_name='分类方法(category/post_tag)')
     description = models.TextField(verbose_name='分类描述')
     parent = models.BigIntegerField(default=0,verbose_name='父分类id')
-    count = models.BigIntegerField(default=0,verbose_name='文章数统计')
+    count = models.BigIntegerField(default=0,verbose_name='数量统计')
     def __unicode__(self):
         return u'%s ->%s(%s)' % (self.taxonomy,self.term.name,self.description)
     
@@ -262,22 +250,53 @@ class TermTaxonomy(models.Model):
         verbose_name=u'目录/标签分类'
         verbose_name_plural=u'目录/标签分类管理'
 
+
+class Links(models.Model):
+    link_id = models.AutoField(primary_key=True)
+    link_url = models.CharField(max_length=255,verbose_name='URL链接')
+    link_name = models.CharField(max_length=255,verbose_name='名称')
+    link_image = models.CharField(default='',blank=True,max_length=255,verbose_name='图片')
+    link_target = models.CharField(default='',blank=True,max_length=25,choices=TARGET_TYPE,verbose_name='打开方式')
+    link_description = models.CharField(default='',blank=True,max_length=255,verbose_name='描述')
+    link_visible = models.CharField(default='Y',blank=True,max_length=20,choices=VISIBLE_TYPE,verbose_name='是否可见')
+    link_owner = models.BigIntegerField(default=0,blank=True,verbose_name='拥有者')
+    link_rating = models.IntegerField(default=0,blank=True,verbose_name='排名')
+    link_updated = models.DateTimeField(default=datetime.datetime.now,blank=True,verbose_name='更新日期')
+    link_rel = models.CharField(default='',blank=True,max_length=255)
+    link_notes = models.TextField(default='',blank=True,verbose_name='备注')
+    link_rss = models.CharField(default='',blank=True,max_length=255,verbose_name='RSS链接')
+    class Meta:
+        managed = db_managed
+        db_table = db_prefix+'links'
+        verbose_name=u'链接'
+        verbose_name_plural = u'链接管理'
+
+    def __unicode__(self):
+        return u'%s  %s' % (self.link_name,self.link_url)
 class TermRelationships(models.Model):
-    #object_id = models.BigIntegerField()
+    #object_id = models.BigIntegerField(verbose_name='文章/链接')
     term_relationship_id=models.AutoField(primary_key=True)
+    #django 这个不适合使用，django two foreign keys with one column a little sad :(
     object=models.ForeignKey(Posts,verbose_name='文章')
+    object_link=models.ForeignKey(Links,null=True,verbose_name='链接',db_column='object_link')
+
     #term_taxonomy_id = models.BigIntegerField()
     term_taxonomy = models.ForeignKey(TermTaxonomy,verbose_name='分类/标签')
     term_order = models.IntegerField(default=0,verbose_name='排序')
     def __unicode__(self):
-        return u'%s 属于 %s分类' % (self.object.post_title,self.term_taxonomy.term.name)
+        return u'%s 属于 %s分类' % (self.object_id,self.term_taxonomy.term.name)
     
+    def object_link(self):
+        return self.object
+   
     class Meta:
         managed = db_managed
         db_table = db_prefix+'term_relationships'
         #unique_together=('object','term_taxonomy_id')
         verbose_name_plural=u'文章/链接分类管理'
         verbose_name=u'文章/链接分类'
+
+
 
 #manager all models
 class Manager(object):
@@ -392,4 +411,19 @@ class Manager(object):
         info =HeadInfo(blogname,blogdescription)       
         #info={'blogname':'aaa','blogdescription':'aaa'}
         return info
+    def get_all_links(self):
 
+        links=Links.objects.filter(link_visible='Y')
+        cats=TermRelationships.objects.select_related('term_taxonomy__term').filter(term_taxonomy__taxonomy__in=('link_category',),term_taxonomy__count__gt=0)
+        all_links={}
+        all_opt={}
+        for l in links:
+            for c in cats:
+                if(c.object_id==l.link_id):
+                    if(c.term_taxonomy.term.term_id in all_opt):
+                        all_links[c.term_taxonomy.term.term_id].append(l)
+                    else:
+                        all_links[c.term_taxonomy.term.term_id]=[l,]   
+                    all_opt[c.term_taxonomy.term.term_id]=c
+        return all_links,all_opt
+        pass
