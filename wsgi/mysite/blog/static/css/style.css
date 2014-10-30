@@ -1065,7 +1065,7 @@ img.aligncenter,
 .site-content article {
 	border-bottom: 1px dashed #ccc;/*4px double #ededed;*/
 	margin-bottom: 72px;
-	margin-bottom: 5.142857143rem;
+	margin-bottom: 4.142857143rem;
 	padding-bottom: 24px;
 	padding-bottom: 1.714285714rem;
 	word-wrap: break-word;
@@ -1390,7 +1390,10 @@ a.comment-edit-link:hover {
 	margin-bottom: 1.714285714rem;
 }
 
-/*new comment style*/
+/*new comment style create by evilbinary 2014-10-31*/
+.comments-area{
+	margin-top: 40px;
+}
 .comments-list {
 	margin-top: 20px;
 	min-height: 20px;

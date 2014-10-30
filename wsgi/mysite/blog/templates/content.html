@@ -4,19 +4,27 @@
 <article id="post-{{post.id}}" class="post-{{post.id}} post type-post status-publish format-standard hentry category-uncategorized">       
     <header class="entry-header">
         {%if post.post_type == 'post'%}
-        <h1 class="entry-title"><a href="/blog/article/{{post.id}}" rel="bookmark">{{post.post_title}}</a></h1>
+            <h1 class="entry-title">
+                <a href="/blog/article/{{post.id}}" rel="bookmark">{{post.post_title}}</a>
+            </h1>
         {%endif%}
         <div class="comments-link">
-            {%if post.post_type == 'post'%}
-            <a href="/blog/?p={{post.id}}#respond" title="评论 {{post.post_titile}}">
-            {%else%}
-                <a href="/blog/page/{{post.id}}#respond" title="评论 {{post.post_titile}}">
-            {%endif%}
-                {%if post.comment_count > 0%}
-                    <i class="fa fa-comments "></i><span class="leave-reply">{{post.comment_count}}条回复</span>
+          
+            {%if post.comment_count > 0%}
+                {%if post.post_type == 'post'%}
+                    <a href="/blog/?p={{post.id}}#nav-single" title="评论 {{post.post_titile}}">
                 {%else%}
-                <i class="fa fa-comment-o  "></i><span class="leave-reply">发表回复</span>
+                    <a href="/blog/page/{{post.id}}#nav-single" title="评论 {{post.post_titile}}">
                 {%endif%}
+                    <i class="fa fa-comments "></i><span class="leave-reply">{{post.comment_count}}条回复</span>
+            {%else%}
+                {%if post.post_type == 'post'%}
+                    <a href="/blog/?p={{post.id}}#respond" title="评论 {{post.post_titile}}">
+                {%else%}
+                    <a href="/blog/page/{{post.id}}#respond" title="评论 {{post.post_titile}}">
+                {%endif%}
+                    <i class="fa fa-comment-o  "></i><span class="leave-reply">发表回复</span>
+            {%endif%}
             </a>
         </div>
     </header>
