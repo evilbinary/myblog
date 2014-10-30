@@ -1,3 +1,10 @@
+#coding=utf-8
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+#   Author  :   evilbinary.org
+#   E-mail  :   rootntsd@gmail.com
+#   Date    :   14/10/1 12:21:19
+#   Desc    :    
 from django import template
 from django.utils.html import conditional_escape ,strip_tags
 from django.utils.safestring import mark_safe 
@@ -5,10 +12,72 @@ import markdown
 from pygments import highlight
 from pygments.lexers import PythonLexer
 from pygments.formatters import HtmlFormatter
+from django.template.loader import render_to_string
+from django.template import RequestContext
+
 
 
 register=template.Library()
+flag_tags=-1
 
+
+@register.filter(name='gen_comment_block')
+def gen_comment_block(comments,request=None):
+    ret=''
+    current_level=0
+    for level,comment in comments:
+        if level==0:
+            while current_level>0:
+                ret=ret+'</ol>'
+                current_level=current_level-1
+            ret=ret+'</li>'
+        else:
+            if current_level<=0:
+                ret=ret+"<ol class='children'>"
+                current_level=current_level+1
+            else:
+                if current_level>level:
+                    sub=current_level-level
+                    while sub>0:
+                        ret=ret+'</ol>'
+                        sub=sub-1
+                        pass
+                    current_level=level
+                elif current_level==level:
+                    pass
+                else:
+                    ret=ret+"<ol class='children'>"
+                    current_level=current_level+1
+                    pass
+        context={'comment':comment,'level':level}
+        context=RequestContext(request,context) 
+        ret=ret+render_to_string('comment_block.html',context)
+    return mark_safe(ret)
+
+
+
+@register.filter(name='mark_tag')
+
+def mark_tag(tag,c):
+    global flag_tags
+    if flag_tags>=0:
+        childs='len:%d  flag:%d @%s'%(len(tag[1])/2,flag_tags,tag)
+        flag_tags=len(tag[1])/2
+        for i in range(flag_tags):
+            childs=childs+c 
+        return mark_safe(childs)
+    return '!!!!!!!!!!!!!'
+@register.filter(name='mark_tag_end')
+def mark_tag_end(tag,child):
+    global flag_tags
+    flag_tags=-1
+@register.filter(name='mark_tag_start')
+def mark_tag_start(tag,child):
+    global flag_tags
+    if flag_tags<0:
+        flag_tags=0
+        return  child
+    return ''
 
 
 @register.filter(name='dict_get')

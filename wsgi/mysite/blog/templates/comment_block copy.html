@@ -1,0 +1,43 @@
+ {% load gravatar  %}
+
+<li class="comment even thread-even depth-{{level}}" id="li-comment-{{forloop.counter}}">
+	<article id="comment-{{comment.comment_id}}" class="comment">
+		<header class="comment-meta comment-author vcard">
+			{%if not comment.comment_author_email %}
+				<img alt="" src="{{STATIC_URL}}img/avatar.jpg" height="44" width="44">
+			{%else%}
+				{%if level < 1 %}
+					<img alt="" src="{{ comment.comment_author_email|get_gravatar}}" height="44" width="44">
+				{%else%}
+					<img alt="" src="{{ comment.comment_author_email|get_gravatar:32}}" height="32" width="32">
+				{%endif%}
+			{%endif%}
+			<cite>
+				<b class="fn">
+					{%if comment.comment_author_url != ''%}
+						<a href="{{comment.comment_author_url}}" rel="external nofollow" class="url">{{comment.comment_author}}</a>
+					{%else%}
+						{{comment.comment_author}}
+					{%endif%}
+				</b> 
+				{%if comment.user_id != 0%}
+					<span>Post author</span>
+				{%else%}
+
+				{%endif%}
+			</cite>
+			<a href="/blog/?p={{comment.comment_post_id}}#comment-{{comment.comment_id}}">
+				<time datetime="{{comment.comment_date}}">{{comment.comment_date}}</time>
+			</a>			
+		</header><!-- .comment-meta -->
+
+		<section class="comment-content comment">
+			<p>{{comment.comment_content}}</p>
+			<!--<p class="edit-link"><a class="comment-edit-link" href="/blog/comment">Edit</a></p>-->			
+		</section><!-- .comment-content -->
+
+		<div class="reply">
+			<a class="comment-reply-link" href="/blog/?p={{comment.comment_post_id}}&amp;replytocom={{comment.comment_id}}#respond" onclick="return addComment.moveForm(&quot;comment-{{comment.comment_id}}&quot;, &quot;{{comment.comment_id}}&quot;, &quot;respond&quot;, &quot;{{comment.comment_post_id}}&quot;)">回复</a> <span>↓</span>			
+		</div><!-- .reply -->
+	</article><!-- #comment-## -->
+</li><!-- #comment-## -->

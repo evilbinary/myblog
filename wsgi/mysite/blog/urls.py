@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
-#   Author  :   cold
+#   Author  :   evilbinary.org
 #   E-mail  :   rootntsd@gmail.com
 #   Date    :   14/10/1 11:21:19
 #   Desc    :   url定义
@@ -33,5 +33,6 @@ urlpatterns= patterns('',
             url(r'^feeds/comments-rss2$',CommentsFeed()),
             url(r'^feeds/(?P<str>\S+)$',views.feed),
             url(r'^test$',views.test),
-
+            url(r'^page_expir$',views.page_expir),
+            
             )

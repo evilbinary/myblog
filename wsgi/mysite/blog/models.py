@@ -1,7 +1,7 @@
 #coding=utf-8
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
-#   Author  :   cold
+#   Author  :   evilbinary.org
 #   E-mail  :   rootntsd@gmail.com
 #   Date    :   14/10/1 12:21:19
 #   Desc    :   模型定义
@@ -216,7 +216,10 @@ class Comments(models.Model):
         db_table = db_prefix+'comments'
         verbose_name=u'评论'
         verbose_name_plural = u'评论管理'
-
+    def __unicode__(self):
+        return u'%s'% (self.comment_id)
+        #return u'id['+str(self.id)+'] '+self.post_title
+    
 
 class Terms(models.Model):
     term_id = models.AutoField(primary_key=True)
