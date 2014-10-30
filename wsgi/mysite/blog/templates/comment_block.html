@@ -11,7 +11,7 @@
 				<img class="round_img " alt="" src="{{ comment.comment_author_email|get_gravatar:32}}" height="32" width="32" >
 			{%endif%}
 		{%endif%}
-	<div class="comment-item" style="padding:0 0 0 5px;">  
+	<div class="comment-item" id="comment-{{comment.comment_id}}" style="padding:0 0 0 5px;">  
 		<div class="info">
 			{%if comment.comment_author_url != ''%}
 				<a class="uname" href="{{comment.comment_author_url}}" rel="external nofollow" >{{comment.comment_author}}</a>
@@ -30,7 +30,7 @@
 				</a>	
 			</span>		
 			<span class="reply">
-				<a   href="/blog/?p={{comment.comment_post_id}}&amp;replytocom={{comment.comment_id}}#respond" onclick="return addComment.moveForm(&quot;comment-{{comment.comment_id}}&quot;, &quot;{{comment.comment_id}}&quot;, &quot;respond&quot;, &quot;{{comment.comment_post_id}}&quot;)">回复</a> 		
+				<a  class="comment-reply-link"  href="/blog/?p={{comment.comment_post_id}}&amp;replytocom={{comment.comment_id}}#respond" onclick="return addComment.moveForm(&quot;comment-{{comment.comment_id}}&quot;, &quot;{{comment.comment_id}}&quot;, &quot;respond&quot;, &quot;{{comment.comment_post_id}}&quot;)">回复</a> 		
  			</span>
  		</div>
  		<div class="body">
