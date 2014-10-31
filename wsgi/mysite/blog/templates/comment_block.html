@@ -16,7 +16,7 @@
 			{%if comment.comment_author_url != ''%}
 				<a class="uname" href="{{comment.comment_author_url}}" rel="external nofollow" >{{comment.comment_author}}</a>
 			{%else%}
-				{{comment.comment_author}}
+				<div class="uname">{{comment.comment_author}}</div>
 			{%endif%}
 			{%if comment.user_id != 0%}
 				<span>Post author</span>
