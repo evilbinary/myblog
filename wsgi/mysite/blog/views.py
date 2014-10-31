@@ -19,7 +19,7 @@ from django.core.context_processors import csrf
 from feeds import ArticlesFeed
 from util import anti_resubmit
 from django.http import HttpResponseRedirect
-
+from blog.forms import CommentForm
 
 manager=Manager()
 #This is for response request
@@ -109,38 +109,49 @@ def render_sidebar(request):
 
 #for post
 def comment(request):
-    comment_content=request.POST.get('comment')
-    comment_post_id=request.POST.get('comment_post_ID').strip()
-    comment_author=request.POST.get('author').strip()
-    comment_email=request.POST.get('email').strip()
-    comment_url=request.POST.get('url').strip()
-    comment_parent=request.POST.get('comment_parent').strip()
-    comment_author_ip=get_client_ip(request)
-    comment_agent=request.META.get('HTTP_USER_AGENT',None)
-    if comment_post_id==None or comment_parent==None:
-        return index(request)
-    if comment_author=='' or comment_email=='' or comment_content=='':
-        return article(request,comment_post_id)
 
-    p=Posts.objects.get(pk=comment_post_id)
-    comment=Comments(comment_post=p,comment_approved='0',comment_author=comment_author,comment_parent=comment_parent,comment_content=comment_content,comment_author_email=comment_email,comment_author_url=comment_url,comment_author_ip=comment_author_ip,comment_agent=comment_agent)
-    # comment.comment_date=datetime()
-    p.comment_count=p.comment_count+1
-    p.save()
-    comment.save()
+    if request.method=='POST':
+        form=CommentForm(request.POST)
+        comment_post_id=request.POST.get('comment_post_ID').strip()
+        if form.is_valid():
+            comment_content=request.POST.get('comment')
+            comment_author=request.POST.get('author').strip()
+            comment_email=request.POST.get('email').strip()
+            comment_url=request.POST.get('url').strip()
+            comment_parent=request.POST.get('comment_parent').strip()
+            comment_author_ip=get_client_ip(request)
+            comment_agent=request.META.get('HTTP_USER_AGENT',None)
+            if comment_post_id==None or comment_parent==None:
+                return index(request)
+            if comment_author=='' or comment_email=='' or comment_content=='':
+                return article(request,comment_post_id)
 
-    request.session['comment_author']=comment_author
-    request.session['comment_email']=comment_email
+            p=Posts.objects.get(pk=comment_post_id)
+            comment=Comments(comment_post=p,comment_approved='0',comment_author=comment_author,comment_parent=comment_parent,comment_content=comment_content,comment_author_email=comment_email,comment_author_url=comment_url,comment_author_ip=comment_author_ip,comment_agent=comment_agent)
+            # comment.comment_date=datetime()
+            p.comment_count=p.comment_count+1
+            p.save()
+            comment.save()
 
-    #context={'test':comment_post_id}
-    if(p.post_type=='post'):
-        #return article(request,comment_post_id)
-        return HttpResponseRedirect('/blog/article/'+comment_post_id)#防止重复提交
-    elif(p.post_type=='page'):
-        #return page(request,comment_post_id)
-        return HttpResponseRedirect('/blog/page/'+comment_post_id)#防止重复提交
+            request.session['comment_author']=comment_author
+            request.session['comment_email']=comment_email
 
-    pass;
+            #context={'test':comment_post_id}
+            if(p.post_type=='post'):
+                #return article(request,comment_post_id)
+                return HttpResponseRedirect('/blog/article/'+comment_post_id+'#comment-%s'%comment.comment_id)#防止重复提交
+            elif(p.post_type=='page'):
+                #return page(request,comment_post_id)
+                return HttpResponseRedirect('/blog/page/'+comment_post_id)#防止重复提交
+        else:
+            t = loader.get_template('test.html')
+            #return HttpResponse(t.render(Context({'form':form})) )
+            contexts={'comment_form':form}
+            return article(request,comment_post_id,contexts)
+            pass
+    else:
+        pass    
+    return index(request)
 
 #页面过期
 def page_expir(request):
@@ -220,12 +231,12 @@ def archive(request,year='2014',month='01'):
     }
     return render_to_response('index.html',context)
 
-def article(request,post_id):
+def article(request,post_id,contexts=None):
 
     context={
     'header':render_header(request),
     'footer':render_footer(request),
-    'contents':render_article(request,post_id),
+    'contents':render_article(request,post_id,contexts),
      'sidebar':render_sidebar(request),
     }
     return render_to_response('index.html',context)
@@ -276,7 +287,7 @@ def render_nator2(prev,next):
     context={'prev_post':prev,
             'next_post':next}
     return render_to_string('page_nav.html',context)
-def render_comment(request,comment_post_id,comments=[]):
+def render_comment(request,comment_post_id,comments=[],contexts=None):
     #构造评论嵌套
     #comments=sorted(test.items(), key=lambda d: d[0],reverse=False) #控制回复排序时间
     # dic={}
@@ -328,7 +339,7 @@ def render_comment(request,comment_post_id,comments=[]):
         pass
     test=result
     comments=result
-    context={'comment_post_id':comment_post_id,'comments':comments,'test':test,'request':request }
+    context={'comment_post_id':comment_post_id,'comments':comments,'test':test,'request':request,'contexts':contexts }
     if request!=None:
         context.update(csrf(request))
     context=RequestContext(request,context) 
@@ -356,7 +367,7 @@ def render_page1(posts,num='1',nator=None,comment=None,num_page=5):
 
 
 
-def render_article(request,post_id):
+def render_article(request,post_id,contexts=None):
     objs=Posts.objects.all().filter(post_status='publish',post_type='post')
     prev_post=objs.filter(id__lt=post_id).only('id','post_title').last()
     cur_post=Posts.objects.all().filter(id=post_id,post_status='publish',post_type='post')
@@ -376,7 +387,7 @@ def render_article(request,post_id):
         comments=Comments.objects.filter(Q(comment_post_id=post_id), Q(comment_approved='1')|(Q(comment_author = comment_author) &Q(comment_author_email=comment_email) &Q(comment_approved = '0')) ).order_by('comment_date')
     else:
         comments=Comments.objects.filter(comment_post_id=post_id,comment_approved='1' ).order_by('comment_date')
-    return render_page1(cur_post,1,nator,render_comment(request,post_id,comments))
+    return render_page1(cur_post,1,nator,render_comment(request,post_id,comments,contexts))
 
 def render_pages(request,num='1'):
     context={}

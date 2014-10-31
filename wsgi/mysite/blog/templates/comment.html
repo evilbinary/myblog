@@ -34,7 +34,8 @@
 			
 			<p class="comment-form-comment">
 				<label for="comment">评论</label> 
-				<textarea id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea>
+				<textarea id="comment" name="comment" cols="45" rows="8" aria-required="true">{{contexts.comment_form.cleaned_data.comment}}</textarea>
+				<span class="required">{{contexts.comment_form.comment.errors|first}}</span>
 			</p>
 			<!--<p class="comment-notes">邮箱地址不会公开，标记成 
 				<span class="required">*</span>是必填.
@@ -42,14 +43,20 @@
 			<div>				
 				<p class="comment-form-author">
 					<label for="author">昵称 <span class="required">*</span></label>
-					 <input id="author" name="author" type="text" value="" size="30" aria-required="true">
+					 <input id="author" name="author" type="text" value="{{contexts.comment_form.author.form.cleaned_data.author}}" size="30" aria-required="true">
+					 <span class="required">{{contexts.comment_form.author.errors|first}}</span>
 				</p>
 				<p class="comment-form-email">
-					<label for="email">邮箱 <span class="required">*</span></label> 
-					<input id="email" name="email" type="text" value="" size="30" aria-required="true">
+					<label for="email">邮箱 
+						<span class="required">*</span>
+					</label> 
+
+					<input id="email" name="email" type="text" value="{{contexts.comment_form.cleaned_data.email}}" size="30" aria-required="true">
+					<span class="required">{{contexts.comment_form.email.errors|first}}</span>
 				</p>
 				<p class="comment-form-url"><label for="url">网站</label>
-				 <input id="url" name="url" type="text" value="" size="30">
+				 <input id="url" name="url" type="text" value="{{contexts.comment_form.data.url}}" size="30">
+				 <span class="required">{{contexts.comment_form.url.errors|first}}</span>
 				</p>
 			</div>
 
