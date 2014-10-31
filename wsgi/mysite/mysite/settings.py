@@ -118,4 +118,6 @@ STATICFILES_DIRS = (
         ('img',os.path.join(STATIC_ROOT,'img')),
         )
         
-
+#头像地址
+GRAVATAR_URL_PREFIX='https://0.gravatar.com/avatar/'
+#GRAVATAR_DEFAULT_IMAGE=''
