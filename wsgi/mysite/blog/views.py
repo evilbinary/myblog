@@ -144,7 +144,7 @@ def comment(request):
                 #return page(request,comment_post_id)
                 return HttpResponseRedirect('/blog/page/'+comment_post_id)#防止重复提交
         else:
-            t = loader.get_template('test.html')
+            #t = loader.get_template('test.html')
             #return HttpResponse(t.render(Context({'form':form})) )
             contexts={'comment_form':form}
             return article(request,comment_post_id,contexts)
