@@ -8,31 +8,32 @@
 from django.conf.urls import *
 from blog import views
 from django.conf import settings
-from views import *
+from blog.views import * 
 from django.contrib import admin
 from feeds import ArticlesFeed,CommentsFeed
 
-
-urlpatterns= patterns('',
-            url(r'^$',views.index),
-            url(r'^blog/',views.index),
-            url(r'^archive/(\d{4})/(\d{1,2})/$',views.archive),
-            url(r'^article/(\d+)/$', views.article),
-            url(r'^articles/(\d{4})/$', views.year_archive),
-            url(r'^articles/(\d{4})/(\d{2})/$',views.month_archive),
-            url(r'^articles/(\d{4})/(\d{2})/(\d+)/$', views.article_detail),
-            url(r'^pages(?P<num>\d+)/$', views.pages),
-            url(r'^pages/$', views.pages),
-            url(r'^pages/(?P<num>\d+)/$', views.pages),
-            url(r'^page/(?P<page_id>\d+)$', views.page),
-            url(r'^test(?P<num>\d+)/$', views.page),
-            url(r'^comment',views.comment),
-            url(r'^search/$',views.search),
-            url(r'^cat/(?P<num>\d+)$',views.cat),
+urlpatterns= patterns('blog.views',
+            url(r'^$','index'),
+            url(r'^blog/','index'),
+            url(r'^archive/(\d{4})/(\d{1,2})/$','archive'),
+            url(r'^article/(\d+)/$', 'article'),
+            url(r'^articles/(\d{4})/$', 'year_archive'),
+            url(r'^articles/(\d{4})/(\d{2})/$','month_archive'),
+            url(r'^articles/(\d{4})/(\d{2})/(\d+)/$', 'article_detail'),
+            url(r'^pages(?P<num>\d+)/$', 'pages'),
+            url(r'^pages/$', 'pages'),
+            url(r'^pages/(?P<num>\d+)/$', 'pages'),
+            url(r'^page/(?P<page_id>\d+)$', 'page'),
+            url(r'^test(?P<num>\d+)/$', 'page'),
+            url(r'^comment','comment'),
+            url(r'^search/$','search'),
+            url(r'^cat/(?P<num>\d+)$','cat'),
+            url(r'^archives/(?P<num>\d+)/$','archives'),
+            url(r'^archives$','archives'),
             url(r'^feeds/rss2$',ArticlesFeed()),
             url(r'^feeds/comments-rss2$',CommentsFeed()),
-            url(r'^feeds/(?P<str>\S+)$',views.feed),
-            url(r'^test$',views.test),
-            url(r'^page_expir$',views.page_expir),
+            url(r'^feeds/(?P<str>\S+)$','feed'),
+            url(r'^test$','test'),
+            url(r'^page_expir$','page_expir'),
             
             )

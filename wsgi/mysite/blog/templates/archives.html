@@ -1,0 +1,126 @@
+<html lang="en-gb"><head>
+        <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/normalize.css">
+
+        <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/style-feel.css">
+
+       <link type="text/css" rel="stylesheet" href="{{STATIC_URL}}css/font-awesome.min.css"/>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="author" content="evilbinary">
+        <meta name="description" content="Posts and writings by evilbinay">
+
+        <link href="/blog/feeds/rss2" type="application/atom+xml" rel="alternate" title="evilbinary Full Atom Feed">
+        <link href="/blog/feeds/rss2" type="application/rss+xml" rel="alternate" title="evilbinary Full RSS Feed">
+
+
+        <title>
+所有归档        </title>
+
+    </head>
+
+    <body>
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                        <h1 class="site-title">
+                            <a title="evilbinary" href="/">首页</a>
+                        </h1>
+
+                        <a id="menu" class="button-square" data-hint="Menu" title="Menu" href="#">
+                            <i class="fa fa-bars"></i>
+                        </a>
+                        
+
+
+                         <a class="button-square button-item" data-hint="rss" title="rss" href="/blog/feeds/rss2">
+                             <i class="fa fa-rss"></i>
+                         </a>
+                         <a class="button-square button-item" data-hint="weibo" title="twitter" target="_blank" href="http://http://weibo.com/u/2176865824">
+                             <i class="fa fa-weibo"></i>
+                         </a>
+                         <a class="button-square button-item" data-hint="github" title="github" target="_blank" href="http://github.com/evilbinary">
+                             <i class="fa fa-github"></i>
+                         </a>
+                         <a class="button-square button-item" data-hint="envelope" title="envelope" target="_blank" href="mailto:rootntsd@gmail.com">
+                             <i class="fa fa-envelope"></i>
+                         </a>
+                            <a class="button-square button-page" title="About Me" href="/blog/page/8">
+                                关于我
+                            </a>
+                       
+                    </div>
+                </div>
+            </header>
+
+            <div>
+    <div id="post-index" class="container">
+        <header class="post-header">
+            <h1 class="post-title">所有归档</h1>
+        </header>
+        <ol class="post-list">
+
+                {%for p in posts%}
+                <li class="post-stub">
+                    <a title="{{p.post_title}}" href="/blog/article/{{p.id}}">
+                        <h4 class="post-stub-title">{{p.post_title}}</h4>
+                        <time class="post-stub-date" datetime="{{p.post_date}}">{{p.post_date}}发表</time>
+                    </a>
+                </li>
+                {%endfor%}
+                
+        </ol>
+    </div>
+            </div>
+        </div>
+
+
+<div class="post-navigation">
+    <span class="step-links">
+        
+        {% if page.has_previous %}
+            <a href="/blog/archives">首页</a>
+            <a href="/blog/archives/{{ posts.previous_page_number }}">上一页</a>
+        {%else%}
+            <span class='deactive'>首页</span>
+            <span class='deactive'>上一页</span>
+            
+        {% endif %}
+    
+        {% for i in page.paginator.page_range_ext %}
+            {%if i = page.number %}
+                <span class='currentpage'>
+                <span href='/blog/archives/{{i}}'>{{i}}</span>
+            {%else%}
+            <a class='paginator' href='/blog/archives/{{i}}'>{{i}}</a>
+            {%endif%}
+        {% endfor%}
+        {% if page.has_next %}
+            <a href="/blog/archives/{{ page.next_page_number }}">下一页</a>
+            <a href="/blog/archives/{{ page.paginator.num_pages }}">尾页</a>
+        {%else%}
+            <span class='deactive'>下一页</span>
+            <span class='deactive'>尾页</span>
+
+        {% endif %}
+
+         共{{ page.paginator.num_pages }}页.
+ 
+    </span>
+</div><!-- #page nav -->
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title"><a title="evilbinary" href="/">evilbinary</a></h1>
+
+                    <a class="button-square button-jump-top js-jump-top" href="#"><i class="fa fa-angle-up"></i></a>
+                </div>
+
+                <p class="footer-copyright">© 2014 / 由<a href="http://getpelican.com">小E</a>创建</p>
+            </div>
+        </footer>
+    
+</body></html>

@@ -40,10 +40,11 @@ POST_STATUS = (
     ('publish', '已发布'),
 )
 POST_TYPE = (
-    ('attachment', 'attachment'),
+    ('attachment', '附件'),
     ('page', '页面'),
     ('post', '文章'),
     ('revision', 'revision'),
+    ('nav_menu_item','导航菜单')
 )
 POST_MIME_TYPE=(
     ('markdown','markdown'),

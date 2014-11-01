@@ -793,7 +793,7 @@ footer p{
 	font-size: 1.428571429rem;
 	line-height: 1.2;
 	font-weight: normal;
-	text-align:center;
+	text-align:left;
 	font-size:1.6em;
 }
 .entry-header .entry-title a {
@@ -1088,6 +1088,12 @@ footer.entry-meta {
 .single-author .entry-meta .by-author {
 	display: none;
 }
+
+/*read more */
+.read-more  a{
+	color: tomato;
+}
+
 .mu_register h2 {
 	color: #757575;
 	font-weight: normal;
@@ -1452,6 +1458,9 @@ a.comment-edit-link:hover {
 	color: #333;
 	margin-top: 5px;
 }
+
+
+
 
 
 /* Comment form */
@@ -1963,6 +1972,9 @@ img#wpstats {
 		float: none;
 		width: auto;
 	}
+
+
+
 
 	/* Comments */
 	.commentlist > li.comment {

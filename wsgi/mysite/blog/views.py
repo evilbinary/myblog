@@ -17,22 +17,31 @@ from django.db import connection
 from django.db.models import Q
 from django.core.context_processors import csrf
 from feeds import ArticlesFeed
-from util import anti_resubmit
+from util import anti_resubmit,anti_frequency
 from django.http import HttpResponseRedirect
 from blog.forms import CommentForm
+from django.views.generic import View
+from django.views.generic.base import TemplateView
+
 
 manager=Manager()
 #This is for response request
 
-
+class MyblogView(TemplateView):
+    template_name = "test.html"
+    def get_context_data(self, **kwargs):
+        context = super(MyblogView, self).get_context_data(**kwargs)
+        context['test'] ='test' 
+        return context
+    #v=0
+    # def get(self, request, *args, **kwargs):
+    #     self.v=self.v+2
+    #     return HttpResponse('Hello, World!%d'%self.v)
+#首页
 def index(request):
-    context={
-    'header':render_header(request),
-    'footer':render_footer(request),
-    'contents':render_pages(request),
-     'sidebar':render_sidebar(request),
-    }
-    return render_to_response('index.html',context)
+    return pages(request)
+
+#页面类型为page的，在菜单上
 def page(request,page_id):
     posts_list=Posts.objects.filter(post_status='publish',post_type='page',id=page_id)
 
@@ -46,12 +55,12 @@ def page(request,page_id):
     }
     return render_to_response('index.html',context)
     pass
-
+#页面列表
 def pages(request,num='1'):
     context={
     'header':render_header(request),
     'footer':render_footer(request),
-    'contents':render_pages(request,num),
+    'contents':render_pages(request,num,more=200),#more=200可以设置more一个是read more 或者全部显示
      'sidebar':render_sidebar(request),
     }
     return render_to_response('index.html',context)
@@ -69,7 +78,24 @@ def year_archive(request,year):
 def month_archive(request,year,month):
     context={'contents':year+' '+month}
     return render_to_response('index.html',context)
+def archives(request,num=1,num_page=20):
+    if(long(num)<=0):
+        num=1
+    page=None    
+        #get post data
+    posts_list=Posts.objects.all().filter(post_status='publish',post_type='post').order_by('-post_date')
+    paginator = MyPaginator(posts_list, num_page)
+    try:
+        page=paginator.page(num)
+    except PageNotAnInteger:
+        page = paginator.page(1)
+    except EmptyPage:
+        page= paginator.page(paginator.num_pages)
 
+    context={'posts':page,'page':page}
+    context=RequestContext(request,context) 
+
+    return render_to_response('archives.html',context)
 
 def render_sidebar(request):
     #ToDo profile
@@ -108,11 +134,16 @@ def render_sidebar(request):
     return render_to_string('sidebar.html',context)
 
 #for post
+@anti_frequency
 def comment(request):
 
     if request.method=='POST':
         form=CommentForm(request.POST)
         comment_post_id=request.POST.get('comment_post_ID').strip()
+        frequency_comment=request.session['frequency_comment']
+        if frequency_comment:
+            contexts={'frequency_comment':'评论太频繁了！'}
+            return article(request,comment_post_id,contexts)
         if form.is_valid():
             comment_content=request.POST.get('comment')
             comment_author=request.POST.get('author').strip()
@@ -185,7 +216,7 @@ def cat(request,num='1'):
     context={
     'header':render_header(request),
     'footer':render_footer(request),
-    'contents':render_page1(posts_list),
+    'contents':render_page_more(posts_list,more=200),
      'sidebar':render_sidebar(request),
     }
     return render_to_response('index.html',context)
@@ -226,7 +257,7 @@ def archive(request,year='2014',month='01'):
     context={
     'header':render_header(request),
     'footer':render_footer(request),
-    'contents':render_page1(posts_list),
+    'contents':render_page_more(posts_list,more=200),
      'sidebar':render_sidebar(request),
     }
     return render_to_response('index.html',context)
@@ -260,7 +291,7 @@ def render_footer(request):
     context=RequestContext(request) 
     return render_to_string('footer.html',context)
 
-def render_contents(posts,cat=''):
+def render_contents(posts,cat='',more=None):
     cats=TermRelationships.objects.select_related('term_taxonomy__term').filter(term_taxonomy__taxonomy__in=('category', 'post_tag', 'post_format'),object_id__in=[ p.id for p in posts])
     #cats=Terms.objects.select_related('termtaxonomy').select_related('termrelationships').filter(termtaxonomy__taxonomy__in=('category', 'post_tag', 'post_format'))
     cat_terms={}
@@ -274,9 +305,12 @@ def render_contents(posts,cat=''):
             post.cat=cat_terms[post.id]
         else:
             post.cat=None
+        if more:
+            post.post_content=post.post_content[:more]
+
         # i=i+1
         pass
-    context={'posts':posts,}
+    context={'posts':posts,'more':more}
     return render_to_string('content.html',context)
 
 def render_nator(page):
@@ -309,35 +343,60 @@ def render_comment(request,comment_post_id,comments=[],contexts=None):
     # test=sorted(l, key=lambda d:(d[0][1],d[1].comment_parent),reverse=False) 
 
     #turn into json data 
-    dic={}
+    # dic={}
+    # stack=[]
+    # for c in comments:
+    #     dic[c.comment_id]={'self':c,'level':0}
+    #     if c.comment_parent!=0:
+    #         p=dic[c.comment_parent]
+    #         if p:
+    #             if 'children' in p:
+    #                 dic[c.comment_parent]['children'].insert(0,dic[c.comment_id])
+    #                 pass
+    #             else:
+    #                 dic[c.comment_parent]['children']=[dic[c.comment_id]]#{c.comment_id:c}
+    #             dic[c.comment_id]['level']= dic[c.comment_parent]['level']+1
+    #         else:
+
+    #     else:
+    #         stack.insert(0,dic[c.comment_id])  
+    # #now dict is json format and so is the stack(only for comment_parent=0) :).
+    # #trace the json data
+    # result=[]
+    # while len(stack)>0:
+    #     top=stack.pop()
+    #     #result.append(top)
+    #     if 'children' not in top:
+    #         result.append((top['level'],top['self']) )
+    #     else:
+    #         c=top['children']
+    #         l=top['level']
+    #         s=top['self']
+    #         result.append( (l,s))
+    #         stack=stack+c
+    #     pass
+    # test=result
+    # comments=result
+
+    #{id:(id,pid,child,level,obj)}
+    dic={i.comment_id:[i.comment_id,i.comment_parent,[],0,i] for i in comments}
     stack=[]
-    for c in comments:
-        dic[c.comment_id]={'self':c,'level':0}
-        if c.comment_parent!=0:
-            if 'children' in dic[c.comment_parent]:
-                dic[c.comment_parent]['children'].insert(0,dic[c.comment_id])
-                pass
-            else:
-                dic[c.comment_parent]['children']=[dic[c.comment_id]]#{c.comment_id:c}
-            dic[c.comment_id]['level']= dic[c.comment_parent]['level']+1
+    for c in dic:
+        i=dic[c]
+        pid=i[1]
+        if pid!=0:
+            p=dic[pid]
+            p[2].append(i)
+            i[3]=p[3]+1 
         else:
-            stack.insert(0,dic[c.comment_id])  
-    #now dict is json format and so is the stack(only for comment_parent=0) :).
-    #trace the json data
+            stack.insert(0,i)
     result=[]
-    while len(stack)>0:
+    while stack:
         top=stack.pop()
-        #result.append(top)
-        if 'children' not in top:
-            result.append((top['level'],top['self']) )
-        else:
-            c=top['children']
-            l=top['level']
-            s=top['self']
-            result.append( (l,s))
-            stack=stack+c
-        pass
-    test=result
+        result.append((top[3],top[4]))
+        top[2].reverse()
+        stack.extend(top[2])
+    #result=(level,comment)
     comments=result
     context={'comment_post_id':comment_post_id,'comments':comments,'test':test,'request':request,'contexts':contexts }
     if request!=None:
@@ -365,6 +424,25 @@ def render_page1(posts,num='1',nator=None,comment=None,num_page=5):
     return render_to_string('page.html',context)
 
 
+def render_page_more(posts,num='1',nator=None,comment=None,num_page=5,more=200):
+    paginator = MyPaginator(posts, num_page)
+    try:
+        page=paginator.page(num)
+    except PageNotAnInteger:
+        page = paginator.page(1)
+    except EmptyPage:
+        page= paginator.page(paginator.num_pages)
+    if more:
+        contents=render_contents(page,more=more)#列表显示预览控制200个字符 read more...
+    if nator==None:
+        nator=render_nator(page) 
+    context={ 
+        'page_contents':contents,
+        'page_nator':nator,
+       }
+    if comment!=None: 
+        context['page_comment']=comment
+    return render_to_string('page.html',context)
 
 
 def render_article(request,post_id,contexts=None):
@@ -389,7 +467,7 @@ def render_article(request,post_id,contexts=None):
         comments=Comments.objects.filter(comment_post_id=post_id,comment_approved='1' ).order_by('comment_date')
     return render_page1(cur_post,1,nator,render_comment(request,post_id,comments,contexts))
 
-def render_pages(request,num='1'):
+def render_pages(request,num='1',more=200):
     context={}
     if(long(num)<=0):
         num=1
@@ -400,7 +478,10 @@ def render_pages(request,num='1'):
     else:
         #get post data
         posts_list=Posts.objects.all().filter(post_status='publish',post_type='post').order_by('-post_date')
-        return render_page1(posts_list,num)
+        if more:
+            return render_page_more(posts_list,num,more=more)
+        else:
+            return render_page1(posts_list,num)
     return render_to_string('page.html',context)
 
 #get ip for comment
