@@ -96,7 +96,7 @@ class  UsersAdmin(admin.ModelAdmin):
 	list_display_links = ('user_nicename','user_login',)
 
 class CommentsAdmin(admin.ModelAdmin):
-	list_display=('comment_post_post_title','comment_content','comment_author','comment_approved','comment_date')
+	list_display=('comment_post_post_title','comment_content_more','comment_author','comment_approved','comment_date')
 	list_display_links = ('comment_post_post_title',)
 	actions=('make_approve','make_unapprove')
 	#readonly_fields=('',)
@@ -126,6 +126,11 @@ class CommentsAdmin(admin.ModelAdmin):
 	def comment_post_post_title(self,obj):
 		return obj.comment_post.post_title
 	comment_post_post_title.short_description = "评论文章标题"
+
+	def comment_content_more(self,obj):
+		return obj.comment_content[0:20]#+u'更多'
+	comment_content_more.short_description='内容摘要'
+
 class OptionsAdmin(admin.ModelAdmin):
 	list_display=('option_name','option_value','autoload')
 	pass
