@@ -27,6 +27,10 @@ class CommentForm(forms.Form):
 			self._errors['author']=self.error_class(['亲，没昵称谁都不认识你!'])
 		if comment==None:
 			self._errors['comment']=self.error_class(['我靠，评论不写还评论个啥？'])
+		else:
+			if len(comment)>200:
+				msg='我靠，评论太长了共%d个字符，不能超过200个字符！'%len(comment)
+				self._errors['comment']=self.error_class([msg])
 		if url==None:
 			self._errors['url']=self.error_class(['url没写正确啊！'])
 		return cleaned_data
