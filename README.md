@@ -12,8 +12,8 @@
 * [https://github.com/evilbinary/myblog](https://github.com/evilbinary/myblog) （源码地址 ）
 
 #截图
-* 博客首页 ![前台博客](https://github.com/evilbinary/myblog/data/screen-shot1.png)
-* 博客后台管理  ![前台博客](https://github.com/evilbinary/myblog/data/screen-shot2.png)
+* 博客首页 ![前台博客](https://github.com/evilbinary/myblog/raw/master/data/screen-shot1.png)
+* 博客后台管理  ![前台博客](https://github.com/evilbinary/myblog/raw/master/data/screen-shot2.png)
 
 #安装说明
 ===================
