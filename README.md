@@ -1,9 +1,51 @@
 #MyBlog
-###myblog是一个开源的博客，兼容wp博客系统，同时支持markdown语法高亮功能，还有多种数据库(sqlite、mysql等)。
-###这里是个人[博客地址](http://evilbinary.org)，也就是用本开源软件搭建的。下面推荐用openshift搭建。
+=========
+"myblog"是清凉干净的一个开源django的博客,你可以随时下载使用。
+#特点
+* 兼容wordpress博客系统,数据从wordpress迁移过来毫无压力。
+* 支持markdown，SyntaxHighlighter语法高亮功能。
+* 支持多种数据库(sqlite、mysql等)。
+	
+	
+# 在线演示
+* [http://evilbinary.org](http://evilbinary.org) (这里是个人[博客地址](http://evilbinary.org)，也就是用本开源软件搭建的。)
+* [https://github.com/evilbinary/myblog](https://github.com/evilbinary/myblog) （源码地址 ）
 
-MyBlog on OpenShift
+#截图
+* 博客首页 ![前台博客](https://github.com/evilbinary/myblog/data/screen-shot1.png)
+* 博客后台管理  ![前台博客](https://github.com/evilbinary/myblog/data/screen-shot2.png)
+
+#安装说明
 ===================
+##OS X
+在苹果系统下安装很容易，首先下载源码，可以直接点击download下载，[猛击这里，注意安全！](https://github.com/evilbinary/myblog/archive/master.zip)，也可以在shell下输入:
+	
+	git clone https://github.com/evilbinary/myblog.git
+	
+下载好后，如果是压缩包记得解压，进去后可以看到setup.py这个就是安装文件了，注意你需要有python环境,运行:
+	
+	pythong setup.py
+	
+然后让它自己安装，安装好后，到wsgi文件夹里面，有个叫mysite这个就是项目的路径，其他的文件不用管了，测试的东西，的点击进去，可以看到blog、manage.py、templates等，然后运行：
+
+	python manage.py syncdb 
+同步一下数据库，可能叫你输入第一次创建超级用户，你就输入一个用户，还有密码，成功后应该有个db.sqlite文件出来，再次运行：
+	
+	python manage.py runserver
+	
+如果没看到错误，那就可以启动服务器了，让后打开浏览器输入:[http://localhost:8000/](http://localhost:8000/)就可以看到界面了。
+##Linux
+同mac一样的操作
+
+##Windows
+目前，还没时间搞，谁可以帮我测试测试看看，谢谢。
+
+#其他
+===================
+如果有app engine之类的账号，比如openshift就可以在上面使用了。
+
+###下面介绍使用用openshift搭建。
+###1. MyBlog在OpenShift上使用
 
 
 This git repository helps you get up and running quickly w/ a Django
@@ -40,7 +82,7 @@ $ rhc env unset DEBUG
 $ rhc app stop && rhc app start
 ```
 
-Running on OpenShift
+###2. Running on OpenShift
 --------------------
 
 Create an account at https://www.openshift.com
@@ -71,7 +113,7 @@ That's it. You can now checkout your application at:
 
     http://django-$yournamespace.rhcloud.com
 
-Admin user name and password
+###3. Admin user name and password
 ----------------------------
 As the `git push` output scrolls by, keep an eye out for a
 line of output that starts with `Django application credentials: `. This line
