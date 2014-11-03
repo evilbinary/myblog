@@ -12,6 +12,20 @@ from django.contrib.contenttypes.admin import GenericTabularInline
 from django import forms
 from blog.models import Commentmeta,Comments,Links,Options,Postmeta
 from blog.models import Posts,TermRelationships,TermTaxonomy,Terms,Usermeta,Users
+from widgets import TreeSelect,MySelect
+from django.contrib.admin.utils import (quote, unquote, flatten_fieldsets,
+    get_deleted_objects, model_format_dict, NestedObjects,
+    lookup_needs_distinct)
+from django.contrib.admin import widgets, helpers
+
+from django.utils.translation import ugettext as _
+from django.utils.translation import ungettext
+from django.utils.encoding import force_text, python_2_unicode_compatible
+
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import User
+
+
 
 #class MyAdminSite(admin.sites.AdminSite):
 
@@ -53,8 +67,15 @@ class  PostsAdmin(admin.ModelAdmin):
 	actions_on_bottom=True
 	actions_on_top=False
 	actions=('make_publish','make_private',)
+
+	radio_fields = {"post_status": admin.HORIZONTAL }
+	view_on_site=True
 	#inlines=(TermRelationshipsInline,)
 	# list_editable=('post_content',)
+	# formfield_overrides = {
+ #        models.TextField: {'widget': RichTextEditorWidget},
+ #    }
+
 	fieldsets=(
 		(None,{
 			'fields':('post_title','post_content','post_author','post_type','post_mime_type','post_status')
@@ -68,6 +89,10 @@ class  PostsAdmin(admin.ModelAdmin):
 			'fields':('to_ping','pinged','post_modified','post_modified_gmt','post_content_filtered','post_parent','guid','menu_order','comment_count')
 		}),
 	)
+
+	def view_on_site(self, obj):
+		return '/blog/article/%s'%obj.id
+
 	#actions
 	def make_publish(self, request, queryset):
 		rows_updated=queryset.update(post_status='publish')
@@ -99,6 +124,8 @@ class CommentsAdmin(admin.ModelAdmin):
 	list_display=('comment_post_post_title','comment_content_more','comment_author','comment_approved','comment_date')
 	list_display_links = ('comment_post_post_title',)
 	actions=('make_approve','make_unapprove')
+	radio_fields = {"comment_approved": admin.HORIZONTAL }
+	view_on_site=True
 	#readonly_fields=('',)
 	fieldsets=(
 		(None,{
@@ -109,6 +136,9 @@ class CommentsAdmin(admin.ModelAdmin):
 			'fields':('comment_author_email','comment_author_url','comment_author_ip','comment_date_gmt','comment_karma','comment_agent','comment_type','comment_parent','user_id')
 		}),
 	)
+	def view_on_site(self, obj):
+		return '/blog/?p=%d#comment-%d'%(obj.comment_post.id,obj.comment_id)
+
 	
 	def make_approve(self, request, queryset):
 		rows_updated =queryset.update(comment_approved='1')
@@ -133,20 +163,133 @@ class CommentsAdmin(admin.ModelAdmin):
 
 class OptionsAdmin(admin.ModelAdmin):
 	list_display=('option_name','option_value','autoload')
+	list_editable=('autoload',)
+
 	pass
 
 class TermsAdmin(admin.ModelAdmin):
 	"""docstring for TermsAdmin"""
 	list_display=('name','slug','term_group')
+	list_editable=('term_group',)
+
+
+class TermRelationshipsForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+    	args[0].object.post_title="aa"
+        super(TermRelationshipsForm, self).__init__(*args, **kwargs)
+        
+        # change a widget attribute:
+        a=self.fields
+        b=self
+        self.fields['object'].widget.attrs["size"] = 50000000
+        self.fields['object'].post_title='aaa'
+        # dd
+  #   def clean(self):
+		# cleaned_data = super(CommentForm, self).clean()
+		# tmp_email=cleaned_data.get('email')
+		# dd
+	def clean_recipients(self):
+		
+		pass
+	object_id=forms.ModelMultipleChoiceField(queryset=Links.objects.all())
+    class Meta:
+        model = TermRelationships
+        pass
 
 class TermRelationshipsAdmin(admin.ModelAdmin):
 	list_display=('post_title','cat','term_order')
+	list_editable=('term_order',)
 	def post_title(self,obj):
-		return obj.object.post_title
+		if  obj.term_taxonomy.taxonomy=='category':
+			return obj.object.post_title
+		elif obj.term_taxonomy.taxonomy=='link_category' :
+			return Links.objects.get(link_id=obj.object_id)
+		else:
+			return obj.term_taxonomy
 	post_title.short_description=u'标题'
 	def cat(self,obj):
 		return obj.term_taxonomy
 	cat.short_description=u'分类'
+
+ 	def change_view(self, request, object_id, form_url='', extra_context=None):
+		extra_context = extra_context or {}
+		#extra_context['post_title'] = 'aaa'
+
+		ret=super(TermRelationshipsAdmin, self).change_view(request, object_id,form_url, extra_context=extra_context)
+		return ret
+
+	def changeform_view(self, request, object_id=None, form_url='', extra_context=None):
+
+	#def changeform_view(self, *args, **kwargs):
+
+
+		ret= super(TermRelationshipsAdmin, self).changeform_view(request,object_id,form_url,extra_context)
+		xx=ret.__dict__
+		# obj = self.get_object(request, object_id)
+		# if obj.term_taxonomy.taxonomy=='link_category':
+		# 	links=Links.objects.filter(link_id=obj.object_id)
+		# 	obj.object.post_title=links
+		# 	obj.links=links
+		#  	form=self.get_form(request,obj)
+		# 	cc=ret.context_data['adminform']
+		# 	b=cc.__dict__
+		#  	f=b['form']
+		#  	f=TermRelationshipsForm(obj)
+		#  	x=f.fields.get('object')._queryset.post_title='sss'
+			# dd
+		# 	f.instance.post_title="xxxxx"
+		
+
+		#obj=TermRelationships.objects.filter(object_id=object_id)
+		#modelForm=self.get_forms(request,obj)
+		#cc=aa.__dict__
+		
+		#ret.context_data['opts']='bb'
+		
+		return ret
+	# def get_object(self, request, object_id):
+	# 	queryset = self.get_queryset(request)
+	# 	model = queryset.model
+	# 	try:
+	# 		object_id = model._meta.pk.to_python(object_id)
+	# 		ret= queryset.get(pk=object_id)
+	# 		if ret.term_taxonomy.taxonomy=='link_category':
+	# 			links=Links.objects.filter(link_id=ret.object_id)
+	# 			ret.object.post_title=links
+	# 			ret.links=links
+	# 		return ret
+	# 		pass
+	# 	except (model.DoesNotExist, ValidationError, ValueError):
+	# 		return None
+
+
+
+
+	def get_queryset(self, request):		
+ 		qs = super(TermRelationshipsAdmin, self).get_queryset(request)
+ 		
+		if request.user.is_superuser:
+			return qs
+		return qs.filter(author=request.user)
+	def formfield_for_dbfield(self, db_field, **kwargs):
+		field = super(TermRelationshipsAdmin, self).formfield_for_dbfield(db_field, **kwargs)
+		a=db_field.__dict__
+		return field
+	def formfield_for_foreignkey(self, db_field, request, **kwargs):
+		if db_field.name == "object":
+			#aa=kwargs["queryset"]
+			#pass
+			bb=db_field.__dict__
+			#kwargs["queryset"] = ''
+			return db_field.formfield(widget = MySelect(attrs = {'width':20}))
+			#aa
+		return super(TermRelationshipsAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
+	def get_formsets(self, request, obj=None):
+		ret=super(TermRelationshipsAdmin, self).get_formsets(request,obj)
+		#dd
+		return ret
+	
 
 class TermTaxonomyAdmin(admin.ModelAdmin):
 	"""docstring for TermTaxonomy"""
@@ -156,6 +299,8 @@ class LinksAdmin(admin.ModelAdmin):
 	"""docstring for LinksAdmin"""
 	list_display=('link_name','link_url','link_visible')
 	list_display_links=('link_name','link_url')
+	radio_fields = {"link_visible": admin.HORIZONTAL }
+
 	fieldsets=(
 		(None,{
 			'fields':('link_name','link_url','link_visible')
@@ -179,7 +324,7 @@ class MyAdminSite(AdminSite):
 # AdminSite.site_title='evilbianry 站点管理'
 admin.site=MyAdminSite()
 
-admin.site.register(auth.models.User)
+admin.site.register(auth.models.User,UserAdmin)
 admin.site.register(auth.models.Group)
 
 admin.site.register( Users,UsersAdmin)

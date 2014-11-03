@@ -22,6 +22,12 @@ from django.db import models
 import datetime
 from django.utils import timezone
 
+from django.db import models
+
+
+
+
+
 db_prefix='wp_'
 db_managed=True
 
@@ -86,6 +92,33 @@ class DjangoMigrations(models.Model):
         db_table = 'django_migrations'
 
 
+# from django.contrib.auth.models import User
+# from django.contrib.auth.admin import UserAdmin
+# import datetime
+# class ProfileBase(type):
+#     def __new__(cls, name, bases, attrs):
+#         module = attrs.pop('__module__')
+#         parents = [b for b in bases if isinstance(b, ProfileBase)]
+#         if parents:
+#             fields = []
+#             for obj_name, obj in attrs.items():
+#                 if isinstance(obj, models.Field): fields.append(obj_name)
+#                 User.add_to_class(obj_name, obj)
+#             UserAdmin.fieldsets = list(UserAdmin.fieldsets)
+#             UserAdmin.fieldsets.append((name, {'fields': fields}))
+#         return super(ProfileBase, cls).__new__(cls, name, bases, attrs)
+        
+# class Profile(object):
+#     __metaclass__ = ProfileBase
+
+# class MyProfile(Profile):
+#     nickname = models.CharField(max_length = 255)
+#     birthday = models.DateTimeField(null = True, blank = True)
+#     city = models.CharField(max_length = 30, blank = True)
+#     university = models.CharField(max_length = 255, blank = True)
+    
+#     def is_today_birthday(self):
+#         return self.birthday.date() == datetime.date.today()
 
 
 class Options(models.Model):
@@ -276,7 +309,19 @@ class Links(models.Model):
         verbose_name_plural = u'链接管理'
 
     def __unicode__(self):
-        return u'%s  %s' % (self.link_name,self.link_url)
+        return u'%s  链接:%s' % (self.link_name,self.link_url)
+
+class PostLinkeManager(models.Manager):
+    def get_queryset(self):
+        
+        ret=super(PostLinkeManager, self).get_queryset().filter()
+        # for r in ret:
+        #     if r.term_taxonomy.taxonomy=='link_category':
+        #         #links=Links.objects.get(link_id=r.object_id)
+        #         r.object.post_title=links
+        #     r.object.post="111"
+        return ret
+
 class TermRelationships(models.Model):
     #object_id = models.BigIntegerField(verbose_name='文章/链接')
     term_relationship_id=models.AutoField(primary_key=True)
@@ -287,12 +332,15 @@ class TermRelationships(models.Model):
     #term_taxonomy_id = models.BigIntegerField()
     term_taxonomy = models.ForeignKey(TermTaxonomy,verbose_name='分类/标签')
     term_order = models.IntegerField(default=0,verbose_name='排序')
+    objects=PostLinkeManager()
+
     def __unicode__(self):
         return u'%s 属于 %s分类' % (self.object_id,self.term_taxonomy.term.name)
     
     def object_link(self):
         return self.object
    
+
     class Meta:
         managed = db_managed
         db_table = db_prefix+'term_relationships'
