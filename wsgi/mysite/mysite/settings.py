@@ -110,12 +110,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-#TEMPLATE_LOADERS = (
-#    'django.template.loaders.eggs.Loader',
+TEMPLATE_LOADERS = (
+    'django.template.loaders.eggs.Loader',
 
-#    'django.template.loaders.filesystem.Loader', #to load bootstrap must make it after or disable
-#    'django.template.loaders.app_directories.Loader',
-#)
+    'django.template.loaders.filesystem.Loader', #to load bootstrap must make it after or disable
+    'django.template.loaders.app_directories.Loader',
+)
 
 TEMPLATE_DIRS=(
         os.path.join(os.path.dirname(__file__), '../blog/templates').replace('\\','/'),
@@ -123,12 +123,12 @@ TEMPLATE_DIRS=(
         )
 
 
-STATIC_ROOT=os.path.join(BASE_DIR,'static'.replace('\\','/'))
+STATIC_ROOT=os.path.join(BASE_DIR,'../static'.replace('\\','/'))
 
-#STATICFILES_FINDERS=(
-#    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-#    "django.contrib.staticfiles.finders.FileSystemFinder",
-#    )
+STATICFILES_FINDERS=(
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    )
 
 MYBLOG_PATH=os.path.join(os.path.dirname(__file__), '../blog/').replace('\\','/')
 
