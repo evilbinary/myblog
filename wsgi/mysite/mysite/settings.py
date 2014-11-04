@@ -3,7 +3,7 @@
 #   Author  :   cold
 #   E-mail  :   rootntsd@gmail.com
 #   Date    :   14/10/1 12:21:19
-#   Desc    :   
+#   Desc    :   配置
 """
 Django settings for mysite project.
 
@@ -36,6 +36,9 @@ ALLOWED_HOSTS = ['.evilbinary.org','localhost']
 # Application definition
 
 INSTALLED_APPS = (
+    'django_admin_bootstrapped.bootstrap3',
+    'django_admin_bootstrapped',
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -107,17 +110,49 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-TEMPLATE_DIR=(
+TEMPLATE_LOADERS = (
+    'django.template.loaders.eggs.Loader',
+
+    'django.template.loaders.filesystem.Loader', #to load bootstrap must make it after or disable
+    'django.template.loaders.app_directories.Loader',
+)
+
+TEMPLATE_DIRS=(
         os.path.join(os.path.dirname(__file__), '../blog/templates').replace('\\','/'),
+
         )
-STATIC_ROOT=os.path.join(BASE_DIR,'../static'.replace('\\','/'))
+
+
+STATIC_ROOT=os.path.join(BASE_DIR,'static'.replace('\\','/'))
+
+STATICFILES_FINDERS=(
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    )
+
+MYBLOG_PATH=os.path.join(os.path.dirname(__file__), '../blog/').replace('\\','/')
+
 
 STATICFILES_DIRS = (
         ('css',os.path.join(STATIC_ROOT,'css')),
         ('js',os.path.join(STATIC_ROOT,'js')),
         ('img',os.path.join(STATIC_ROOT,'img')),
+        ('admin/css',os.path.join(STATIC_ROOT,'admin/css')),
+        ('admin/js',os.path.join(STATIC_ROOT,'admin/js')),
+        ('admin/js/admin',os.path.join(STATIC_ROOT,'admin/js/admin')),
+
+        ('admin/img',os.path.join(STATIC_ROOT,'admin/img')),
+
+
+        ('admin/css',os.path.join(MYBLOG_PATH,'static/admin/css')),
+        ('admin/js',os.path.join(MYBLOG_PATH,'static/admin/js')),
+        ('admin/js/admin',os.path.join(MYBLOG_PATH,'static/admin/js/admin')),
+
+        ('admin/img',os.path.join(MYBLOG_PATH,'static/admin/img')),
         )
-        
+
+# print  ('admin/css',os.path.join(MYBLOG_PATH,'static/admin/css'))
+   
 #头像地址
 GRAVATAR_URL_PREFIX='https://0.gravatar.com/avatar/'
 #GRAVATAR_DEFAULT_IMAGE=''
