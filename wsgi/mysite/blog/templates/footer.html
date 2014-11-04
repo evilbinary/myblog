@@ -16,6 +16,30 @@
     <link type="text/css" rel="stylesheet" href="{{STATIC_URL}}css/shThemeDefault.css" />  
     <link type="text/css" rel="stylesheet" href="{{STATIC_URL}}css/shCoreDefault.css"/>
 
+    <!--<script type="text/javascript"  src="https://highlightjs.org/static/highlight.pack.js"></script>-->
+
+    <link type="text/css" rel="stylesheet" href="{{STATIC_URL}}css/monokai.css"/>
+
+    <script type="text/javascript"  src="{{STATIC_URL}}js/highlight.pack.js"></script>
+
+    <!--<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/default.min.css">-->
+    <!--<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>-->
+
+    <script type="text/javascript">
+         //替换为span \t
+        //hljs.tabReplace = '<span class="indent">\t</span>';-->
+        hljs.configure({
+          tabReplace: '    ', // 4 spaces
+          //classPrefix: ''     // don't append class prefix
+                              // … other options aren't changed
+        })
+        //hljs.initHighlighting();
+        hljs.initHighlightingOnLoad();
+
+        $('div.code').each(function(i, block) {
+            hljs.highlightBlock(block);
+        });
+    </script>
 
     <script type="text/javascript">
     //<![CDATA[

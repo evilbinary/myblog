@@ -23,7 +23,8 @@ import datetime
 from django.utils import timezone
 
 from django.db import models
-
+from django.core.urlresolvers import reverse
+from django.utils.encoding import force_unicode
 
 
 
@@ -208,7 +209,11 @@ class Posts(models.Model):
     def __unicode__(self):
         return u'%s' % (self.post_title)
         #return u'id['+str(self.id)+'] '+self.post_title
-    
+    #@models.permalink
+    def get_absolute_url(self):
+        # return '/blog/article/%s'%self.id
+        # return ('blog.views.article',[str(self.id)])
+        return reverse('blog.views.article', args=[str(self.id)])
     class Meta:
         managed = db_managed
         db_table = db_prefix+'posts'
@@ -245,6 +250,12 @@ class Comments(models.Model):
     comment_parent = models.BigIntegerField(default=0)
     user_id = models.BigIntegerField(default=0)
 
+
+    def get_absolute_url(self):
+        return '/blog/?p=%s#comment-%s'%(self.comment_post.id,self.comment_id)
+        # return ('blog.views.article',[str(self.id)])
+        #return reverse('blog.views',args=['?p='+str(self.comment_post)] )
+    
     class Meta:
         managed = db_managed
         db_table = db_prefix+'comments'

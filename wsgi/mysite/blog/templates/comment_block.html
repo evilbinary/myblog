@@ -34,10 +34,12 @@
  			</span>
  		</div>
  		<div class="body">
+ 			<!--<div class="code">-->
  			{{comment.comment_content}}
  			{%if comment.comment_approved = '0' %}
  				<span class="required">您的评论已经提交等待博主审核！</span>
  			{%endif%}
+ 			<!--</div>-->
 			<!--<p class="edit-link"><a class="comment-edit-link" href="/blog/comment">Edit</a></p>-->			
  		</div>
 
