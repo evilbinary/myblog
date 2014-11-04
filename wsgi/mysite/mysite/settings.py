@@ -125,10 +125,10 @@ TEMPLATE_DIRS=(
 
 STATIC_ROOT=os.path.join(BASE_DIR,'static'.replace('\\','/'))
 
-STATICFILES_FINDERS=(
-    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-    "django.contrib.staticfiles.finders.FileSystemFinder",
-    )
+#STATICFILES_FINDERS=(
+#    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+#    "django.contrib.staticfiles.finders.FileSystemFinder",
+#    )
 
 MYBLOG_PATH=os.path.join(os.path.dirname(__file__), '../blog/').replace('\\','/')
 
