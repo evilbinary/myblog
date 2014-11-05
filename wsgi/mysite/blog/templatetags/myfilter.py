@@ -136,35 +136,32 @@ def auto_mark_filter(markup,htmlparser=None):
     ret =''
     for c in soup.body.children:
         a=c
-        c=c.wrap(soup.new_tag('p'))
+        #c=c.wrap(soup.new_tag('p'))
         if isinstance(a,NavigableString):
             ss=a.string.split('\n\n')
-            param=''
             p_tag = soup.new_tag("p")
-
+            i=0
             for s in ss:
-                if s.strip()!='':
-                    param=param+'#=<p>'+esc(s)+'</p>'
+                if len(s.strip(''))>0:
                     new_tag=soup.new_tag('p')
                     new_tag.string=esc(s)
-                    p_tag.append(new_tag)
-                # .clear()
-            # c.p=soup.new_string(param)
-            # dd
-            c.replace_with(p_tag) 
-            #dd
-    # for c in soup.body.children:
-    #     if c:
-    #         pass
-    #     else:
-    #         #c.replace_with(unicode(c).replace('\n','<br>') )
-    #         c.wrap(soup.new_tag('p'))
-            
+                    if i==0:
+                        p_tag=new_tag
+                    elif new_tag.string!='':
+                        p_tag.append(new_tag)
+                    i=i+1
+            if i>0:
+                a.replace_with(p_tag)      
     pre_tags=soup.find_all('pre')
     for pre_node in pre_tags:
         code=pre_node.code or pre_node
+        i=0
         for child in code.children:
-            child.replace_with(''.join(esc(child)).strip('\n') )
+            s=(esc(child))
+            if i==0:
+                s=s.strip('\n')
+            child.replace_with( s )
+            i=i+1
          #ret=ret+'###'.join(pre_node.strings)
     ret=soup.body
     #ret=linebreaks(ret)
