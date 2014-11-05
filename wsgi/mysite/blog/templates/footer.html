@@ -77,6 +77,11 @@
         'vb vbnet               @shBrushVb.js',
         'xml xhtml xslt html    @shBrushXml.js'
       ));
+      SyntaxHighlighter.defaults['toolbar'] = false
+      SyntaxHighlighter.defaults['gutter'] = true;
+      //SyntaxHighlighter.config.stripBrs=false
+      SyntaxHighlighter.config.bloggerMode = true;
+      SyntaxHighlighter.config.strings.viewSource = "查看源码"
       SyntaxHighlighter.all();
       //
       </script>

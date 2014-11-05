@@ -634,7 +634,7 @@ a:hover {
 }
 .site-header h1 a,
 .site-header h2 a {
-	color: #515151;
+	color: #000000;
 	display: inline-block;
 	text-decoration: none;
 }
@@ -840,6 +840,8 @@ article.sticky .featured-post {
 .entry-summary,
 .mu_register {
 	line-height: 1.714285714;
+
+	
 }
 .entry-content h1,
 .comment-content h1,
@@ -905,7 +907,6 @@ article.sticky .featured-post {
 	font-size: 16px;
 	/*text-indent: 2em;add to indent 2parm text*/
 	font-family: "Helvetica Neue", Helvetica, "Hiragino Sans GB", Arial, sans-serif;
-
 }
 .entry-content a:visited,
 .comment-content a:visited {
@@ -972,8 +973,8 @@ article.sticky .featured-post {
 	font-size: 12px;
 	font-size: 1.057142857rem;
 	line-height: 1.414285714;
-	margin: 24px 0;
-	margin: 1.714285714rem 0;
+	/*margin: 24px 0;*/
+	/*margin: 1.714285714rem 0;*/
 	overflow: auto;
 	padding: 24px;
 	padding: 1.714285714rem;

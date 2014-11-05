@@ -6,7 +6,7 @@
 #   Date    :   14/10/1 12:21:19
 #   Desc    :    
 from django import template
-from django.utils.html import conditional_escape ,strip_tags
+from django.utils.html import conditional_escape ,strip_tags,linebreaks
 from django.utils.safestring import mark_safe 
 import markdown 
 from pygments import highlight
@@ -14,7 +14,8 @@ from pygments.lexers import PythonLexer
 from pygments.formatters import HtmlFormatter
 from django.template.loader import render_to_string
 from django.template import RequestContext
-
+from bs4 import BeautifulSoup #html解析BeautifulSoup 可以支持多种解析器，如lxml, html5lib, html.parser.  所以很方便，哈哈好，而且兼容性好，PS这里不是在宣传。
+from bs4 import NavigableString
 
 
 register=template.Library()
@@ -108,7 +109,8 @@ def value_get(value,key,default=None):
 @register.filter(name='markdown')
 def markdown_filter(value,arg=None):
     extensions=(arg and arg.split(','))
-    ret=markdown.markdown(value,extensions=extensions,safe_mode=False,enable_attributes=False)
+    #extensions=['fenced_code']
+    ret=markdown.markdown(value,extensions=extensions,safe_mode=True,enable_attributes=False)
     return mark_safe(ret)
 
 @register.filter(name='highlight')
@@ -117,19 +119,75 @@ def highlight_filter(value,style=None):
         HtmlFormatter().get_style_defs(style)
     ret=highlight(value, PythonLexer(), HtmlFormatter())
     return ret
+@register.filter(name='automark')
+def auto_mark_filter(markup,htmlparser=None):
+    soup=None
+    if htmlparser:
+        soup=BeautifulSoup(markup,htmlparser)
+    else :
+        soup=BeautifulSoup(markup)
+    esc=None
+    autoescape='False'
+    if autoescape and autoescape=='True': 
+        esc = conditional_escape 
+    else: 
+        esc = lambda x: unicode(x )
+        pass
+    ret =''
+    for c in soup.body.children:
+        a=c
+        c=c.wrap(soup.new_tag('p'))
+        if isinstance(a,NavigableString):
+            ss=a.string.split('\n\n')
+            param=''
+            p_tag = soup.new_tag("p")
+
+            for s in ss:
+                if s.strip()!='':
+                    param=param+'#=<p>'+esc(s)+'</p>'
+                    new_tag=soup.new_tag('p')
+                    new_tag.string=esc(s)
+                    p_tag.append(new_tag)
+                # .clear()
+            # c.p=soup.new_string(param)
+            # dd
+            c.replace_with(p_tag) 
+            #dd
+    # for c in soup.body.children:
+    #     if c:
+    #         pass
+    #     else:
+    #         #c.replace_with(unicode(c).replace('\n','<br>') )
+    #         c.wrap(soup.new_tag('p'))
+            
+    pre_tags=soup.find_all('pre')
+    for pre_node in pre_tags:
+        code=pre_node.code or pre_node
+        for child in code.children:
+            child.replace_with(''.join(esc(child)).strip('\n') )
+         #ret=ret+'###'.join(pre_node.strings)
+    ret=soup.body
+    #ret=linebreaks(ret)
+
+    return mark_safe(ret)
+    # soup.prettify()
+    # return mark_safe(''.join(['###########'+unicode(i.string)+'---------------<br>' for i in soup.body.contents]))
+
+    pass
+
 @register.filter(name='autop')
 def autop_filter(value,autoescape=None):
     values=value.split('\r\n\r\n')
     ret=''
     esc=None
-    if autoescape==None: 
+    if autoescape and autoescape=='True': 
         esc = conditional_escape 
     else: 
         esc = lambda x: x 
         pass
     pa=[]
     pb=[]
-    for i in range(0,len(values)):
+    for i in xrange(0,len(values)):
         if values[i].find('<pre')>=0 and values[i].find('</pre')<0:
             pa.append(i)
         elif values[i].find('<pre')<0 and values[i].find('</pre')>=0:
@@ -137,8 +195,8 @@ def autop_filter(value,autoescape=None):
 
     if len(pa)==len(pb):
         dela=[]
-        for i in range(0,min(len(pa),len(pb))):
-            for j in range(pa[i]+1,pb[i]+1):
+        for i in xrange(0,min(len(pa),len(pb))):
+            for j in xrange(pa[i]+1,pb[i]+1):
                 values[pa[i]]=values[pa[i]]+'\r\n\r\n'+values[j]
                 dela.append(j)
         dela.sort()

@@ -34,11 +34,10 @@
     <div class="entry-content">
         <p>
         {% if post.post_mime_type == "markdown" %}
-         {{post.post_content|markdown:"codehilite,nl2br"}}
-
+         {{post.post_content|markdown:"codehilite,nl2br,fenced_code"}}
         {%else%}
-            {{post.post_content|autop:'true'}}   
-        {%endif%}
+              {{post.post_content|automark}}
+         {%endif%}
     </p>
 
     </div>
