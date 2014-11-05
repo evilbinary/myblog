@@ -134,7 +134,8 @@ def auto_mark_filter(markup,htmlparser=None):
         esc = lambda x: unicode(x )
         pass
     ret =''
-    for c in soup.body:
+    body= soup.body or soup
+    for c in soup:
         a=c
         #c=c.wrap(soup.new_tag('p'))
         if isinstance(a,NavigableString):
