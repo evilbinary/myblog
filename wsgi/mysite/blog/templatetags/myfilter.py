@@ -15,7 +15,7 @@ from pygments.formatters import HtmlFormatter
 from django.template.loader import render_to_string
 from django.template import RequestContext
 from bs4 import BeautifulSoup #html解析BeautifulSoup 可以支持多种解析器，如lxml, html5lib, html.parser.  所以很方便，哈哈好，而且兼容性好，PS这里不是在宣传。
-from bs4 import NavigableString
+from bs4 import NavigableString,Tag
 
 
 register=template.Library()
@@ -135,24 +135,54 @@ def auto_mark_filter(markup,htmlparser=None):
         pass
     ret =''
     body= soup.body or soup
+    # print 'body:',body,'[body-----]'
     for c in body:
         a=c
         #c=c.wrap(soup.new_tag('p'))
-        if isinstance(a,NavigableString):
-            ss=a.string.split('\n\n')
-            p_tag = soup.new_tag("p")
-            i=0
-            for s in ss:
-                if len(s.strip(''))>0:
-                    new_tag=soup.new_tag('p')
-                    new_tag.string=esc(s)
-                    if i==0:
-                        p_tag=new_tag
-                    elif new_tag.string!='':
-                        p_tag.append(new_tag)
-                    i=i+1
-            if i>0:
-                a.replace_with(p_tag)      
+        # print type(a),'content:',c
+        ss=[]
+        s=''
+        if isinstance(a,NavigableString)  :
+            a=c
+            s=c.string
+        elif isinstance(a,Tag):
+            # a=a.unwrap()
+            # print 'type======',type(a)
+            # print 'a====',a
+            # print '===xxxx',a.p
+            if a.name=='pre':
+                continue
+            else:
+                s=a.string
+
+            # else:
+            #     continue
+
+            # dd
+
+        else:
+            continue
+        ss=s.split('\r\n')
+        # ss1=a.string.split('\')
+        # if len(ss)<len(ss1):
+            # ss=ss1
+        # print 'ss:',a.string
+        p_tag = soup.new_tag("p")
+        i=0
+        for s in ss:
+            if len(s.strip(''))>0:
+                new_tag=soup.new_tag('p')
+                new_tag.string=esc(s)
+                if i==0:
+                    p_tag=new_tag
+                elif new_tag.string!='':
+                    p_tag.append(new_tag)
+                # else:
+                #     p_tag.append(new_tag)
+                i=i+1
+                # print '====',s
+        if i>0:
+            c.replace_with(p_tag)      
     pre_tags=soup.find_all('pre')
     for pre_node in pre_tags:
         code=pre_node.code or pre_node
@@ -161,6 +191,7 @@ def auto_mark_filter(markup,htmlparser=None):
             s=(esc(child))
             if i==0:
                 s=s.strip('\n')
+                s=s.strip('\r\n')
             child.replace_with( s )
             i=i+1
          #ret=ret+'###'.join(pre_node.strings)
