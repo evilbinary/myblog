@@ -976,12 +976,13 @@ article.sticky .featured-post {
 	/*margin: 24px 0;*/
 	/*margin: 1.714285714rem 0;*/
 	overflow: auto;
-	padding: 24px;
-	padding: 1.714285714rem;
+  	/*padding: 24px;*/
+	/*padding: 1.714285714rem;*/
 }
 .entry-content pre code,
 .comment-content pre code {
 	display: block;
+	border-radius:3px;
 }
 .entry-content abbr,
 .comment-content abbr,
