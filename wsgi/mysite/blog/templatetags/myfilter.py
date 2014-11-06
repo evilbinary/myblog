@@ -135,7 +135,7 @@ def auto_mark_filter(markup,htmlparser=None):
         pass
     ret =''
     body= soup.body or soup
-    for c in soup:
+    for c in body:
         a=c
         #c=c.wrap(soup.new_tag('p'))
         if isinstance(a,NavigableString):
@@ -164,7 +164,7 @@ def auto_mark_filter(markup,htmlparser=None):
             child.replace_with( s )
             i=i+1
          #ret=ret+'###'.join(pre_node.strings)
-    ret=soup.body
+    ret=soup.body or soup
     #ret=linebreaks(ret)
 
     return mark_safe(ret)
