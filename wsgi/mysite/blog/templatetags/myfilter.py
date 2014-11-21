@@ -16,7 +16,7 @@ from django.template.loader import render_to_string
 from django.template import RequestContext
 from bs4 import BeautifulSoup #html解析BeautifulSoup 可以支持多种解析器，如lxml, html5lib, html.parser.  所以很方便，哈哈好，而且兼容性好，PS这里不是在宣传。
 from bs4 import NavigableString,Tag
-
+import re
 
 register=template.Library()
 flag_tags=-1
@@ -119,6 +119,57 @@ def highlight_filter(value,style=None):
         HtmlFormatter().get_style_defs(style)
     ret=highlight(value, PythonLexer(), HtmlFormatter())
     return ret
+
+#p_pre = re.compile(r'<pre (?=[\'"]?\w+[\'"]?).*?>(?P<code>[\w\W]+?)</pre>')
+p_pre = re.compile(r'<pre(?P<attr>[\W\w]*?)>(?P<code>[\w\W]*?)</pre[\w\W]*?>')
+p_code=re.compile(r'<code[\w\W]*?>(?P<code>[\w\W]+?)</code[\w\W]*?>')
+
+@register.filter(name='autocode')
+def auto_mark_code_filter(value,autoescape='True'):
+    pre_list = p_pre.findall(value)
+    esc=None
+    if autoescape and autoescape=='True': 
+        esc = conditional_escape 
+    else: 
+        esc = lambda x: x 
+        pass
+
+    if pre_list:
+        split_list = p_pre.split(value)
+        #print split_list
+        for pre_block in p_pre.finditer(value):
+
+            #print 'pre_block:============',pre_block.groups(1),'=====',pre_block.group()
+            attr=pre_block.group('attr')
+            code = pre_block.group('code')
+            #print 'code:=================',code
+            if attr:
+                attr_index = split_list.index(attr)
+                split_list[attr_index]=''
+
+            code_index = split_list.index(code)
+            code2_=None
+            m_code2=p_code.search(pre_block.group())
+            ret_code=''
+            if m_code2:
+                code2=m_code2.group('code')
+                ret_code='<pre '+attr+'><code>'+esc(code2)+'</code></pre>'
+            else:
+                ret_code='<pre '+(attr).replace('"',"'")+'>'+esc(code)+'</pre>'
+            #print 'code==================:', ret_code
+            #pre=pre_block.group()
+            #print 'tyep====',type(code)
+            #index = split_list.index(pre_block)
+            #split_list[attr_index]=attr
+            split_list[code_index]=ret_code
+            pass
+        v=['<p>'+v+'</p>' for v in split_list if v!='']
+        value=  mark_safe(''.join(v))
+        #print 'ret-----------------------\n',value
+        return value
+    return value
+    pass
+
 @register.filter(name='automark')
 def auto_mark_filter(markup,htmlparser=None):
     soup=None
@@ -126,6 +177,9 @@ def auto_mark_filter(markup,htmlparser=None):
         soup=BeautifulSoup(markup,htmlparser)
     else :
         soup=BeautifulSoup(markup)
+    
+    attrMap = soup.attrMap;
+    print "attrMap=",dir(soup);
     esc=None
     autoescape='False'
     if autoescape and autoescape=='True': 
@@ -162,7 +216,8 @@ def auto_mark_filter(markup,htmlparser=None):
 
         else:
             continue
-        ss=s.split('\r\n')
+        if s!=None:
+            ss=s.split('\r\n')
         # ss1=a.string.split('\')
         # if len(ss)<len(ss1):
             # ss=ss1
