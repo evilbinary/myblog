@@ -167,7 +167,7 @@ def auto_mark_code_filter(value,autoescape='True'):
         value=  mark_safe(''.join(v))
         #print 'ret-----------------------\n',value
         return value
-    return value
+    return auto_mark_filter(value)
     pass
 
 @register.filter(name='automark')
@@ -178,8 +178,8 @@ def auto_mark_filter(markup,htmlparser=None):
     else :
         soup=BeautifulSoup(markup)
     
-    attrMap = soup.attrMap;
-    print "attrMap=",dir(soup);
+    #attrMap = soup.attrMap;
+    #print "attrMap=",dir(soup);
     esc=None
     autoescape='False'
     if autoescape and autoescape=='True': 
