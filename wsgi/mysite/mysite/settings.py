@@ -154,5 +154,5 @@ STATICFILES_DIRS = (
 # print  ('admin/css',os.path.join(MYBLOG_PATH,'static/admin/css'))
    
 #头像地址
-GRAVATAR_URL_PREFIX='https://0.gravatar.com/avatar/'
+GRAVATAR_URL_PREFIX='https://secure.gravatar.com/avatar/'
 #GRAVATAR_DEFAULT_IMAGE=''
