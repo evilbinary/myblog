@@ -24,10 +24,11 @@
 	
 下载好后，如果是压缩包记得解压，进去后可以看到setup.py这个就是安装文件了，注意你需要有python环境,运行:
 	
-	pythong setup.py
+	python setup.py install
 	
 然后让它自己安装，安装好后，到wsgi文件夹里面，有个叫mysite这个就是项目的路径，其他的文件不用管了，测试的东西，的点击进去，可以看到blog、manage.py、templates等，然后运行：
 
+	python manage.py collectstatic
 	python manage.py syncdb 
 同步一下数据库，可能叫你输入第一次创建超级用户，你就输入一个用户，还有密码，成功后应该有个db.sqlite文件出来，再次运行：
 	
