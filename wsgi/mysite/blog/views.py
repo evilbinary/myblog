@@ -462,8 +462,24 @@ def render_article(request,post_id,contexts=None):
     contents=render_contents(cur_post)
     nator=render_nator2(prev_post,next_post)
 
+    # post_id=int(post_id)
     #incre views
-    if request.session.get('views'):
+    vv=request.session.get('post_views')
+    # print vv,' vv.has_key(post_id):',vv.has_key(post_id),' post_id:',post_id
+    if vv:
+        if vv.has_key(post_id):
+            pass
+        else:
+
+            views=Postmeta.objects.filter(post_id=cur_post.first(),meta_key='views').first()
+            if views:
+                views.meta_value=str(int(views.meta_value)+1)
+                views.save()
+            request.session.modified = True
+            request.session['post_views'][post_id]=1
+            # print vv,' vv.has_key(post_id):',vv.has_key(post_id),' post_id:',post_id
+
+            # print request.session['post_views']
         pass
     else:
         views=Postmeta.objects.filter(post_id=cur_post.first(),meta_key='views').first()
@@ -477,7 +493,9 @@ def render_article(request,post_id,contexts=None):
             views.meta_value='0'
             views.save()
             pass
-        request.session['views']=1;
+        request.session['post_views']={post_id:1};
+        print id(request.session['post_views'])
+
 
     #comment_author=request.POST.get('author')
     #comment_email=request.POST.get('email')
