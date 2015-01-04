@@ -175,7 +175,8 @@ class TermsAdmin(admin.ModelAdmin):
 
 class TermRelationshipsForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-    	args[0].object.post_title="aa"
+    	fields=''
+    	# args[0].object.post_title="aa"
         super(TermRelationshipsForm, self).__init__(*args, **kwargs)
         
         # change a widget attribute:

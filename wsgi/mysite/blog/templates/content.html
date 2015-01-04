@@ -55,13 +55,18 @@
      {%else%}
      <a href="/blog/page/{{post.id}}" title="{{post.post_date}}" rel="bookmark">
      {%endif%}
+            <i class="fa fa-clock-o"></i>
             <time class="entry-date" datetime="{{post.post_date}}">{{post.post_date|date:"Y M d D H:i:s"}}</time></a>
             <span class="by-author"> by 
                 <span class="author vcard">
                     <a class="url fn n" href="/blog/author/1" title="View all posts by {{post.post_author}}" rel="author">{{post.post_author}}</a>
                 </span>
             </span>     
-            {%if more%}   
+            {%if more%}
+            <i class="fa fa-eye"></i>
+            <span class="read-more">
+                {{post.views}}次
+            </span>
             <span class="read-more">
                 <a class="read-more" href="/blog/article/{{post.id}}"> 阅读更多...</a>
             </span> 

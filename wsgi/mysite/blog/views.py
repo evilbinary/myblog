@@ -7,7 +7,7 @@
 
 from django.shortcuts import render,render_to_response
 from django.template import loader,Context,RequestContext
-from blog.models import Manager,Posts,Comments,TermTaxonomy,Terms,TermRelationships,Options,Links
+from blog.models import Manager,Posts,Comments,TermTaxonomy,Terms,TermRelationships,Options,Links,Postmeta
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator,Page,EmptyPage, PageNotAnInteger
@@ -295,6 +295,11 @@ def render_contents(posts,cat='',more=None):
     cats=TermRelationships.objects.select_related('term_taxonomy__term').filter(term_taxonomy__taxonomy__in=('category', 'post_tag', 'post_format'),object_id__in=[ p.id for p in posts])
     #cats=Terms.objects.select_related('termtaxonomy').select_related('termrelationships').filter(termtaxonomy__taxonomy__in=('category', 'post_tag', 'post_format'))
     cat_terms={}
+    post_views=Postmeta.objects.all().filter(meta_key='views',post_id__in=[p.id for p in posts])
+    len_post_views=len(post_views)
+    views={}
+    for v in post_views:
+        views[v.post_id.id]=v
     for cat in cats:
         cat_terms[cat.object_id]=cat.term_taxonomy.term
     # i=0
@@ -307,7 +312,11 @@ def render_contents(posts,cat='',more=None):
             post.cat=None
         if more:
             post.post_content=post.post_content[:more]
-
+        v=views.get(post.id)
+        if v:
+            post.views=v.meta_value
+        else:
+            post.views=0
         # i=i+1
         pass
     context={'posts':posts,'more':more}
@@ -452,6 +461,23 @@ def render_article(request,post_id,contexts=None):
     next_post=objs.filter(id__gt=post_id).only('id','post_title').first()
     contents=render_contents(cur_post)
     nator=render_nator2(prev_post,next_post)
+
+    #incre views
+    if request.session.get('views'):
+        pass
+    else:
+        views=Postmeta.objects.filter(post_id=cur_post.first(),meta_key='views').first()
+        if views:
+            views.meta_value=str(int(views.meta_value)+1)
+            views.save()
+        else:
+            views=Postmeta()
+            views.post_id=cur_post.first()
+            views.meta_key=u'views'
+            views.meta_value='0'
+            views.save()
+            pass
+        request.session['views']=1;
 
     #comment_author=request.POST.get('author')
     #comment_email=request.POST.get('email')

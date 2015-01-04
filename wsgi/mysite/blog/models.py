@@ -169,15 +169,6 @@ class Users(models.Model):
         verbose_name_plural = u'用户管理'
         #app_label = u'系统管理'
 
-class Postmeta(models.Model):
-    meta_id = models.BigIntegerField(primary_key=True)
-    post_id = models.BigIntegerField()
-    meta_key = models.CharField(max_length=255, blank=True)
-    meta_value = models.TextField(blank=True)
-
-    class Meta:
-        managed = db_managed
-        db_table = db_prefix+'postmeta'
 
 
 class Posts(models.Model):
@@ -219,6 +210,22 @@ class Posts(models.Model):
         db_table = db_prefix+'posts'
         verbose_name=u'发布'
         verbose_name_plural = u'发布管理'
+
+class Postmeta(models.Model):
+    meta_id = models.AutoField(primary_key=True)
+    # post_id = models.BigIntegerField()
+    post_id = models.ForeignKey(Posts,db_column='post_id')
+    meta_key = models.CharField(max_length=255, blank=True)
+    meta_value = models.TextField(blank=True)
+
+    def __unicode__(self):
+        return u'%s' % (self.meta_id)
+    class Meta:
+        managed = db_managed
+        db_table = db_prefix+'postmeta'
+        verbose_name=u'发布附带'
+        verbose_name_plural = u'发布管理'
+
 
 class Commentmeta(models.Model):
     meta_id = models.BigIntegerField(primary_key=True)
