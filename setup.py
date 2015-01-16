@@ -14,5 +14,5 @@ setup(
     author='evilbinary',
     author_email='rootntsd@gmail.com',
     url='http://www.python.org/sigs/distutils-sig/',
-    install_requires=['Django>=1.7','pytz','Markdown>=2.5.1','Pygments>=1.6','MySQL-python','django-admin-bootstrapped','beautifulsoup4>=4.3.2'],
+    install_requires=['Django>=1.7','pytz','Markdown>=2.5.1','Pygments>=1.6','MySQL-python','django-admin-bootstrapped','beautifulsoup4>=4.3.2','Pillow','django-ckeditor'],
 )

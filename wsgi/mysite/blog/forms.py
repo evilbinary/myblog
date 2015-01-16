@@ -8,6 +8,11 @@
 
 from django import forms
 from django.forms import Form
+from django.forms import ModelForm 
+from blog.models import Posts 
+from blog.widgets import RichTextEditorWidget
+from django.db import models
+
 
 class CommentForm(forms.Form):
 	comment=forms.CharField()
@@ -34,3 +39,11 @@ class CommentForm(forms.Form):
 		if url==None:
 			self._errors['url']=self.error_class(['url没写正确啊！'])
 		return cleaned_data
+
+class PostsForm(ModelForm): 
+	# post_title=forms.CharField(max_length=200,label='标题')
+	# post_title=forms.TextInput(attrs={'size':1,'rows':0.1} )
+	post_title=forms.CharField(widget=forms.TextInput(attrs={'size':80,} ),label='标题')
+	post_content=forms.CharField(widget=RichTextEditorWidget(),label='内容:')
+	class Meta:
+		model=Posts

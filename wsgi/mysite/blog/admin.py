@@ -25,6 +25,11 @@ from django.utils.encoding import force_text, python_2_unicode_compatible
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
+from blog.widgets import RichTextEditorWidget
+from django.db import models
+from blog.forms import PostsForm
+
+from django.contrib.sites.models import Site
 
 
 #class MyAdminSite(admin.sites.AdminSite):
@@ -63,7 +68,7 @@ class  PostsAdmin(admin.ModelAdmin):
 	#list_filter=('post_title','post_content')
 	search_fields = ['post_title','post_content']
 	#list_per_page=10
-	#form=PostsAdminFrom
+	form=PostsForm
 	actions_on_bottom=True
 	actions_on_top=False
 	actions=('make_publish','make_private',)
@@ -311,6 +316,12 @@ class LinksAdmin(admin.ModelAdmin):
 			'fields':('link_image','link_target','link_description','link_owner','link_rating','link_updated','link_rel','link_notes','link_rss')
 		}),
 	)
+
+# class SiteAdmin(admin.ModelAdmin):
+# 	list_display = ('domain', 'name')
+# 	search_fields = ('domain', 'name')
+
+
 class MyAdminSite(AdminSite):
 
 	site_header='evilbianry 管理'
@@ -322,8 +333,11 @@ class MyAdminSite(AdminSite):
 
 
 # AdminSite.site_header='evilbianry 管理'
-# AdminSite.site_title='evilbianry 站点管理'
+AdminSite.site_title='evilbianry 站点管理'
 admin.site=MyAdminSite()
+
+# admin.site.register(Site, SiteAdmin)
+
 
 admin.site.register(auth.models.User,UserAdmin)
 admin.site.register(auth.models.Group)

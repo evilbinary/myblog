@@ -462,29 +462,30 @@ def render_article(request,post_id,contexts=None):
     contents=render_contents(cur_post)
     nator=render_nator2(prev_post,next_post)
 
-    # post_id=int(post_id)
-    #incre views
-    vv=request.session.get('post_views')
-    if vv==None:
-        request.session.modified = True
-        request.session['post_views'] ={}
+    if cur_post.first()!=None:
+        # post_id=int(post_id)
+        #incre views
         vv=request.session.get('post_views')
-    if vv.has_key(post_id)==False:
-        print 2
-        views=Postmeta.objects.filter(post_id=cur_post.first(),meta_key='views').first()
-        if views:
-            views.meta_value=str(int(views.meta_value)+1)
-            views.save()
-            print 3
-        else:
-            views=Postmeta()
-            views.post_id=cur_post.first()
-            views.meta_key=u'views'
-            views.meta_value='1'
-            views.save()
-            print 4
-        request.session.modified = True
-        request.session['post_views'][post_id]=1
+        if vv==None:
+            request.session.modified = True
+            request.session['post_views'] ={}
+            vv=request.session.get('post_views')
+        if vv.has_key(post_id)==False:
+            print 2
+            views=Postmeta.objects.filter(post_id=cur_post.first(),meta_key='views').first()
+            if views:
+                views.meta_value=str(int(views.meta_value)+1)
+                views.save()
+                print 3
+            else:
+                views=Postmeta()
+                views.post_id=cur_post.first()
+                views.meta_key=u'views'
+                views.meta_value='1'
+                views.save()
+                print 4
+            request.session.modified = True
+            request.session['post_views'][post_id]=1
 
 
     #comment_author=request.POST.get('author')

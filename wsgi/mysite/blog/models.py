@@ -179,7 +179,7 @@ class Posts(models.Model):
     post_date = models.DateTimeField(verbose_name='发布时间',default=datetime.datetime.now,blank=True)
     post_date_gmt = models.DateTimeField(default=timezone.now,blank=True)
     post_content = models.TextField(verbose_name='内容')
-    post_title = models.TextField(verbose_name='标题')
+    post_title = models.CharField(max_length=120,verbose_name='标题')
     post_excerpt = models.TextField(default='',blank=True)
     post_status = models.CharField(verbose_name='发布状态',choices=POST_STATUS,max_length=20)
     comment_status = models.CharField(default='',blank=True,max_length=20)
@@ -204,7 +204,14 @@ class Posts(models.Model):
     def get_absolute_url(self):
         # return '/blog/article/%s'%self.id
         # return ('blog.views.article',[str(self.id)])
-        return reverse('blog.views.article', args=[str(self.id)])
+        if self.post_type =='post':
+            return reverse('blog.views.article', args=[str(self.id)])
+        elif self.post_type =='page':
+            return reverse('blog.views.page', args=[str(self.id)])
+        else:
+            return reverse('blog.views.article', args=[str(self.id)])
+
+
     class Meta:
         managed = db_managed
         db_table = db_prefix+'posts'
@@ -242,8 +249,8 @@ class Comments(models.Model):
     #comment_id = models.BigIntegerField(db_column='comment_ID', primary_key=True)  # Field name made lowercase.
     comment_id=models.AutoField(primary_key=True)
     #comment_post_id = models.BigIntegerField(db_column='comment_post_ID')  # Field name made lowercase.
-    comment_post=models.ForeignKey(Posts)
-    comment_author = models.TextField(verbose_name='评论者')
+    comment_post=models.ForeignKey(Posts,verbose_name='文章')
+    comment_author = models.CharField(max_length=100,verbose_name='评论者')
     comment_author_email = models.CharField(max_length=100)
     comment_author_url = models.CharField(max_length=200,blank=True)
     comment_author_ip = models.CharField(default='',max_length=100,blank=True)  # Field name made lowercase.
@@ -259,7 +266,12 @@ class Comments(models.Model):
 
 
     def get_absolute_url(self):
-        return '/blog/?p=%s#comment-%s'%(self.comment_post.id,self.comment_id)
+        if self.comment_post.post_type =='post':
+            return '/blog/?p=%s#comment-%s'%(self.comment_post.id,self.comment_id)
+        elif self.comment_post.post_type =='page':
+            return '/blog/page/%s#comment-%s'%(self.comment_post.id,self.comment_id)
+        else:
+            return '/blog/?p=%s#comment-%s'%(self.comment_post.id,self.comment_id)
         # return ('blog.views.article',[str(self.id)])
         #return reverse('blog.views',args=['?p='+str(self.comment_post)] )
     

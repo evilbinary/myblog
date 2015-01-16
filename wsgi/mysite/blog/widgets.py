@@ -6,6 +6,10 @@ from itertools import *
 from blog.models import Commentmeta,Comments,Links,Options,Postmeta
 from django.utils.html import *
 
+from django import forms
+from django.contrib import admin
+from ckeditor.widgets import CKEditorWidget
+
 class TreeSelect(Select):
 	def __init__(self, attrs=None):
 		super(Select, self).__init__(attrs) 
@@ -91,3 +95,7 @@ class MySelect(Select):
  		return super(MySelect,self).render_options(choices,selected_choices)
 
  		pass
+
+class RichTextEditorWidget(CKEditorWidget):
+
+	pass
