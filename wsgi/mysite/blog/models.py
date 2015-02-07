@@ -280,6 +280,12 @@ class Comments(models.Model):
         db_table = db_prefix+'comments'
         verbose_name=u'评论'
         verbose_name_plural = u'评论管理'
+
+        permissions = (
+            ("can_comment_direct", "can_comment_direct"),
+            
+        )
+
     def __unicode__(self):
         return u'%s'% (self.comment_id)
         #return u'id['+str(self.id)+'] '+self.post_title

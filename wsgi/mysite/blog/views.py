@@ -157,8 +157,12 @@ def comment(request):
             if comment_author=='' or comment_email=='' or comment_content=='':
                 return article(request,comment_post_id)
 
+            comment_approved=0;
+            if request.user.is_authenticated():
+                if request.user.has_perm('blog.can_comment_direct'):
+                    comment_approved=1
             p=Posts.objects.get(pk=comment_post_id)
-            comment=Comments(comment_post=p,comment_approved='0',comment_author=comment_author,comment_parent=comment_parent,comment_content=comment_content,comment_author_email=comment_email,comment_author_url=comment_url,comment_author_ip=comment_author_ip,comment_agent=comment_agent)
+            comment=Comments(comment_post=p,comment_approved=comment_approved,comment_author=comment_author,comment_parent=comment_parent,comment_content=comment_content,comment_author_email=comment_email,comment_author_url=comment_url,comment_author_ip=comment_author_ip,comment_agent=comment_agent)
             # comment.comment_date=datetime()
             p.comment_count=p.comment_count+1
             p.save()
@@ -393,7 +397,7 @@ def render_comment(request,comment_post_id,comments=[],contexts=None):
     for c in dic:
         i=dic[c]
         pid=i[1]
-        if pid!=0:
+        if pid!=0 and dic.get(pid)!=None:
             p=dic[pid]
             p[2].append(i)
             i[3]=p[3]+1 

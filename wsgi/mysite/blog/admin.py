@@ -119,11 +119,7 @@ class  PostsAdmin(admin.ModelAdmin):
 	post_content_more.short_description='内容摘要'
 	pass
 
-class  UsersAdmin(admin.ModelAdmin):
-	#fields=('post_title','post_content')
-	#list_filter=('post_title','post_content')
-	list_display=('user_nicename','user_login','user_pass','user_email','user_status','user_registered')
-	list_display_links = ('user_nicename','user_login',)
+
 
 class CommentsAdmin(admin.ModelAdmin):
 	list_display=('comment_post_post_title','comment_content_more','comment_author','comment_approved','comment_date')
@@ -322,6 +318,16 @@ class LinksAdmin(admin.ModelAdmin):
 # 	search_fields = ('domain', 'name')
 
 
+class  UsersAdmin(admin.ModelAdmin):
+	#fields=('post_title','post_content')
+	#list_filter=('post_title','post_content')
+	list_display=('user_nicename','user_login','user_pass','user_email','user_status','user_registered')
+	list_display_links = ('user_nicename','user_login',)
+
+class PermissionAdmin(admin.ModelAdmin):
+
+	pass
+
 class MyAdminSite(AdminSite):
 
 	site_header='evilbianry 管理'
@@ -341,6 +347,7 @@ admin.site=MyAdminSite()
 
 admin.site.register(auth.models.User,UserAdmin)
 admin.site.register(auth.models.Group)
+admin.site.register(auth.models.Permission,PermissionAdmin)
 
 admin.site.register( Users,UsersAdmin)
 admin.site.register( Posts,PostsAdmin)
