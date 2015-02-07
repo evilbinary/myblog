@@ -25,6 +25,16 @@ from django.utils import timezone
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.utils.encoding import force_unicode
+from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import (
+    BaseUserManager, AbstractBaseUser,PermissionsMixin
+)
+from django.core.mail import send_mail
+from django.contrib.auth.hashers import (
+    check_password, make_password, is_password_usable)
+from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.crypto import get_random_string, salted_hmac
 
 
 
@@ -147,18 +157,151 @@ class Usermeta(models.Model):
         db_table = db_prefix+'usermeta'
 
 
-class Users(models.Model):
+
+class MyUserManager(BaseUserManager):
+
+
+    def _create_user(self, user_login, user_email, user_pass,
+                     is_staff, is_superuser, **extra_fields):
+        if not user_login:
+            raise ValueError('Users must have an user name')
+
+        user = self.model(
+            user_email=self.normalize_email(user_email),
+            user_login=user_login,
+            is_staff=is_staff,
+            is_superuser=is_superuser,
+#            user_registered=timezone.now,
+            user_status=1,
+        )
+
+        user.set_password(user_pass)
+        user.save(using=self._db)
+        return user
+
+    def create_user(self, user_login, user_email=None, password=None, **extra_fields):
+        return self._create_user(user_login, user_email, password, False, False,
+                                 **extra_fields)
+
+    def create_superuser(self, user_login, user_email, password, **extra_fields):
+        return self._create_user(user_login, user_email, password, True, True,
+                                 **extra_fields)
+
+class MyAbstractBaseUser(models.Model):
+    REQUIRED_FIELDS = []
+
+
+
+    class Meta:
+        abstract = True
+
+    def get_username(self):
+        "Return the identifying username for this User"
+        return getattr(self, self.USERNAME_FIELD)
+
+    def __str__(self):
+        return self.get_username()
+
+    def natural_key(self):
+        return (self.get_username(),)
+
+    def is_anonymous(self):
+        """
+        Always returns False. This is a way of comparing User objects to
+        anonymous users.
+        """
+        return False
+
+    def is_authenticated(self):
+        """
+        Always return True. This is a way to tell if the user has been
+        authenticated in templates.
+        """
+        return True
+
+    def has_usable_password(self):
+        return is_password_usable(self.user_pass)
+
+    def get_full_name(self):
+        raise NotImplementedError('subclasses of AbstractBaseUser must provide a get_full_name() method')
+
+    def get_short_name(self):
+        raise NotImplementedError('subclasses of AbstractBaseUser must provide a get_short_name() method.')
+
+    def get_session_auth_hash(self):
+        """
+        Returns an HMAC of the password field.
+        """
+        key_salt = "django.contrib.auth.models.AbstractBaseUser.get_session_auth_hash"
+        return salted_hmac(key_salt, self.user_pass).hexdigest()
+
+class Users(MyAbstractBaseUser,PermissionsMixin):
     #id = models.BigIntegerField(primary_key=True)  # Field name made lowercase.
-    id=models.AutoField(primary_key=True) 
-    user_login = models.CharField(max_length=60)
-    user_pass = models.CharField(max_length=64)
-    user_nicename = models.CharField(max_length=50)
-    user_email = models.CharField(max_length=100)
-    user_url = models.CharField(max_length=100)
-    user_registered = models.DateTimeField()
-    user_activation_key = models.CharField(max_length=60)
-    user_status = models.IntegerField(choices=USER_STATUS)
-    display_name = models.CharField(max_length=250)
+    id=models.AutoField(primary_key=True,unique=True) 
+    user_login = models.CharField(max_length=60,unique=True,verbose_name='登录名')
+    user_pass = models.CharField(max_length=164,verbose_name='密码')
+    user_nicename = models.CharField(max_length=50,blank=True,verbose_name='昵称')
+    user_email = models.CharField(max_length=100,blank=True,verbose_name='email')
+    user_url = models.CharField(max_length=100,blank=True,verbose_name='网站')
+    user_registered = models.DateTimeField(default=timezone.now,blank=True,verbose_name='注册时间')
+    user_activation_key = models.CharField(max_length=60,blank=True)
+    user_status = models.IntegerField(choices=USER_STATUS,default=0,verbose_name='状态',blank=True)
+    display_name = models.CharField(max_length=250,blank=True,verbose_name='显示名字')
+
+
+    #is_active = models.BooleanField(default=True)
+    #is_admin = models.BooleanField(default=False)
+    is_staff = models.BooleanField(_('staff status'),default=False,blank=True)
+    last_login = models.DateTimeField(_('last login'), default=timezone.now,blank=True)
+
+    USERNAME_FIELD='user_login'
+    REQUIRED_FIELDS = ['user_email']
+
+    objects = MyUserManager()
+
+
+
+    def set_password(self, raw_password):
+        self.user_pass = make_password(raw_password)
+    
+    def check_password(self, raw_password):
+        """
+        Returns a boolean of whether the raw_password was correct. Handles
+        hashing formats behind the scenes.
+        """
+        def setter(raw_password):
+            self.set_password(raw_password)
+            self.save(update_fields=["user_pass"])
+        return check_password(raw_password, self.user_pass, setter)
+
+    def set_unusable_password(self):
+        # Sets a value that will never be a valid hash
+        self.user_pass = make_password(None)
+
+    
+
+    #############
+
+    def get_full_name(self):
+        # The user is identified by their email address
+        return self.user_nicename
+
+    def get_short_name(self):
+        # The user is identified by their email address
+        return self.display_name
+
+    def email_user(self, subject, message, from_email=None, **kwargs):
+        """ 
+        Sends an email to this User.
+        """
+        send_mail(subject, message, from_email, [self.email], **kwargs)
+
+
+    @property
+    def is_active(self):
+        return self.user_status
+    
+
     def __unicode__(self):
         return u'%s' % (self.user_nicename)
         #return u'id['+str(self.id)+'] '+self.user_nicename
@@ -167,7 +310,9 @@ class Users(models.Model):
         db_table = db_prefix+'users'
         verbose_name=u'用户'
         verbose_name_plural = u'用户管理'
-        #app_label = u'系统管理'
+        #app_label = u'系统管理' 
+        #swappable = 'AUTH_USER_MODEL'
+
 
 
 

@@ -39,7 +39,10 @@
 			</p>
 			<!--<p class="comment-notes">邮箱地址不会公开，标记成 
 				<span class="required">*</span>是必填.
-			</p>-->		
+			</p>-->	
+			{% if user.is_authenticated %}	
+
+			{% else %}
 			<div>				
 				<p class="comment-form-author">
 					<label for="author">昵称 <span class="required">*</span></label>
@@ -59,7 +62,7 @@
 				 <span class="required">{{contexts.comment_form.url.errors|first}}</span>
 				</p>
 			</div>
-
+			{% endif %}
 			
 
 
