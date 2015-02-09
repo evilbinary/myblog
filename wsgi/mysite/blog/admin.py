@@ -503,14 +503,17 @@ class MyAdminSite(AdminSite):
 	site_header='evilbianry 管理'
 	site_title='evilbianry 站点管理'
 	index_title='evilbinary'
+	title='evilbinary'
 	def __init__(self,name='admin',app_name='admin'):
 		super(MyAdminSite,self).__init__(name,app_name)
 	pass
 
 
-# AdminSite.site_header='evilbianry 管理'
+AdminSite.site_header='evilbianry 管理'
 AdminSite.site_title='evilbianry 站点管理'
+AdminSite.title='evilbinary'
 admin.site=MyAdminSite()
+
 
 # admin.site.register(Site, SiteAdmin)
 
