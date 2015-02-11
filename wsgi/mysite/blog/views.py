@@ -138,17 +138,42 @@ def render_sidebar(request):
 def comment(request):
 
     if request.method=='POST':
-        form=CommentForm(request.POST)
+        data=request.POST
+        if request.user.is_authenticated():
+            data={}
+            if request.user.user_nicename:
+                data['author']=request.user.user_nicename
+            elif request.user.display_name:
+                data['author']=request.user.display_name
+            elif request.user.user_login:    
+                data['author']=request.user.user_login
+            else:
+                data['author']=''
+            data['email']=request.user.user_email
+            data['url']=request.user.user_url
+            data['comment']=request.POST.get('comment').strip()
+            # print 'is is_authenticated',data
+
+        form=CommentForm(data)
         comment_post_id=request.POST.get('comment_post_ID').strip()
+
         frequency_comment=request.session['frequency_comment']
+        
+        if request.user.has_perm('blog.can_comment_unlimit_time'):
+            frequency_comment=None
         if frequency_comment:
             contexts={'frequency_comment':'评论太频繁了！'}
             return article(request,comment_post_id,contexts)
+        # print 'comment save3'
+
         if form.is_valid():
-            comment_content=request.POST.get('comment')
-            comment_author=request.POST.get('author').strip()
-            comment_email=request.POST.get('email').strip()
-            comment_url=request.POST.get('url').strip()
+            # print 'comment save2'
+
+            comment_content=form.cleaned_data['comment']
+            print comment_content
+            comment_author=form.cleaned_data['author']
+            comment_email=form.cleaned_data['email']
+            comment_url=form.cleaned_data['url']
             comment_parent=request.POST.get('comment_parent').strip()
             comment_author_ip=get_client_ip(request)
             comment_agent=request.META.get('HTTP_USER_AGENT',None)
@@ -167,6 +192,7 @@ def comment(request):
             p.comment_count=p.comment_count+1
             p.save()
             comment.save()
+            # print 'comment save'
 
             request.session['comment_author']=comment_author
             request.session['comment_email']=comment_email

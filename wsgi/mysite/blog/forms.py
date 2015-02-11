@@ -28,8 +28,6 @@ class CommentForm(forms.Form):
 		comment=cleaned_data.get('comment')
 		url=cleaned_data.get('url')
 
-		print  self.__dict__
-
 		if tmp_email==None :
 			self._errors['email']=self.error_class(['亲，邮箱给我填正确来!'])
 		if author==None:
@@ -64,6 +62,7 @@ class UserCreationForm(forms.ModelForm):
         'duplicate_username': _("A user with that username already exists."),
         'password_mismatch': _("The two password fields didn't match."),
     }
+
     user_login = forms.RegexField(label=_("Username"), max_length=30,
         regex=r'^[\w.@+-]+$',
         help_text=_("Required. 30 characters or fewer. Letters, digits and "
@@ -72,6 +71,9 @@ class UserCreationForm(forms.ModelForm):
             'invalid': _("This value may contain only letters, numbers and "
                          "@/./+/-/_ characters.")})
     user_pass = forms.CharField(label=_("Password"),widget=forms.PasswordInput)
+    # user_email = forms.CharField(label='aaa',widget=forms.PasswordInput)
+
+    # user_email= forms.EmailField(label=_("Email"))
     # user_pass2 = forms.CharField(label=_("Password confirmation"),
     #widget=forms.PasswordInput,
     #     help_text=_("Enter the same password as above, for verification."))
@@ -80,7 +82,9 @@ class UserCreationForm(forms.ModelForm):
         model = Users
         # fields = ("user_login","user_pass")
 		#fields = '__all__'
+	def clean_useremail(self):
 
+		pass
 
     def clean_username(self):
         # Since User.username is unique, this check is redundant,

@@ -428,6 +428,7 @@ class Comments(models.Model):
 
         permissions = (
             ("can_comment_direct", "can_comment_direct"),
+            ("can_comment_unlimit_time",'不限制时间评论')
             
         )
 
