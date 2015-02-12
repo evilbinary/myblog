@@ -156,3 +156,35 @@ STATICFILES_DIRS = (
 #头像地址
 GRAVATAR_URL_PREFIX='https://secure.gravatar.com/avatar/'
 #GRAVATAR_DEFAULT_IMAGE=''
+
+
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+CKEDITOR_UPLOAD_PATH = "uploads/"
+# CKEDITOR_JQUERY_URL = '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'
+
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar':[        
+            ['Source','-','Save','NewPage','Preview','-','Templates'],        
+            ['Cut','Copy','Paste','PasteText','PasteFromWord','-','Print','SpellChecker','Scayt'],        
+            ['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],        
+            ['Form','Checkbox','Radio','TextField','Textarea','Select','Button', 'ImageButton','HiddenField'], 
+            ['Bold','Italic','Underline','Strike','-','Subscript','Superscript'],        
+            ['NumberedList','BulletedList','-','Outdent','Indent','Blockquote'],        
+            ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],        
+            ['Link','Unlink','Anchor'],        
+            ['Image','Flash','Table','HorizontalRule','Smiley','SpecialChar','PageBreak'],        
+            ['Styles','Format','Font','FontSize'],        
+            ['TextColor','BGColor'],        
+            ['Maximize','ShowBlocks','-','About']        
+        ],
+        'width': 700,
+        'height': 400,
+        'toolbarCanCollapse': False,
+    },
+}
+
+AUTH_USER_MODEL = "blog.Users"
