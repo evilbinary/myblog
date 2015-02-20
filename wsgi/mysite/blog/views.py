@@ -60,7 +60,7 @@ def pages(request,num='1'):
     context={
     'header':render_header(request),
     'footer':render_footer(request),
-    'contents':render_pages(request,num,more=200),#more=200可以设置more一个是read more 或者全部显示
+    'contents':render_pages(request,num,more=640),#more=200可以设置more一个是read more 或者全部显示
      'sidebar':render_sidebar(request),
     }
     return render_to_response('index.html',context)
@@ -246,7 +246,7 @@ def cat(request,num='1'):
     context={
     'header':render_header(request),
     'footer':render_footer(request),
-    'contents':render_page_more(posts_list,more=200),
+    'contents':render_page_more(posts_list,more=300),
      'sidebar':render_sidebar(request),
     }
     return render_to_response('index.html',context)
@@ -463,7 +463,7 @@ def render_page1(posts,num='1',nator=None,comment=None,num_page=5):
     return render_to_string('page.html',context)
 
 
-def render_page_more(posts,num='1',nator=None,comment=None,num_page=5,more=200):
+def render_page_more(posts,num='1',nator=None,comment=None,num_page=5,more=300):
     paginator = MyPaginator(posts, num_page)
     try:
         page=paginator.page(num)
@@ -532,7 +532,7 @@ def render_article(request,post_id,contexts=None):
         comments=Comments.objects.filter(comment_post_id=post_id,comment_approved='1' ).order_by('comment_date')
     return render_page1(cur_post,1,nator,render_comment(request,post_id,comments,contexts))
 
-def render_pages(request,num='1',more=200):
+def render_pages(request,num='1',more=300):
     context={}
     if(long(num)<=0):
         num=1
