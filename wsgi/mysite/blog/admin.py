@@ -354,7 +354,7 @@ class UsersAdmin2(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('user_login', 'user_pass')}),
         (_('Personal info'), {'fields': ('user_email','user_url','user_nicename')}),
-        (_('Permissions'), {'fields': ( 'is_staff', 'is_superuser', #'is_active',
+        (_('Permissions'), {'fields': ( 'is_staff', 'is_superuser', 'user_status',
                                        'groups', 'user_permissions')}),
         (_('Important dates'), {'fields': ('last_login', 'user_registered')}),
     )
@@ -518,7 +518,7 @@ admin.site=MyAdminSite()
 # admin.site.register(Site, SiteAdmin)
 
 
-#admin.site.register(auth.models.User,UserAdmin)
+# admin.site.register(auth.models.User,UserAdmin)
 admin.site.register(auth.models.Group)
 admin.site.register(auth.models.Permission,PermissionAdmin)
 

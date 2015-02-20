@@ -170,7 +170,7 @@ def comment(request):
             # print 'comment save2'
 
             comment_content=form.cleaned_data['comment']
-            print comment_content
+            # print comment_content
             comment_author=form.cleaned_data['author']
             comment_email=form.cleaned_data['email']
             comment_url=form.cleaned_data['url']
