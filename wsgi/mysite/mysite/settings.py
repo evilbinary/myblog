@@ -30,6 +30,7 @@ DEBUG = False
 
 TEMPLATE_DEBUG = True
 
+
 ALLOWED_HOSTS = ['.evilbinary.org','localhost']
 
 
