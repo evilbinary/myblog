@@ -175,6 +175,7 @@ def comment(request):
             comment_email=form.cleaned_data['email']
             comment_url=form.cleaned_data['url']
             comment_parent=request.POST.get('comment_parent').strip()
+            print 'comment_parent:',comment_parent
             comment_author_ip=get_client_ip(request)
             comment_agent=request.META.get('HTTP_USER_AGENT',None)
             if comment_post_id==None or comment_parent==None:
@@ -437,6 +438,7 @@ def render_comment(request,comment_post_id,comments=[],contexts=None):
         stack.extend(top[2])
     #result=(level,comment)
     comments=result
+    #print result
     context={'comment_post_id':comment_post_id,'comments':comments,'test':test,'request':request,'contexts':contexts }
     if request!=None:
         context.update(csrf(request))
