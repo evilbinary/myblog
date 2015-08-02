@@ -14,7 +14,7 @@
 #截图
 * 博客首页 ![前台博客](https://github.com/evilbinary/myblog/raw/master/data/screen-shot1.png)
 * 博客后台管理  ![前台博客](https://github.com/evilbinary/myblog/raw/master/data/screen-shot2.png)
-* 喜欢就支持一下，增加作者完善得动力. ![喜欢就支持一下](https://github.com/evilbinary/evilbinary/myblog/raw/master/data/s.png)
+* 喜欢就支持一下，增加作者完善得动力. ![喜欢就支持一下](https://github.com/evilbinary/myblog/raw/master/data/s.png)
 
 #安装说明
 ===================
