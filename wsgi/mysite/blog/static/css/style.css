@@ -1458,7 +1458,7 @@ a.comment-edit-link:hover {
 .comment-item .body {
 	word-break: break-all;
 	color: #333;
-	margin-top: 5px;
+	line-height: 20px;
 }
 
 
@@ -1563,6 +1563,7 @@ a.comment-edit-link:hover {
 /*pagination
 ----------------------------------------------------------------*/
 div.pagination{
+    width: 600px;
     padding: 10px 10px 20px 10px;
     margin: 0px 0px 0px 0px;
     text-align: center;
