@@ -35,8 +35,8 @@
         <p>
         {% if post.post_mime_type == "markdown" %}
          {{post.post_content|markdown:"codehilite,nl2br,fenced_code"}}
-        {%elif post.post_mime_type=="text/html" %} 
-            {{post.post_content}}
+        {%elif post.post_mime_type == "text/html" %} 
+            {{post.post_content|safe }}
         {%else%}
  
               {{post.post_content|autocode}}

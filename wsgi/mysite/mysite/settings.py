@@ -67,6 +67,20 @@ ROOT_URLCONF = 'mysite.urls'
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
+MEDIA_DIR=BASE_DIR
+DATABASE_DIR=BASE_DIR
+
+#OpenShift define here
+
+
+if os.environ.has_key('OPENSHIFT_REPO_DIR'):
+    DEBUG = bool(os.environ.get('DEBUG', False))
+    if DEBUG:
+        print("WARNING: The DEBUG environment is set to True.")
+    TEMPLATE_DEBUG=DEBUG
+    MEDIA_DIR=os.path.join(os.environ['OPENSHIFT_DATA_DIR'])
+    DATABASE_DIR= os.path.join(os.environ['OPENSHIFT_DATA_DIR'])
+
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
@@ -82,7 +96,7 @@ DATABASES = {
     },
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(DATABASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -161,8 +175,8 @@ GRAVATAR_URL_PREFIX='https://secure.gravatar.com/avatar/'
 
 
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = ""
+MEDIA_ROOT = os.path.join(MEDIA_DIR, "media")
 CKEDITOR_UPLOAD_PATH = "uploads/"
 # CKEDITOR_JQUERY_URL = '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'
 
