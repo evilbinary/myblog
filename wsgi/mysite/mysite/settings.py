@@ -153,9 +153,7 @@ STATICFILES_DIRS = (
         ('css',os.path.join(STATIC_ROOT,'css')),
         ('js',os.path.join(STATIC_ROOT,'js')),
         ('img',os.path.join(STATIC_ROOT,'img')),
-
-        ('media',os.path.join(MEDIA_DIR,'media'),
-
+        
         ('admin/css',os.path.join(STATIC_ROOT,'admin/css')),
         ('admin/js',os.path.join(STATIC_ROOT,'admin/js')),
         ('admin/js/admin',os.path.join(STATIC_ROOT,'admin/js/admin')),
@@ -178,7 +176,7 @@ GRAVATAR_URL_PREFIX='https://secure.gravatar.com/avatar/'
 
 
 
-MEDIA_URL = "/media"
+MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(MEDIA_DIR, "media")
 CKEDITOR_UPLOAD_PATH = "uploads/"
 # CKEDITOR_JQUERY_URL = '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'
