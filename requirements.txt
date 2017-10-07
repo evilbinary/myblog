@@ -7,4 +7,4 @@ MySQL-python
 django-admin-bootstrapped==2.1.0
 beautifulsoup4>=4.3.2
 Pillow
-django-ckeditor
+django-ckeditor===4.0.2

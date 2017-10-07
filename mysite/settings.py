@@ -186,7 +186,7 @@ GRAVATAR_URL_PREFIX='https://secure.gravatar.com/avatar/'
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(MEDIA_DIR, "media")
-CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_UPLOAD_PATH = os.path.join(MEDIA_ROOT, 'uploads')
 # CKEDITOR_JQUERY_URL = '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'
 
 
