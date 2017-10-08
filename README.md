@@ -42,11 +42,19 @@
 ##Windows
 目前，还没时间搞，谁可以帮我测试测试看看，谢谢。
 
-#其他
+#正式环境部署
 ===================
 如果有app engine之类的账号，比如openshift就可以在上面使用了。
 
-###下面介绍使用用openshift搭建。
+##使用用openshift-v3搭建
+
+使用制作好的docker[镜像](https://hub.docker.com/r/evilbinary/myblog/)
+
+	docker pull evilbinary/myblog
+	oc new-app  --docker-image=evilbinary/myblog
+
+
+##使用用openshift-v2搭建
 ###1. MyBlog在OpenShift上使用
 
 
