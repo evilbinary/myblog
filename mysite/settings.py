@@ -16,8 +16,8 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+#BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
@@ -31,7 +31,7 @@ DEBUG = False
 TEMPLATE_DEBUG = True
 
 
-ALLOWED_HOSTS = ['.evilbinary.org','localhost']
+ALLOWED_HOSTS = ['*','.evilbinary.org','localhost']
 
 
 # Application definition
@@ -148,7 +148,7 @@ TEMPLATE_DIRS=(
         )
 
 
-STATIC_ROOT=os.path.join(BASE_DIR,'../static'.replace('\\','/'))
+STATIC_ROOT=os.path.join(BASE_DIR,'static')
 
 STATICFILES_FINDERS=(
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
