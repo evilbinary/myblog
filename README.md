@@ -1,5 +1,5 @@
 # MyBlog
-=========
+
 "myblog"是清凉干净的一个开源django的博客,你可以随时下载使用。
 # 特点
 * 兼容wordpress博客系统,数据从wordpress迁移过来毫无压力。
@@ -17,7 +17,7 @@
 * 喜欢就支持一下，增加作者完善得动力. ![喜欢就支持一下](https://github.com/evilbinary/myblog/raw/master/data/s.png)
 
 # 安装说明
-===================
+
 ## OS X
 在苹果系统下安装很容易，首先下载源码，可以直接点击download下载，[猛击这里，注意安全！](https://github.com/evilbinary/myblog/archive/master.zip)，也可以在shell下输入:
 	
@@ -43,7 +43,7 @@
 目前，还没时间搞，谁可以帮我测试测试看看，谢谢。
 
 # 正式环境部署
-===================
+
 如果有app engine之类的账号，比如openshift就可以在上面使用了。
 
 ## 使用用openshift-v3搭建
@@ -93,7 +93,7 @@ $ rhc app stop && rhc app start
 ```
 
 ### 2. Running on OpenShift
---------------------
+
 
 Create an account at https://www.openshift.com
 
@@ -124,7 +124,7 @@ That's it. You can now checkout your application at:
     http://django-$yournamespace.rhcloud.com
 
 ### 3. Admin user name and password
-----------------------------
+
 As the `git push` output scrolls by, keep an eye out for a
 line of output that starts with `Django application credentials: `. This line
 contains the generated admin password that you will need to begin
