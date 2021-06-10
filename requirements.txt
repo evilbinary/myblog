@@ -1,4 +1,4 @@
-Django==1.7
+Django==2.2.24
 pysqlite
 pytz
 Markdown>=2.5.1
