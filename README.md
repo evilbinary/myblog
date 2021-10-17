@@ -25,7 +25,13 @@
 	
 下载好后，如果是压缩包记得解压，进去后可以看到setup.py这个就是安装文件了，注意你需要有python环境,运行:
 	
-	python setup.py install
+```bash
+python setup.py install
+``` 
+或者
+```bash
+pip install -r requirements.txt`
+```	
 	
 然后让它自己安装，安装好后，到wsgi文件夹里面，有个叫mysite这个就是项目的路径，其他的文件不用管了，测试的东西，的点击进去，可以看到blog、manage.py、templates等，然后运行：
 
