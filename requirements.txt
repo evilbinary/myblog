@@ -6,5 +6,5 @@ Pygments==1.6
 MySQL-python
 django-admin-bootstrapped==2.1.0
 beautifulsoup4==4.3.2
-Pillow==5.3.0
+Pillow==9.0.0
 django-ckeditor===5.0.3
